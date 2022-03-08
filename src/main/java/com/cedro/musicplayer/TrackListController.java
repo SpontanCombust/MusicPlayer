@@ -6,37 +6,27 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 
-public class TrackListPane extends VBox {
+public class TrackListController  {
     @FXML
     private VBox rootPane;
     @FXML
     private ListView<String> musicListView;
 
 
-    private Jukebox commonJukebox = null;
     private final List<String> audioExtensions;
 
-
-    public TrackListPane() throws IOException {
+    public TrackListController() throws IOException {
         audioExtensions = Arrays.asList(
             "aif", "aiff", 
             "mp3",
             "mp4", "m4a", "m4v",
             "wav");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("track-list-view.fxml"));
-        loader.setController(this);
-        loader.setRoot(this);
-        loader.load();
-    }
-
-    void setJukebox(Jukebox jukebox) {
-        this.commonJukebox = jukebox;
+        
     }
 
     @FXML
