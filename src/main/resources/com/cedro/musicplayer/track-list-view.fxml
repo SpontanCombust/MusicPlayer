@@ -4,9 +4,9 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cedro.musicplayer.TrackListController">
+<fx:root fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" type="VBox" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ListView fx:id="musicListView" VBox.vgrow="ALWAYS" />
       <Button fx:id="loadMusicButton" mnemonicParsing="false" onAction="#onLoadMusicButtonClick" text="Load music" />
    </children>
-</VBox>
+</fx:root>

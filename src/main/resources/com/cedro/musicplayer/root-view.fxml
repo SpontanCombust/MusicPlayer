@@ -5,6 +5,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import com.cedro.musicplayer.TrackListController?>
+<?import com.cedro.musicplayer.PlayerController?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane prefHeight="700.0">
@@ -16,8 +19,8 @@
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <fx:include maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="track-list-view.fxml" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-            <fx:include maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="player-view.fxml" GridPane.columnIndex="1" />
+            <TrackListController maxWidth="1.7976931348623157E308" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+            <PlayerController maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>
