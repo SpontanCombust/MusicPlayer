@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.cedro.musicplayer.PlayerHudView?>
-<?import com.cedro.musicplayer.TrackListView?>
+<?import com.cedro.musicplayer.PlayerHud?>
+<?import com.cedro.musicplayer.TrackList?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -18,8 +18,8 @@
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <TrackListView fx:id="trackListPane" maxWidth="1.7976931348623157E308" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-            <PlayerHudView fx:id="playerHudPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
+            <TrackList fx:id="trackListPane" maxWidth="1.7976931348623157E308" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+            <PlayerHud fx:id="playerHudPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

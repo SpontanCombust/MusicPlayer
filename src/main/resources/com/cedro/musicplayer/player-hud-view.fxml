@@ -15,7 +15,7 @@
    <Canvas height="200.0" width="200.0" />
 
    <Label fx:id="musicTitleText" text="Music title" />
-   <Slider />
+   <Slider fx:id="musicTimelineSlider" />
    <HBox alignment="TOP_CENTER">
       <children>
          <Button mnemonicParsing="false" text="Previous" />

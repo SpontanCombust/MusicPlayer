@@ -4,9 +4,9 @@ import javafx.fxml.FXML;
 
 public class RootController {
     @FXML
-    private TrackListView trackListView;
+    private TrackList trackListView;
     @FXML
-    private PlayerHudView playerHudView;
+    private PlayerHud playerHudView;
 
     public RootController() {
         
