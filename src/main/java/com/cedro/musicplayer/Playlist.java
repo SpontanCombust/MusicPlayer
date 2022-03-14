@@ -1,16 +1,19 @@
 package com.cedro.musicplayer;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 
 public class Playlist {
     private final List<String> AUDIO_EXTENSIONS;
-    private ArrayList<Media> playlistTracks = new ArrayList<>();
+    private ArrayList<Media> tracks = new ArrayList<>();
+    private ArrayList<String> trackNames = new ArrayList<>();
 
     public Playlist() {
         AUDIO_EXTENSIONS = Arrays.asList(
@@ -20,19 +23,38 @@ public class Playlist {
             "wav");
     }
 
-    public void addTracks(Collection<Media> tracks) {
-        playlistTracks.addAll(tracks);
+    public void loadTracksFromDirectory(File directory, boolean scanRecursively) {
+        var files = directory.listFiles();
+        if(files != null) {
+            for(File f: files) {
+                if(f.isDirectory() && scanRecursively) {
+                    this.loadTracksFromDirectory(f, scanRecursively);
+                } else if(this.isAudioFile(f)){
+                    var mediaOpt = loadMedia(f.getAbsolutePath());
+                    if(mediaOpt.isPresent()) {
+                        trackNames.add(f.getName());
+                        tracks.add(mediaOpt.get());
+                    }
+                }
+            }
+        }
     }
 
-    public Media getTrack(int i) {
-        return playlistTracks.get(i);
+    public ArrayList<Media> getTracks() {
+        return tracks;
+    }
+
+    public ArrayList<String> getTrackNames() {
+        return trackNames;
     }
 
     public void clearTracks() {
-        playlistTracks.clear();
+        tracks.clear();
     }
 
-    public boolean isAudioFile(File file) {
+    
+    
+    private boolean isAudioFile(File file) {
         int dotIndex = file.getName().lastIndexOf(".");
         if( dotIndex != -1 ) {
             String extension = file.getName().substring(dotIndex + 1);
@@ -40,5 +62,20 @@ public class Playlist {
         }
 
         return false;
+    }
+
+    private Optional<Media> loadMedia(String path) {
+        Optional<Media> opt = Optional.empty();
+
+        try {
+            var media = new Media(Paths.get(path).toUri().toString());
+            opt = Optional.of(media);
+        } catch (MediaException e) {
+            System.out.println(e.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return opt;
     }
 }
