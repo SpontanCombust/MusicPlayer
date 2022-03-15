@@ -15,11 +15,12 @@
    <Canvas height="200.0" width="200.0" />
 
    <Label fx:id="musicTitleText" text="Music title" />
+   <Label fx:id="musicTimeText" text="Music time" />
    <Slider fx:id="musicTimelineSlider" />
    <HBox alignment="TOP_CENTER">
       <children>
          <Button mnemonicParsing="false" text="Previous" />
-         <Button onAction="#onPlayPauseClick" text="Play/Pause" />
+         <Button fx:id="playPauseButton" onAction="#onPlayPauseClick" text="Play/Pause" />
          <Button mnemonicParsing="false" text="Next" />
       </children>
    </HBox>

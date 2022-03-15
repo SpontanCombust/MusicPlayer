@@ -22,8 +22,11 @@ public class TrackList extends VBox {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("track-list-view.fxml"));
         loader.setController(this);
         loader.setRoot(this);
-        loader.load();
+        loader.load();  
+    }
 
+    @FXML
+    public void initialize() {
         // when the track is changed automatically or with prev/next buttons
         Jukebox.getInstance().currentTrackIndex.addListener(
             (observable, oldVal, newVal) -> {
@@ -31,8 +34,6 @@ public class TrackList extends VBox {
             }
         );
     }
-
-
 
     @FXML
     protected void onLoadMusicButtonClick() {
@@ -52,9 +53,10 @@ public class TrackList extends VBox {
 
     @FXML
     protected void onTrackSelected(MouseEvent e) {
-        if(e.getClickCount() == 2) {
+        if(e.getClickCount() >= 2) {
             int trackIdx = this.musicListView.getSelectionModel().getSelectedIndex();
-            Jukebox.getInstance().currentTrackIndex.set(trackIdx);
+            Jukebox.getInstance().selectTrack(trackIdx);
+            Jukebox.getInstance().play();
         }
     }
 }

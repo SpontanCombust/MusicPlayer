@@ -10,7 +10,7 @@ import javafx.util.Duration;
 
 public class Jukebox {
     public final SimpleObjectProperty<Media> currentTrack = new SimpleObjectProperty<>();
-    public final SimpleIntegerProperty currentTrackIndex = new SimpleIntegerProperty();
+    public final SimpleIntegerProperty currentTrackIndex = new SimpleIntegerProperty(0);
     public final SimpleStringProperty currentTrackName = new SimpleStringProperty();
     public final SimpleObjectProperty<Duration> currentTrackTime = new SimpleObjectProperty<>();
 
@@ -41,6 +41,26 @@ public class Jukebox {
         return false;
     }
 
+    public boolean isPaused() {
+        if(mediaPlayer != null) {
+            return this.mediaPlayer.getStatus().equals(Status.PAUSED);
+        }
+
+        return false;
+    }
+
+    public void selectTrack(int newIndex) {
+        var tracks = playlist.getTracks();
+        
+        if(newIndex >= 0 && newIndex < tracks.size()) {
+            boolean wasPlayingBefore = this.isPlaying();
+            
+            Media media = tracks.get(newIndex);
+            this.mediaPlayer = new MediaPlayer(media);
+            this.mediaPlayer.setOnReady(() -> onTrackReady(newIndex, media, wasPlayingBefore));
+        }
+    }
+
     public void play() {
         if(mediaPlayer != null) {
             this.mediaPlayer.play();
@@ -53,38 +73,29 @@ public class Jukebox {
         }
     }
 
-    public void next() {
-        this.currentTrackIndex.add(1);
+    public void selectNextTrack() {
+        this.selectTrack(this.currentTrackIndex.get() + 1);
     }
 
-    public void previous() {
-        this.currentTrackIndex.subtract(1);
+    public void selectPreviousTrack() {
+        this.selectTrack(this.currentTrackIndex.get() - 1);
     }
 
 
     private Jukebox() {
-        currentTrackIndex.addListener(
-            (obeservable, oldVal, newVal) -> {
-                onTrackIndexChanged(newVal.intValue());
-            }
-        );
+        
     }
 
-    private void onTrackIndexChanged(int newIndex) {
-        var tracks = playlist.getTracks();
+    private void onTrackReady(int index, Media media, boolean wasPlayingBefore) {
+        this.currentTrackIndex.set(index);
+        this.currentTrack.set(media);
+        this.currentTrackName.set(playlist.getTrackNames().get(index));
+        this.currentTrackTime.unbind();
+        this.currentTrackTime.set(new Duration(0.0));
+        this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());
 
-        if(newIndex >= 0 && newIndex < tracks.size()) {
-            boolean isPlaying = this.isPlaying();
-
-            Media media = tracks.get(newIndex);
-            this.mediaPlayer = new MediaPlayer(media);
-            this.currentTrack.set(media);
-            this.currentTrackName.set(playlist.getTrackNames().get(newIndex));
-            this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());
-
-            if(isPlaying) {
-                this.mediaPlayer.play();
-            }
+        if(wasPlayingBefore) {
+            this.mediaPlayer.play();
         }
     }
 }
