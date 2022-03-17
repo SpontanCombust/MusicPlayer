@@ -30,7 +30,7 @@ public class TrackList extends VBox {
         // when the track is changed automatically or with prev/next buttons
         Jukebox.getInstance().currentTrackIndex.addListener(
             (observable, oldVal, newVal) -> {
-                this.musicListView.getSelectionModel().select(newVal.intValue());
+                onCurrentTrackIndexChanged(newVal.intValue());
             }
         );
     }
@@ -58,5 +58,10 @@ public class TrackList extends VBox {
             Jukebox.getInstance().selectTrack(trackIdx);
             Jukebox.getInstance().play();
         }
+    }
+
+
+    private void onCurrentTrackIndexChanged(int newIndex) {
+        this.musicListView.getSelectionModel().select(newIndex);
     }
 }

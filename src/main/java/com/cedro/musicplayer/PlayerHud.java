@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
@@ -46,29 +47,19 @@ public class PlayerHud extends VBox {
         this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
 
         Jukebox.getInstance().currentTrack.addListener(
-            (observable, oldVal, newVal) -> {
-                this.musicTimelineSlider.setMax(Math.max(newVal.getDuration().toMillis(), 1));
-            }
+            (observable, oldVal, newVal) -> onCurrentTrackChanged(newVal)
         );
 
         Jukebox.getInstance().currentTrackTime.addListener(
-            (observable, oldVal, newVal) -> {
-                this.musicTimelineSlider.setValue(newVal.toMillis());
-                this.musicTimeText.setText(
-                    this.formatTimeFromSeconds((int)newVal.toSeconds()) // elapsed
-                    + "/" + 
-                    this.formatTimeFromSeconds(Math.max((int)Jukebox.getInstance().getCurrentTrackDuration().toSeconds(), 1)) // total duration
-                );
-            }  
+            (observable, oldVal, newVal) -> onCurrentTrackTimeProgressed(newVal)
         );
 
         Jukebox.getInstance().currentTrackStatus.addListener(
-            (observable, oldVal, newVal) -> {
-                onTrackStatusChanged(newVal);
-            }
+            (observable, oldVal, newVal) -> onTrackStatusChanged(newVal)
         );
     }
 
+    
     @FXML
     protected void onPreviousTrackClick() {
         Jukebox.getInstance().selectPreviousTrack();
@@ -142,5 +133,18 @@ public class PlayerHud extends VBox {
         } else {
             this.playPauseButton.setText("Play");
         }
+    }
+
+    private void onCurrentTrackChanged(Media newTrack) {
+        this.musicTimelineSlider.setMax(Math.max(newTrack.getDuration().toMillis(), 1));
+    }
+
+    private void onCurrentTrackTimeProgressed(Duration newTime) {
+        this.musicTimelineSlider.setValue(newTime.toMillis());
+        this.musicTimeText.setText(
+            this.formatTimeFromSeconds((int)newTime.toSeconds()) // elapsed
+            + "/" + 
+            this.formatTimeFromSeconds(Math.max((int)Jukebox.getInstance().getCurrentTrackDuration().toSeconds(), 1)) // total duration
+        );
     }
 }
