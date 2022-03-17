@@ -13,6 +13,7 @@ public class Jukebox {
     public final SimpleIntegerProperty currentTrackIndex = new SimpleIntegerProperty(0);
     public final SimpleStringProperty currentTrackName = new SimpleStringProperty();
     public final SimpleObjectProperty<Duration> currentTrackTime = new SimpleObjectProperty<>();
+    public final SimpleObjectProperty<Status> currentTrackStatus = new SimpleObjectProperty<>();
 
 
     private static Jukebox instance = null;
@@ -55,9 +56,14 @@ public class Jukebox {
         if(newIndex >= 0 && newIndex < tracks.size()) {
             boolean wasPlayingBefore = this.isPlaying();
             
+            if(mediaPlayer != null) {
+                this.mediaPlayer.dispose();
+            }
+            
             Media media = tracks.get(newIndex);
             this.mediaPlayer = new MediaPlayer(media);
             this.mediaPlayer.setOnReady(() -> onTrackReady(newIndex, media, wasPlayingBefore));
+            this.mediaPlayer.setOnEndOfMedia(() -> onTrackFinished());
         }
     }
 
@@ -93,9 +99,16 @@ public class Jukebox {
         this.currentTrackTime.unbind();
         this.currentTrackTime.set(new Duration(0.0));
         this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());
+        this.currentTrackStatus.bind(this.mediaPlayer.statusProperty());
 
         if(wasPlayingBefore) {
             this.mediaPlayer.play();
         }
+    }
+
+    private void onTrackFinished() {
+        //FIXME this doesn't seem to seek to the actual beginning, but some time after it for some reason
+        this.mediaPlayer.seek(this.mediaPlayer.getStartTime());
+        this.mediaPlayer.stop();
     }
 }

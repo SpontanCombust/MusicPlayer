@@ -19,9 +19,9 @@
    <Slider fx:id="musicTimelineSlider" />
    <HBox alignment="TOP_CENTER">
       <children>
-         <Button mnemonicParsing="false" text="Previous" />
+         <Button mnemonicParsing="false" text="Previous" onAction="#onPreviousTrackClick"/>
          <Button fx:id="playPauseButton" onAction="#onPlayPauseClick" text="Play/Pause" />
-         <Button mnemonicParsing="false" text="Next" />
+         <Button mnemonicParsing="false" text="Next" onAction="#onNextTrackClick"/>
       </children>
    </HBox>
 </fx:root>

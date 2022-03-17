@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 
 public class PlayerHud extends VBox {
     @FXML
@@ -29,17 +30,20 @@ public class PlayerHud extends VBox {
 
     @FXML
     public void initialize() {
-        this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
         this.musicTimeText.setText("00:00/00:00");
         this.musicTimelineSlider.setMin(0.0);
         this.musicTimelineSlider.setValue(0.0);
         this.playPauseButton.setText("Play");
+
+
+        this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
 
         Jukebox.getInstance().currentTrack.addListener(
             (observable, oldVal, newVal) -> {
                 this.musicTimelineSlider.setMax(Math.max(newVal.getDuration().toSeconds(), 1));
             }
         );
+
         Jukebox.getInstance().currentTrackTime.addListener(
             (observable, oldVal, newVal) -> {
                 double durationSeconds = this.musicTimelineSlider.getMax();
@@ -48,6 +52,12 @@ public class PlayerHud extends VBox {
                 this.musicTimelineSlider.setValue(elapsedSeconds);
                 this.musicTimeText.setText(this.formatTimeFromSeconds((int)elapsedSeconds) + "/" + this.formatTimeFromSeconds((int)durationSeconds));
             }  
+        );
+
+        Jukebox.getInstance().currentTrackStatus.addListener(
+            (observable, oldVal, newVal) -> {
+                onTrackStatusChanged(newVal);
+            }
         );
     }
 
@@ -65,10 +75,8 @@ public class PlayerHud extends VBox {
     protected void onPlayPauseClick() {
         if(Jukebox.getInstance().isPlaying()) {
             Jukebox.getInstance().pause();
-            this.playPauseButton.setText("Play");
         } else {
             Jukebox.getInstance().play();
-            this.playPauseButton.setText("Pause");
         }
     }
 
@@ -88,5 +96,13 @@ public class PlayerHud extends VBox {
         }
 
         return minutesStr + ":" + secondsStr;
+    }
+
+    private void onTrackStatusChanged(MediaPlayer.Status newStatus) {
+        if(newStatus == MediaPlayer.Status.PLAYING) {
+            this.playPauseButton.setText("Pause");
+        } else {
+            this.playPauseButton.setText("Play");
+        }
     }
 }
