@@ -79,12 +79,26 @@ public class Jukebox {
         }
     }
 
+    public void seek(Duration seekTime) {
+        if(mediaPlayer != null) {
+            this.mediaPlayer.seek(seekTime);
+        }
+    }
+
     public void selectNextTrack() {
         this.selectTrack(this.currentTrackIndex.get() + 1);
     }
 
     public void selectPreviousTrack() {
         this.selectTrack(this.currentTrackIndex.get() - 1);
+    }
+
+    public Duration getCurrentTrackDuration() {
+        if(this.mediaPlayer != null) {
+            return this.mediaPlayer.getMedia().getDuration();
+        }
+
+        return Duration.UNKNOWN;
     }
 
 

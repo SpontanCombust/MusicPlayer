@@ -16,12 +16,12 @@
 
    <Label fx:id="musicTitleText" text="Music title" />
    <Label fx:id="musicTimeText" text="Music time" />
-   <Slider fx:id="musicTimelineSlider" />
+   <Slider fx:id="musicTimelineSlider" onMouseDragged="#onMusicSliderCursorDragged" onMousePressed="#onMusicSliderMousePressed" onMouseReleased="#onMusicSliderMouseReleased" />
    <HBox alignment="TOP_CENTER">
       <children>
-         <Button mnemonicParsing="false" text="Previous" onAction="#onPreviousTrackClick"/>
+         <Button mnemonicParsing="false" onAction="#onPreviousTrackClick" text="Previous" />
          <Button fx:id="playPauseButton" onAction="#onPlayPauseClick" text="Play/Pause" />
-         <Button mnemonicParsing="false" text="Next" onAction="#onNextTrackClick"/>
+         <Button mnemonicParsing="false" onAction="#onNextTrackClick" text="Next" />
       </children>
    </HBox>
 </fx:root>

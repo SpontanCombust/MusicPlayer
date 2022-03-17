@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class PlayerHud extends VBox {
     @FXML
@@ -19,6 +20,10 @@ public class PlayerHud extends VBox {
     private Slider musicTimelineSlider;
     @FXML
     private Button playPauseButton;
+
+
+    private boolean isDraggingMusicTimeline;
+    private boolean shouldResumeOnMusicTimelineDragFinished;
 
 
     public PlayerHud() throws IOException {
@@ -34,23 +39,26 @@ public class PlayerHud extends VBox {
         this.musicTimelineSlider.setMin(0.0);
         this.musicTimelineSlider.setValue(0.0);
         this.playPauseButton.setText("Play");
+        this.isDraggingMusicTimeline = false;
+        this.shouldResumeOnMusicTimelineDragFinished = false;
 
 
         this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
 
         Jukebox.getInstance().currentTrack.addListener(
             (observable, oldVal, newVal) -> {
-                this.musicTimelineSlider.setMax(Math.max(newVal.getDuration().toSeconds(), 1));
+                this.musicTimelineSlider.setMax(Math.max(newVal.getDuration().toMillis(), 1));
             }
         );
 
         Jukebox.getInstance().currentTrackTime.addListener(
             (observable, oldVal, newVal) -> {
-                double durationSeconds = this.musicTimelineSlider.getMax();
-                double elapsedSeconds = newVal.toSeconds();
-
-                this.musicTimelineSlider.setValue(elapsedSeconds);
-                this.musicTimeText.setText(this.formatTimeFromSeconds((int)elapsedSeconds) + "/" + this.formatTimeFromSeconds((int)durationSeconds));
+                this.musicTimelineSlider.setValue(newVal.toMillis());
+                this.musicTimeText.setText(
+                    this.formatTimeFromSeconds((int)newVal.toSeconds()) // elapsed
+                    + "/" + 
+                    this.formatTimeFromSeconds(Math.max((int)Jukebox.getInstance().getCurrentTrackDuration().toSeconds(), 1)) // total duration
+                );
             }  
         );
 
@@ -80,6 +88,32 @@ public class PlayerHud extends VBox {
         }
     }
 
+    @FXML
+    protected void onMusicSliderCursorDragged() {
+        this.isDraggingMusicTimeline = true;
+
+        if(Jukebox.getInstance().isPlaying()) {
+            this.shouldResumeOnMusicTimelineDragFinished = true;
+            Jukebox.getInstance().pause();
+        }
+
+        Jukebox.getInstance().seek(new Duration(this.musicTimelineSlider.getValue()));
+    }
+
+    @FXML
+    protected void onMusicSliderMousePressed() {
+        Jukebox.getInstance().seek(new Duration(this.musicTimelineSlider.getValue()));
+    }
+
+    @FXML
+    protected void onMusicSliderMouseReleased() {
+        if(this.shouldResumeOnMusicTimelineDragFinished) {
+            Jukebox.getInstance().play();
+        }
+        this.isDraggingMusicTimeline = false;
+        this.shouldResumeOnMusicTimelineDragFinished = false;
+    }
+
 
     private String formatTimeFromSeconds(int seconds) {
         int minutes = seconds / 60;
@@ -99,6 +133,10 @@ public class PlayerHud extends VBox {
     }
 
     private void onTrackStatusChanged(MediaPlayer.Status newStatus) {
+        if(isDraggingMusicTimeline) {
+            return;
+        }
+
         if(newStatus == MediaPlayer.Status.PLAYING) {
             this.playPauseButton.setText("Pause");
         } else {
