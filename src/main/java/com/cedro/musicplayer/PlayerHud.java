@@ -21,6 +21,8 @@ public class PlayerHud extends VBox {
     private Slider musicTimelineSlider;
     @FXML
     private Button playPauseButton;
+    @FXML
+    private Slider volumeSlider;
 
 
     private boolean isDraggingMusicTimeline;
@@ -42,6 +44,9 @@ public class PlayerHud extends VBox {
         this.playPauseButton.setText("Play");
         this.isDraggingMusicTimeline = false;
         this.shouldResumeOnMusicTimelineDragFinished = false;
+        this.volumeSlider.setMin(0.0);
+        this.volumeSlider.setMax(1.0);
+        this.volumeSlider.setValue(1.0);
 
 
         this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
@@ -56,6 +61,10 @@ public class PlayerHud extends VBox {
 
         Jukebox.getInstance().currentTrackStatus.addListener(
             (observable, oldVal, newVal) -> onTrackStatusChanged(newVal)
+        );
+
+        this.volumeSlider.valueProperty().addListener(
+            (observable, oldVal, newVal) -> onVolumeSliderValueChanged(newVal.floatValue())
         );
     }
 
@@ -146,5 +155,9 @@ public class PlayerHud extends VBox {
             + "/" + 
             this.formatTimeFromSeconds(Math.max((int)Jukebox.getInstance().getCurrentTrackDuration().toSeconds(), 1)) // total duration
         );
+    }
+
+    private void onVolumeSliderValueChanged(float newVolume) {
+        Jukebox.getInstance().setVolume(newVolume);
     }
 }

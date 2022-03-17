@@ -22,6 +22,7 @@ public class Jukebox {
     private MediaPlayer mediaPlayer = null;
 
 
+
     public static Jukebox getInstance() {
         if(instance == null) {
             instance = new Jukebox();
@@ -100,6 +101,13 @@ public class Jukebox {
 
         return Duration.UNKNOWN;
     }
+
+    public void setVolume(float volume) {
+        if(this.mediaPlayer != null) {
+            this.mediaPlayer.setVolume(volume);
+        }
+    }
+
 
 
     private Jukebox() {
