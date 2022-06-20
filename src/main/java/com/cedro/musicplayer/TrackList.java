@@ -34,6 +34,20 @@ public class TrackList extends VBox {
                 onCurrentTrackIndexChanged(newVal.intValue());
             }
         );
+
+        refreshTrackListView();
+    }
+
+    private void refreshTrackListView() {
+        this.musicListView.getItems().clear();
+        this.musicListView
+        .getItems()
+        .addAll(
+            Jukebox.getInstance()
+            .getPlaylist()
+            .stream()
+            .map(t -> t.getName())
+            .collect(Collectors.toList()));
     }
 
     @FXML
@@ -42,16 +56,19 @@ public class TrackList extends VBox {
         
         File selectedDirectory = directoryChooser.showDialog(rootPane.getScene().getWindow());
         if(selectedDirectory != null) {
-            this.musicListView.getItems().clear();
-
             Jukebox jb = Jukebox.getInstance();
             var albums = MusicAlbum.fromDirectoryRecurse(selectedDirectory.toPath());
             jb.getAlbums().clear();
             jb.getAlbums().addAll(albums);
+
             // by default for now will load all music from albums into the playlist
-            jb.getPlaylist().addAll(albums.stream().flatMap(a -> a.getTracks().stream()).collect(Collectors.toList()));
+            jb.getPlaylist()
+            .addAll(
+                albums.stream()
+                .flatMap(a -> a.getTracks().stream())
+                .collect(Collectors.toList()));
             
-            this.musicListView.getItems().addAll(jb.getPlaylist().stream().map(t -> t.getName()).collect(Collectors.toList()));
+            refreshTrackListView();
         }
     }
 
