@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -23,6 +24,8 @@ public class PlayerHud extends VBox {
     private Button playPauseButton;
     @FXML
     private Slider volumeSlider;
+    @FXML
+    private ImageView albumCoverImageView;
 
 
     private boolean isDraggingMusicTimeline;
@@ -42,11 +45,12 @@ public class PlayerHud extends VBox {
         this.musicTimelineSlider.setMin(0.0);
         this.musicTimelineSlider.setValue(0.0);
         this.playPauseButton.setText("Play");
-        this.isDraggingMusicTimeline = false;
-        this.shouldResumeOnMusicTimelineDragFinished = false;
         this.volumeSlider.setMin(0.0);
         this.volumeSlider.setMax(1.0);
         this.volumeSlider.setValue(1.0);
+        this.isDraggingMusicTimeline = false;
+        this.shouldResumeOnMusicTimelineDragFinished = false;
+        this.albumCoverImageView.setImage(MusicAlbum.DEFAULT_COVER_IMAGE);
 
 
         this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);

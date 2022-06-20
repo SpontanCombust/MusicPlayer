@@ -1,8 +1,12 @@
 package com.cedro.musicplayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -14,14 +18,21 @@ public class Jukebox {
     public final SimpleStringProperty currentTrackName = new SimpleStringProperty();
     public final SimpleObjectProperty<Duration> currentTrackTime = new SimpleObjectProperty<>();
     public final SimpleObjectProperty<Status> currentTrackStatus = new SimpleObjectProperty<>();
+    public final SimpleObjectProperty<Image> currentTrackCoverImage = new SimpleObjectProperty<>();
 
 
     private static Jukebox instance = null;
 
-    private Playlist playlist = new Playlist();
     private MediaPlayer mediaPlayer = null;
 
+    private List<MusicTrack> playlist = new ArrayList<>();
+    private List<MusicAlbum> albums = new ArrayList<>();
+    private List<MusicCollection> userCollections = new ArrayList<>();
 
+
+    private Jukebox() {
+        
+    }
 
     public static Jukebox getInstance() {
         if(instance == null) {
@@ -31,9 +42,22 @@ public class Jukebox {
         return instance;
     }
     
-    public Playlist getPlaylist() {
+
+
+    public List<MusicTrack> getPlaylist() {
         return this.playlist;
     }
+
+    public List<MusicAlbum> getAlbums() {
+        return this.albums;
+    }
+
+    public List<MusicCollection> getUserCollections() {
+        return this.userCollections;
+    }
+
+
+    
 
     public boolean isPlaying() {
         if(mediaPlayer != null) {
@@ -52,16 +76,14 @@ public class Jukebox {
     }
 
     public void selectTrack(int newIndex) {
-        var tracks = playlist.getTracks();
-        
-        if(newIndex >= 0 && newIndex < tracks.size()) {
+        if(newIndex >= 0 && newIndex < playlist.size()) {
             boolean wasPlayingBefore = this.isPlaying();
             
             if(mediaPlayer != null) {
                 this.mediaPlayer.dispose();
             }
             
-            Media media = tracks.get(newIndex);
+            Media media = playlist.get(newIndex).loadMedia();
             this.mediaPlayer = new MediaPlayer(media);
             this.mediaPlayer.setOnReady(() -> onTrackReady(newIndex, media, wasPlayingBefore));
             this.mediaPlayer.setOnEndOfMedia(() -> onTrackFinished());
@@ -108,16 +130,10 @@ public class Jukebox {
         }
     }
 
-
-
-    private Jukebox() {
-        
-    }
-
     private void onTrackReady(int index, Media media, boolean wasPlayingBefore) {
         this.currentTrackIndex.set(index);
         this.currentTrack.set(media);
-        this.currentTrackName.set(playlist.getTrackNames().get(index));
+        this.currentTrackName.set(playlist.get(index).getName());
         this.currentTrackTime.unbind();
         this.currentTrackTime.set(new Duration(0.0));
         this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());

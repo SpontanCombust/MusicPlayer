@@ -2,6 +2,7 @@ package com.cedro.musicplayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,11 +44,14 @@ public class TrackList extends VBox {
         if(selectedDirectory != null) {
             this.musicListView.getItems().clear();
 
-            Playlist playlist = Jukebox.getInstance().getPlaylist();
-            playlist.clearTracks();
-            playlist.loadTracksFromDirectory(selectedDirectory, true);
+            Jukebox jb = Jukebox.getInstance();
+            var albums = MusicAlbum.fromDirectoryRecurse(selectedDirectory.toPath());
+            jb.getAlbums().clear();
+            jb.getAlbums().addAll(albums);
+            // by default for now will load all music from albums into the playlist
+            jb.getPlaylist().addAll(albums.stream().flatMap(a -> a.getTracks().stream()).collect(Collectors.toList()));
             
-            this.musicListView.getItems().addAll(playlist.getTrackNames());
+            this.musicListView.getItems().addAll(jb.getPlaylist().stream().map(t -> t.getName()).collect(Collectors.toList()));
         }
     }
 
