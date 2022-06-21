@@ -26,8 +26,7 @@ public class Jukebox {
     private MediaPlayer mediaPlayer = null;
 
     private List<MusicTrack> playlist = new ArrayList<>();
-    private List<MusicAlbum> albums = new ArrayList<>();
-    private List<MusicCollection> userCollections = new ArrayList<>();
+    private MusicDatabase musicDatabase = new MusicDatabase();
 
 
     private Jukebox() {
@@ -48,12 +47,8 @@ public class Jukebox {
         return this.playlist;
     }
 
-    public List<MusicAlbum> getAlbums() {
-        return this.albums;
-    }
-
-    public List<MusicCollection> getUserCollections() {
-        return this.userCollections;
+    public MusicDatabase getMusicDatabase() {
+        return this.musicDatabase;
     }
 
 

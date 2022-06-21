@@ -53,20 +53,32 @@ public class LibraryModelController extends AnchorPane {
 
         populateAllTracks();
         populateAlbums();
-        populateCustomCollections();
+        populateUserCollections();
     }
 
     void populateAllTracks() {
         Jukebox jb = Jukebox.getInstance();
 
         allTrackListView.getItems().clear();
-        allTrackListView.getItems().addAll(jb.getPlaylist().stream().map(t -> t.getName()).collect(Collectors.toList()));
+
+        allTrackListView.getItems().addAll(
+            jb.getPlaylist()
+            .stream()
+            .map(t -> t.getName())
+            .collect(Collectors.toList()));
     }
 
     void populateAlbums() {
         Jukebox jb = Jukebox.getInstance();
 
-        List<VBox> albumVboxes = jb.getAlbums().stream().map(a -> makeAlbumVbox(a)).collect(Collectors.toList());
+        List<VBox> albumVboxes =
+        jb.getMusicDatabase()
+        .getAlbumMap()
+        .values()
+        .stream()
+        .map(a -> makeAlbumVbox(a))
+        .collect(Collectors.toList());
+        
         albumsFlowPane.getChildren().clear();
         albumsFlowPane.getChildren().addAll(albumVboxes);
     }
@@ -86,10 +98,16 @@ public class LibraryModelController extends AnchorPane {
         return vbox;
     }
 
-    void populateCustomCollections() {
+    void populateUserCollections() {
         Jukebox jb = Jukebox.getInstance();
 
-        List<VBox> userCollectionVboxes = jb.getUserCollections().stream().map(c -> makeUserCollectionVbox(c)).collect(Collectors.toList());
+        List<VBox> userCollectionVboxes = 
+        jb.getMusicDatabase()
+        .getUserCollectionList()
+        .stream()
+        .map(c -> makeUserCollectionVbox(c))
+        .collect(Collectors.toList());
+
         customCollectionsFlowPane.getChildren().clear();
         customCollectionsFlowPane.getChildren().addAll(userCollectionVboxes);
     }

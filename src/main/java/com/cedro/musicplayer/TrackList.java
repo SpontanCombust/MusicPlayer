@@ -58,8 +58,8 @@ public class TrackList extends VBox {
         if(selectedDirectory != null) {
             Jukebox jb = Jukebox.getInstance();
             var albums = MusicAlbum.fromDirectoryRecurse(selectedDirectory.toPath());
-            jb.getAlbums().clear();
-            jb.getAlbums().addAll(albums);
+            jb.getMusicDatabase().clearAlbums();
+            jb.getMusicDatabase().addAlbums(albums);
 
             // by default for now will load all music from albums into the playlist
             jb.getPlaylist()
