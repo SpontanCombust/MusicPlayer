@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 
 public class TrackList extends VBox {
     @FXML
@@ -68,6 +69,39 @@ public class TrackList extends VBox {
                 .flatMap(a -> a.getTracks().stream())
                 .collect(Collectors.toList()));
             
+            refreshTrackListView();
+        }
+    }
+
+    @FXML
+    protected void onSaveMusicDatabaseButtonClick() {
+        var fileChooser = new FileChooser();
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", MusicDatabase.DB_FILE_EXTENSION));
+        fileChooser.setInitialFileName("music" + MusicDatabase.DB_FILE_EXTENSION);
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        File selectedFile = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
+        if(selectedFile != null) {
+            try {
+                Jukebox.getInstance().getMusicDatabase().saveToFile(selectedFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    protected void onLoadMusicDatabaseButtonClick() {
+        var fileChooser = new FileChooser();
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", MusicDatabase.DB_FILE_EXTENSION));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        File selectedFile = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
+        if(selectedFile != null) {
+            String err = Jukebox.getInstance().getMusicDatabase().loadFromFile(selectedFile.toPath());
+            if(err != null) {
+                System.out.println(err);
+            }
             refreshTrackListView();
         }
     }

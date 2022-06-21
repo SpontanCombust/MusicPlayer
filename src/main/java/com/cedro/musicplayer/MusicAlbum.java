@@ -2,9 +2,15 @@ package com.cedro.musicplayer;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MusicAlbum extends MusicCollection {
@@ -19,25 +25,21 @@ public class MusicAlbum extends MusicCollection {
     public static MusicAlbum fromDirectory(Path directoryPath) {
         List<File> files = Arrays.asList(directoryPath.toFile().listFiles());
 
-        if(files.stream().anyMatch(f -> MusicTrack.isAudioFile(f.toPath()))) {
+        if(files.stream().anyMatch(f -> MusicTrack.isAudioFile(f.toPath().toAbsolutePath()))) {
             MusicAlbum album = new MusicAlbum();
-            album.dirPath = directoryPath;
+            album.dirPath = directoryPath.toAbsolutePath();
             album.name = directoryPath.getFileName().toString();
 
-            for(File f: files) {
-                if(f.isFile()) {
-                    MusicTrack track = MusicTrack.fromFile(f.toPath());
-                    if(track != null) {
-                        track.setParentAlbum(album);
-                        album.tracks.add(track);
-                        continue;
-                    }
-    
-                    if(album.coverImagePath != null && isImageFile(f.toPath())) {
-                        album.coverImagePath = f.toPath();
-                    }
+            files.stream()
+            .filter(f -> f.isFile())
+            .forEach(f -> {
+                Path filePath = f.toPath().toAbsolutePath();
+                if(MusicTrack.isAudioFile(filePath)) {
+                    album.tracksPaths.add(filePath);
+                } else if(album.coverImagePath != null && isImageFile(f.toPath())) {
+                    album.coverImagePath = filePath;
                 }
-            }
+            });
 
             return album;
         }
@@ -78,5 +80,35 @@ public class MusicAlbum extends MusicCollection {
 
     public Path getDirPath() {
         return dirPath;
+    }
+
+
+    public JSONObject toJSON() {
+        return new JSONObject()
+        .put("dirPath", dirPath.toString())
+        .put("name", name)
+        .put("coverImagePath", coverImagePath != null ? coverImagePath.toString() : null)
+        .put("tracks", new JSONArray().putAll(
+            tracksPaths
+            .stream()
+            .map(p -> p.toString())
+            .collect(Collectors.toList())));
+    }
+
+    public static MusicAlbum fromJSON(JSONObject json) throws JSONException {
+        MusicAlbum album = new MusicAlbum();
+        album.dirPath = Paths.get(json.getString("dirPath"));
+        album.name = json.getString("name");
+
+        if(json.isNull("coverImagePath")) {
+            album.coverImagePath = null;
+        } else {
+            album.coverImagePath = Paths.get(json.getString("coverImagePath"));
+        }
+        
+        json.getJSONArray("tracks")
+        .forEach(o -> album.tracksPaths.add(Paths.get((String)o)));
+        
+        return album;
     }
 }

@@ -13,20 +13,17 @@ public class MusicTrack {
 
 
     private Path filePath;
-    private String name;
-    private MusicAlbum parentAlbum;
 
+
+    private MusicTrack(Path filePath) {
+        this.filePath = filePath;
+    }
 
     public static MusicTrack fromFile(Path filePath) {
         String fileName = filePath.getFileName().toString();
 
         if(AUDIO_EXTENSIONS.stream().anyMatch(ext -> fileName.endsWith("." + ext))) {
-            String name = fileName.substring(0, fileName.lastIndexOf("."));
-            
-            MusicTrack track = new MusicTrack();
-            track.filePath = filePath;
-            track.name = name;
-            return track;
+            return new MusicTrack(filePath.toAbsolutePath());
         }
 
         return null;
@@ -43,15 +40,19 @@ public class MusicTrack {
     }
 
     public String getName() {
-        return name;
+        String fileName = filePath.getFileName().toString();
+        return fileName.substring(0, fileName.lastIndexOf("."));
     }
 
-    public void setParentAlbum(MusicAlbum parentAlbum) {
-        this.parentAlbum = parentAlbum;
+    public Path getParentAlbumPath() {
+        return filePath.getParent();
     }
 
     public MusicAlbum getParentAlbum() {
-        return parentAlbum;
+        return Jukebox.getInstance()
+        .getMusicDatabase()
+        .getAlbumMap()
+        .get(this.getParentAlbumPath());
     }
 
     Media loadMedia() {

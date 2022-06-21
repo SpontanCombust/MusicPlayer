@@ -46,11 +46,6 @@ public class LibraryModelController extends AnchorPane {
 
     @FXML
     public void initialize() {
-        // albumsTilePane.setPrefTileWidth(albumsTilePane.getWidth() / albumsTilePane.getPrefColumns());
-        // albumsTilePane.setPrefTileHeight(albumsTilePane.getHeight() / albumsTilePane.getPrefRows());
-        // customCollectionsTilePane.setPrefTileWidth(customCollectionsTilePane.getWidth() / customCollectionsTilePane.getPrefColumns());
-        // customCollectionsTilePane.setPrefTileHeight(customCollectionsTilePane.getHeight() / customCollectionsTilePane.getPrefRows());
-
         populateAllTracks();
         populateAlbums();
         populateUserCollections();
@@ -62,7 +57,9 @@ public class LibraryModelController extends AnchorPane {
         allTrackListView.getItems().clear();
 
         allTrackListView.getItems().addAll(
-            jb.getPlaylist()
+            jb.getMusicDatabase()
+            .getTrackMap()
+            .values()
             .stream()
             .map(t -> t.getName())
             .collect(Collectors.toList()));
