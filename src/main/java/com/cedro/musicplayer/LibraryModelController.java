@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -21,7 +20,7 @@ public class LibraryModelController extends AnchorPane {
     private AnchorPane rootPane;
 
     @FXML
-    private ListView<String> allTrackListView;
+    private AllTracksTrackListView allTrackListView;
 
     @FXML
     private StackPane albumsStackPane;
@@ -46,24 +45,14 @@ public class LibraryModelController extends AnchorPane {
 
     @FXML
     public void initialize() {
-        populateAllTracks();
+        // populateAllTracks();
         populateAlbums();
         populateUserCollections();
     }
 
-    void populateAllTracks() {
-        Jukebox jb = Jukebox.getInstance();
-
-        allTrackListView.getItems().clear();
-
-        allTrackListView.getItems().addAll(
-            jb.getMusicDatabase()
-            .getTrackMap()
-            .values()
-            .stream()
-            .map(t -> t.getName())
-            .collect(Collectors.toList()));
-    }
+    // void populateAllTracks() {
+        
+    // }
 
     void populateAlbums() {
         Jukebox jb = Jukebox.getInstance();

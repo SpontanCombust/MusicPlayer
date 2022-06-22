@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -14,6 +15,14 @@ public class RootController {
 
     @FXML
     private AnchorPane contentPane;
+
+    @FXML
+    private ToggleButton buttonOpenPlayer;
+    
+    @FXML
+    private ToggleButton buttonOpenLibrary;
+
+
 
     @FXML
     public void initialize() throws IOException {
@@ -45,7 +54,7 @@ public class RootController {
     protected void onMenuAbout(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
-        alert.setHeaderText("Music Player v1.0");
+        alert.setHeaderText("Music Player v" + MusicPlayerApplication.VERSION);
         alert.setContentText(
             "Simple music player application.\n\n" +
             "Copyright (c) 2022 Przemysław Cedro\n"
@@ -88,6 +97,8 @@ public class RootController {
                 AnchorPane.setBottomAnchor(library, 0.0);
                 AnchorPane.setLeftAnchor(library, 0.0);
                 AnchorPane.setRightAnchor(library, 0.0);
+                buttonOpenLibrary.setSelected(true);
+                buttonOpenPlayer.setSelected(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -105,6 +116,8 @@ public class RootController {
                 AnchorPane.setBottomAnchor(player, 0.0);
                 AnchorPane.setLeftAnchor(player, 0.0);
                 AnchorPane.setRightAnchor(player, 0.0);
+                buttonOpenPlayer.setSelected(true);
+                buttonOpenLibrary.setSelected(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }

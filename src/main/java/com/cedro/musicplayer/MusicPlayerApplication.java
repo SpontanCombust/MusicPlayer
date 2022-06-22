@@ -8,12 +8,15 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MusicPlayerApplication extends Application {
+    public static final String VERSION = "1.0";
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MusicPlayerApplication.class.getResource("root-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Music Player");
         stage.getIcons().add(MusicAlbum.DEFAULT_COVER_IMAGE);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
