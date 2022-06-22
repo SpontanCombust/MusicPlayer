@@ -2,6 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -10,14 +13,31 @@
    <children>
       <VBox>
          <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromFileSystem" text="Load music from file system..." />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromDatabase" text="Load music database..." />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToDatabase" text="Save music database..." />
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="Exit" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuAbout" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
             <HBox minHeight="-Infinity" minWidth="-Infinity">
                <children>
-                  <Button minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#openPlayer" text="Player">
+                  <Button minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" text="Player">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#openLibrary" text="Library" />
+                  <Button minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" text="Library" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" />

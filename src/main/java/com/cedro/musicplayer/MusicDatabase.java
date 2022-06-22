@@ -1,5 +1,6 @@
 package com.cedro.musicplayer;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +15,12 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 public class MusicDatabase {
     public static final String DB_FILE_EXTENSION = ".musicdb";
@@ -77,7 +84,7 @@ public class MusicDatabase {
 
     // =========================== IO ===========================
 
-    public void saveToFile(Path filePath) throws IOException {
+    public void saveToDatabaseFile(Path filePath) throws IOException {
         JSONObject json = new JSONObject()
         .put("albums", new JSONArray(
             albumMap.values().stream()
@@ -95,37 +102,85 @@ public class MusicDatabase {
         Files.write(filePath, json.toString().getBytes());
     }
 
+    public void requestSaveToDatabaseFile(Window window) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Music Database");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", DB_FILE_EXTENSION));
+        fileChooser.setInitialFileName("music" + MusicDatabase.DB_FILE_EXTENSION);
+        fileChooser.setInitialDirectory(new File("."));
+
+        File selectedFile = fileChooser.showSaveDialog(window);
+        if(selectedFile != null) {
+            try {
+                saveToDatabaseFile(selectedFile.toPath());
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error saving database");
+                alert.setContentText("Error saving database to file: " + e.getMessage());
+            }
+        }
+    }
+
     // If error occurs returns non-empty string
-    public String loadFromFile(Path filePath) {
+    public void loadFromDatabaseFile(Path filePath) throws Exception {
         if(!filePath.toString().endsWith(DB_FILE_EXTENSION)) {
-            return "File extension must be " + DB_FILE_EXTENSION;
+            throw new Exception("File extension must be " + DB_FILE_EXTENSION);
         }
 
-        try {
-            FileReader fr = new FileReader(filePath.toFile());
-            JSONTokener tokener = new JSONTokener(fr);
-            JSONObject root = new JSONObject(tokener);
+        FileReader fr = new FileReader(filePath.toFile());
+        JSONTokener tokener = new JSONTokener(fr);
+        JSONObject root = new JSONObject(tokener);
 
-            JSONArray albumsJSON = root.getJSONArray("albums");
-            for(int i = 0; i < albumsJSON.length(); i++) {
-                MusicAlbum album = MusicAlbum.fromJSON(albumsJSON.getJSONObject(i));
-                if(album != null) {
-                    addAlbum(album);
-                }
+        JSONArray albumsJSON = root.getJSONArray("albums");
+        for(int i = 0; i < albumsJSON.length(); i++) {
+            MusicAlbum album = MusicAlbum.fromJSON(albumsJSON.getJSONObject(i));
+            if(album != null) {
+                addAlbum(album);
             }
-
-            JSONArray collectionsJSON = root.getJSONArray("userCollections");
-            for(int i = 0; i < collectionsJSON.length(); i++) {
-                MusicCollection collection = MusicCollection.fromJSON(collectionsJSON.getJSONObject(i));
-                if(collection != null) {
-                    addUserCollection(collection);
-                }
-            }
-            
-        } catch (Exception e) {
-            return e.toString();
         }
 
-        return null;
+        JSONArray collectionsJSON = root.getJSONArray("userCollections");
+        for(int i = 0; i < collectionsJSON.length(); i++) {
+            MusicCollection collection = MusicCollection.fromJSON(collectionsJSON.getJSONObject(i));
+            if(collection != null) {
+                addUserCollection(collection);
+            }
+        }
+    }
+
+    public void requestLoadFromDatabaseFile(Window window) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Music Database");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", MusicDatabase.DB_FILE_EXTENSION));
+        fileChooser.setInitialDirectory(new File("."));
+
+        File selectedFile = fileChooser.showOpenDialog(window);
+        if(selectedFile != null) {
+            try {
+                loadFromDatabaseFile(selectedFile.toPath());
+            } catch (Exception e) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error loading database");
+                alert.setContentText("Error loading database from file: " + e.getMessage());
+            }
+        }
+    }
+
+    public void loadFromFileSystem(Path dirPath) {
+        var albums = MusicAlbum.fromDirectoryRecurse(dirPath);
+        addAlbums(albums);
+    }
+
+    public void requestLoadFromFileSystem(Window window) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Load music from file system");
+        directoryChooser.setInitialDirectory(new File("."));
+
+        File selectedDirectory = directoryChooser.showDialog(window);
+        if(selectedDirectory != null) {
+            loadFromFileSystem(selectedDirectory.toPath());
+        }
     }
 }

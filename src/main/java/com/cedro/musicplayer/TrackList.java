@@ -1,6 +1,5 @@
 package com.cedro.musicplayer;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -9,8 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 
 public class TrackList extends VBox {
     @FXML
@@ -53,57 +50,37 @@ public class TrackList extends VBox {
 
     @FXML
     protected void onLoadMusicButtonClick() {
-        var directoryChooser = new DirectoryChooser();
-        
-        File selectedDirectory = directoryChooser.showDialog(rootPane.getScene().getWindow());
-        if(selectedDirectory != null) {
-            Jukebox jb = Jukebox.getInstance();
-            var albums = MusicAlbum.fromDirectoryRecurse(selectedDirectory.toPath());
-            jb.getMusicDatabase().clearAlbums();
-            jb.getMusicDatabase().addAlbums(albums);
+        Jukebox jb = Jukebox.getInstance();
 
-            // by default for now will load all music from albums into the playlist
-            jb.getPlaylist()
-            .addAll(
-                albums.stream()
-                .flatMap(a -> a.getTracks().stream())
-                .collect(Collectors.toList()));
+        jb.getMusicDatabase().requestLoadFromFileSystem(this.getScene().getWindow());
+
+        //FIXME until adding to a playlist is available this is the default
+        jb.getPlaylist().addAll(
+            jb.getMusicDatabase()
+            .getTrackMap().values().stream()
+            .collect(Collectors.toList()));
             
-            refreshTrackListView();
-        }
+        refreshTrackListView();
     }
 
     @FXML
     protected void onSaveMusicDatabaseButtonClick() {
-        var fileChooser = new FileChooser();
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", MusicDatabase.DB_FILE_EXTENSION));
-        fileChooser.setInitialFileName("music" + MusicDatabase.DB_FILE_EXTENSION);
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-        File selectedFile = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
-        if(selectedFile != null) {
-            try {
-                Jukebox.getInstance().getMusicDatabase().saveToFile(selectedFile.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Jukebox.getInstance().getMusicDatabase().requestSaveToDatabaseFile(this.getScene().getWindow());
     }
 
     @FXML
     protected void onLoadMusicDatabaseButtonClick() {
-        var fileChooser = new FileChooser();
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", MusicDatabase.DB_FILE_EXTENSION));
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        Jukebox jb = Jukebox.getInstance();
 
-        File selectedFile = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
-        if(selectedFile != null) {
-            String err = Jukebox.getInstance().getMusicDatabase().loadFromFile(selectedFile.toPath());
-            if(err != null) {
-                System.out.println(err);
-            }
-            refreshTrackListView();
-        }
+        jb.getMusicDatabase().requestLoadFromDatabaseFile(this.getScene().getWindow());
+
+        //FIXME until adding to a playlist is available this is the default
+        jb.getPlaylist().addAll(
+            jb.getMusicDatabase()
+            .getTrackMap().values().stream()
+            .collect(Collectors.toList()));
+
+        refreshTrackListView();
     }
 
     @FXML

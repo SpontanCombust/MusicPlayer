@@ -13,6 +13,7 @@ public class MusicPlayerApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MusicPlayerApplication.class.getResource("root-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Music Player");
+        stage.getIcons().add(MusicAlbum.DEFAULT_COVER_IMAGE);
         stage.setScene(scene);
         stage.show();
     }
