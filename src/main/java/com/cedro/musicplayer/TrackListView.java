@@ -1,7 +1,6 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,8 +17,6 @@ public class TrackListView extends AnchorPane {
     protected AnchorPane rootPane;
     @FXML
     protected ListView<String> listView;
-
-    protected List<MusicTrack> tracks = new ArrayList<>();
 
 
 
@@ -49,7 +46,7 @@ public class TrackListView extends AnchorPane {
 
 
     public List<MusicTrack> getTracks() {
-        return tracks;
+        return null;
     }
 
     public void populateListItems() {
@@ -58,7 +55,7 @@ public class TrackListView extends AnchorPane {
         this.listView
         .getItems()
         .addAll(
-            this.tracks
+            this.getTracks()
             .stream()
             .map(t -> t.getName())
             .collect(Collectors.toList()));
@@ -69,7 +66,7 @@ public class TrackListView extends AnchorPane {
         .getSelectionModel()
         .getSelectedIndices()
         .stream()
-        .map(i -> this.tracks.get(i))
+        .map(i -> this.getTracks().get(i))
         .collect(Collectors.toList());
     }
 }

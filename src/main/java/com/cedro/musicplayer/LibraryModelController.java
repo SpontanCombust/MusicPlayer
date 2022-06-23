@@ -20,7 +20,7 @@ public class LibraryModelController extends AnchorPane {
     private AnchorPane rootPane;
 
     @FXML
-    private AllTracksTrackListView allTrackListView;
+    private LibraryTrackListView allTrackListView;
 
     @FXML
     private StackPane albumsStackPane;
@@ -62,22 +62,22 @@ public class LibraryModelController extends AnchorPane {
         .getAlbumMap()
         .values()
         .stream()
-        .map(a -> makeAlbumVbox(a))
+        .map(a -> makeCollectionVbox(a))
         .collect(Collectors.toList());
         
         albumsFlowPane.getChildren().clear();
         albumsFlowPane.getChildren().addAll(albumVboxes);
     }
 
-    VBox makeAlbumVbox(MusicAlbum album) {
+    VBox makeCollectionVbox(MusicCollection collection) {
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
 
-        ImageView iv = new ImageView(album.getCoverImage());
+        ImageView iv = new ImageView(collection.getCoverImage());
         iv.setFitWidth(200);
         iv.setPreserveRatio(true);
         
-        Label l = new Label(album.getName());
+        Label l = new Label(collection.getName());
         
         vbox.getChildren().addAll(iv, l);
 
@@ -91,22 +91,10 @@ public class LibraryModelController extends AnchorPane {
         jb.getMusicDatabase()
         .getUserCollectionList()
         .stream()
-        .map(c -> makeUserCollectionVbox(c))
+        .map(c -> makeCollectionVbox(c))
         .collect(Collectors.toList());
 
         customCollectionsFlowPane.getChildren().clear();
         customCollectionsFlowPane.getChildren().addAll(userCollectionVboxes);
     }
-
-    VBox makeUserCollectionVbox(MusicCollection collection) {
-        VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
-
-        Label l = new Label(collection.getName());
-
-        vbox.getChildren().addAll(l);
-
-        return vbox;
-    }
-
 }

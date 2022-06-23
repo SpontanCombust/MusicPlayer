@@ -1,6 +1,7 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.scene.input.MouseEvent;
 
@@ -8,9 +9,6 @@ public class PlaylistTrackListView extends TrackListView {
 
     public PlaylistTrackListView() throws IOException {
         super();
-
-        this.tracks = Jukebox.getInstance().getPlaylist();
-        this.populateListItems();
     }
     
     @Override
@@ -23,6 +21,11 @@ public class PlaylistTrackListView extends TrackListView {
                 onCurrentTrackIndexChanged(newVal.intValue());
             }
         );
+    }
+
+    @Override
+    public List<MusicTrack> getTracks() {
+        return Jukebox.getInstance().getPlaylist();
     }
 
     private void onCurrentTrackIndexChanged(int newIndex) {

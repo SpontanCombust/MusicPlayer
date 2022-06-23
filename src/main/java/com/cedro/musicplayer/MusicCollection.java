@@ -56,6 +56,10 @@ public class MusicCollection {
         .filter(t -> this.tracksPaths.contains(t.getFilePath()))
         .collect(Collectors.toList());
     }
+
+    public void addTracks(List<MusicTrack> tracks) {
+        tracks.stream().forEach(t -> this.tracksPaths.add(t.getFilePath()));
+    }
     
     public JSONObject toJSON() {
         return new JSONObject()
