@@ -13,7 +13,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
-public class TrackListView extends AnchorPane {
+public abstract class TrackListView extends AnchorPane {
     @FXML
     protected AnchorPane rootPane;
     @FXML
@@ -31,7 +31,6 @@ public class TrackListView extends AnchorPane {
     @FXML
     public void initialize() {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        populateListItems();
     }
 
     @FXML

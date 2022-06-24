@@ -7,9 +7,6 @@ import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -46,14 +43,10 @@ public class LibraryModelController extends AnchorPane {
 
     @FXML
     public void initialize() {
-        // populateAllTracks();
+        allTrackListView.populateListItems();
         populateAlbums();
         populateUserCollections();
     }
-
-    // void populateAllTracks() {
-        
-    // }
 
     void populateAlbums() {
         Jukebox jb = Jukebox.getInstance();
@@ -63,26 +56,11 @@ public class LibraryModelController extends AnchorPane {
         .getAlbumMap()
         .values()
         .stream()
-        .map(a -> makeCollectionVbox(a))
+        .map(a -> new LibraryCollectionTile(a, this.albumsStackPane))
         .collect(Collectors.toList());
         
         albumsFlowPane.getChildren().clear();
         albumsFlowPane.getChildren().addAll(albumVboxes);
-    }
-
-    VBox makeCollectionVbox(MusicCollection collection) {
-        VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
-
-        ImageView iv = new ImageView(collection.getCoverImage());
-        iv.setFitWidth(200);
-        iv.setPreserveRatio(true);
-        
-        Label l = new Label(collection.getName());
-        
-        vbox.getChildren().addAll(iv, l);
-
-        return vbox;
     }
 
     void populateUserCollections() {
@@ -92,7 +70,7 @@ public class LibraryModelController extends AnchorPane {
         jb.getMusicDatabase()
         .getUserCollectionList()
         .stream()
-        .map(c -> makeCollectionVbox(c))
+        .map(c -> new LibraryCollectionTile(c, this.customCollectionsStackPane))
         .collect(Collectors.toList());
 
         customCollectionsFlowPane.getChildren().clear();

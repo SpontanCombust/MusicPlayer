@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javafx.scene.control.ContextMenu;
 
-public class LibraryTrackListView extends TrackListView {
+public abstract class LibraryTrackListView extends TrackListView {
 
     public LibraryTrackListView() throws IOException {
         super();
