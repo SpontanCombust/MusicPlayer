@@ -88,7 +88,23 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
         File file = fc.showOpenDialog(parentTile.getScene().getWindow());
         if(file != null) {
             this.parentTile.getCollection().setCoverImagePath(file.toPath().toAbsolutePath());
-            this.parentTile.reloadCoverImage();
+            this.parentTile.reloadView();
+        }
+    }
+
+    @FXML
+    void onChangeName(ActionEvent event) {
+        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
+        
+        TextInputDialog tid = new TextInputDialog();
+        tid.setTitle(bundle.getString("library_collection_tile_context_menu_item_change_name_dialog_title"));
+        tid.setHeaderText(bundle.getString("library_collection_tile_context_menu_item_change_name_dialog_header"));
+        tid.setResult(this.parentTile.getCollection().getName());
+        
+        Optional<String> result = tid.showAndWait();
+        if(result.isPresent()) {
+            this.parentTile.getCollection().setName(result.get());
+            this.parentTile.reloadView();
         }
     }
 }

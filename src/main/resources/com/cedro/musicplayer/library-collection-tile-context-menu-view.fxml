@@ -12,6 +12,7 @@
         <MenuItem mnemonicParsing="false" onAction="#onAddToNewCollection" text="%library_collection_tile_context_menu_item_add_to_collection_new_collection" />
       </items>
     </Menu>
+    <MenuItem onAction="#onChangeName" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_change_name" />
     <MenuItem onAction="#onChangeCoverImage" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_change_cover_image" />
   </items>
 </fx:root>

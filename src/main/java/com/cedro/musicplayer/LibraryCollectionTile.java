@@ -17,6 +17,7 @@ public class LibraryCollectionTile extends VBox {
     private MusicCollection collection;
     private StackPane parentStackPane;
     private ImageView coverImageView;
+    private Label collectionNameLabel;
 
     public LibraryCollectionTile(MusicCollection collection, StackPane parentStackPane) {
         this.setAlignment(Pos.CENTER);
@@ -25,9 +26,9 @@ public class LibraryCollectionTile extends VBox {
         this.coverImageView.setFitWidth(200);
         this.coverImageView.setPreserveRatio(true);
         
-        Label collectionName = new Label(collection.getName());
+        this.collectionNameLabel = new Label(collection.getName());
 
-        this.getChildren().addAll(this.coverImageView, collectionName);
+        this.getChildren().addAll(this.coverImageView, this.collectionNameLabel);
         this.setOnContextMenuRequested(event -> {
             try {
                 ContextMenu cm = new LibraryCollectionTileContextMenu(this);
@@ -72,7 +73,8 @@ public class LibraryCollectionTile extends VBox {
         return this.collection;
     }
 
-    public void reloadCoverImage() {
+    public void reloadView() {
+        this.collectionNameLabel.setText(this.collection.getName());
         this.coverImageView.setImage(this.collection.getCoverImage());
     }
 }
