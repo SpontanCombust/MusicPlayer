@@ -1,9 +1,11 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
@@ -11,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class RootController {
+public class RootController extends AnchorPane {
 
     @FXML
     private AnchorPane contentPane;
@@ -23,6 +25,12 @@ public class RootController {
     private ToggleButton buttonOpenLibrary;
 
 
+    public RootController() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("root-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
+        loader.setController(this);
+        loader.setRoot(this);
+        loader.load();
+    }
 
     @FXML
     public void initialize() throws IOException {

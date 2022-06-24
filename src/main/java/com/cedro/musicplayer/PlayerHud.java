@@ -1,6 +1,7 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +34,7 @@ public class PlayerHud extends VBox {
 
 
     public PlayerHud() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("player-hud-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("player-hud-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
         loader.setController(this);
         loader.setRoot(this);
         loader.load(); 
@@ -44,7 +45,7 @@ public class PlayerHud extends VBox {
         this.musicTimeText.setText("00:00/00:00");
         this.musicTimelineSlider.setMin(0.0);
         this.musicTimelineSlider.setValue(0.0);
-        this.playPauseButton.setText("Play");
+        this.playPauseButton.setText(getPlayPauseButtonText(false));
         this.volumeSlider.setMin(0.0);
         this.volumeSlider.setMax(1.0);
         this.volumeSlider.setValue(1.0);
@@ -141,10 +142,15 @@ public class PlayerHud extends VBox {
             return;
         }
 
-        if(newStatus == MediaPlayer.Status.PLAYING) {
-            this.playPauseButton.setText("Pause");
+        this.playPauseButton.setText(getPlayPauseButtonText(newStatus == MediaPlayer.Status.PLAYING));
+    }
+
+    private String getPlayPauseButtonText(boolean isPlaying) {
+        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
+        if(isPlaying) {
+            return bundle.getString("player_view_button_pause_track");
         } else {
-            this.playPauseButton.setText("Play");
+            return bundle.getString("player_view_button_play_track");
         }
     }
 

@@ -16,8 +16,8 @@
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <ImageView fx:id="albumCoverImageView" fitHeight="200.0" fitWidth="200.0" />
-   <Label fx:id="musicTitleText" text="Music title" />
-   <Label fx:id="musicTimeText" text="Music time" />
+   <Label fx:id="musicTitleText" text="music_title" />
+   <Label fx:id="musicTimeText" text="music_time" />
    <Slider fx:id="musicTimelineSlider" onMouseDragged="#onMusicSliderCursorDragged" onMousePressed="#onMusicSliderMousePressed" onMouseReleased="#onMusicSliderMouseReleased" />
    <GridPane alignment="TOP_CENTER">
      <columnConstraints>
@@ -31,9 +31,9 @@
       <children>
          <HBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
             <children>
-               <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onPreviousTrackClick" text="Previous" />
-               <Button fx:id="playPauseButton" alignment="TOP_CENTER" onAction="#onPlayPauseClick" text="Play/Pause" />
-               <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onNextTrackClick" text="Next" />
+               <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onPreviousTrackClick" text="%player_view_button_previous_track" />
+               <Button fx:id="playPauseButton" alignment="TOP_CENTER" onAction="#onPlayPauseClick" text="%player_view_button_play_track" />
+               <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onNextTrackClick" text="%player_view_button_next_track" />
             </children>
          </HBox>
          <Slider fx:id="volumeSlider" value="100.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" />

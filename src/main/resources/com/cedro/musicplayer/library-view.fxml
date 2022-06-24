@@ -12,7 +12,7 @@
    <children>
       <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
-            <Tab text="All tracks">
+            <Tab text="%library_view_tab_all_tracks">
               <content>
                 <AnchorPane>
                      <children>
@@ -21,7 +21,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-          <Tab text="Albums">
+          <Tab text="%library_view_tab_albums">
             <content>
               <AnchorPane>
                      <children>
@@ -38,7 +38,7 @@
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab text="Custom collections">
+            <Tab text="%library_view_tab_user_collections">
               <content>
                 <AnchorPane>
                      <children>

@@ -9,35 +9,35 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cedro.musicplayer.RootController">
+<fx:root type="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox>
          <children>
             <MenuBar>
               <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu mnemonicParsing="false" text="%root_view_menu_file">
                   <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromFileSystem" text="Load music from file system..." />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromDatabase" text="Load music database..." />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToDatabase" text="Save music database..." />
-                    <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="Exit" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromFileSystem" text="%root_view_menu_file_load_from_system" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromDatabase" text="%root_view_menu_file_load_from_database" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToDatabase" text="%root_view_menu_file_save_to_system" />
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="%root_view_menu_file_exit" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu mnemonicParsing="false" text="%root_view_menu_help">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#onMenuAbout" text="About" />
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuAbout" text="%root_view_menu_help_about" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
             <HBox minHeight="-Infinity" minWidth="-Infinity">
                <children>
-                  <ToggleButton fx:id="buttonOpenPlayer" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" text="Player">
+                  <ToggleButton fx:id="buttonOpenPlayer" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" text="%root_view_button_player">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </ToggleButton>
-                  <ToggleButton fx:id="buttonOpenLibrary" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" text="Library" />
+                  <ToggleButton fx:id="buttonOpenLibrary" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" text="%root_view_button_library" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" />
@@ -48,4 +48,4 @@
          </children>
       </VBox>
    </children>
-</AnchorPane>
+</fx:root>
