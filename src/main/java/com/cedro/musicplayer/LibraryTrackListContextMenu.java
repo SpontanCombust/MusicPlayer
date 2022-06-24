@@ -1,8 +1,10 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,20 +32,28 @@ public class LibraryTrackListContextMenu extends ContextMenu {
 
     @FXML
     void initialize() {
-        Jukebox.getInstance().getMusicDatabase().getUserCollectionList().forEach(collection -> {
+        List<MenuItem> items = 
+        Jukebox.getInstance()
+        .getMusicDatabase()
+        .getUserCollectionList().stream()
+        .map(collection -> {
             MenuItem collectionItem = new MenuItem();
             collectionItem.setText(collection.getName());
             collectionItem.setOnAction(e -> {
                 collection.addTracks(this.parentTrackListView.getSelectedTracks());
             });
-            menuAddToUserCollection.getItems().add(collectionItem);
-        });
+
+            return collectionItem;
+
+        }).collect(Collectors.toList());
+
+        // inserting to the beginning so the "new collection" item is at the bottom
+        menuAddToUserCollection.getItems().addAll(0, items);
     }
 
     @FXML
     void onAddToPlaylist(ActionEvent event) {
         Jukebox.getInstance().getPlaylist().addAll(this.parentTrackListView.getSelectedTracks());
-        parentTrackListView.populateListItems();
     }
 
     @FXML

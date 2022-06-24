@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -15,17 +16,26 @@ public class LibraryCollectionTile extends VBox {
 
     private MusicCollection collection;
     private StackPane parentStackPane;
+    private ImageView coverImageView;
 
     public LibraryCollectionTile(MusicCollection collection, StackPane parentStackPane) {
         this.setAlignment(Pos.CENTER);
 
-        ImageView iv = new ImageView(collection.getCoverImage());
-        iv.setFitWidth(200);
-        iv.setPreserveRatio(true);
+        this.coverImageView = new ImageView(collection.getCoverImage());
+        this.coverImageView.setFitWidth(200);
+        this.coverImageView.setPreserveRatio(true);
         
-        Label l = new Label(collection.getName());
+        Label collectionName = new Label(collection.getName());
 
-        this.getChildren().addAll(iv, l);
+        this.getChildren().addAll(this.coverImageView, collectionName);
+        this.setOnContextMenuRequested(event -> {
+            try {
+                ContextMenu cm = new LibraryCollectionTileContextMenu(this);
+                cm.show(this, event.getScreenX(), event.getScreenY());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         this.collection = collection;
         this.parentStackPane = parentStackPane;
@@ -56,5 +66,13 @@ public class LibraryCollectionTile extends VBox {
                 e.printStackTrace();
             }
         }
+    }
+
+    public MusicCollection getCollection() {
+        return this.collection;
+    }
+
+    public void reloadCoverImage() {
+        this.coverImageView.setImage(this.collection.getCoverImage());
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Menu?>
+
+<fx:root type="ContextMenu" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+  <items>
+    <MenuItem onAction="#onAddToPlaylist" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_add_to_playlist" />
+    <Menu fx:id="menuAddToUserCollection" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_add_to_collection">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#onAddToNewCollection" text="%library_collection_tile_context_menu_item_add_to_collection_new_collection" />
+      </items>
+    </Menu>
+    <MenuItem onAction="#onChangeCoverImage" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_change_cover_image" />
+  </items>
+</fx:root>

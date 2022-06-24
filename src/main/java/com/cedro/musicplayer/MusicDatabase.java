@@ -101,10 +101,11 @@ public class MusicDatabase {
         Files.write(filePath, json.toString().getBytes());
     }
 
+    //TODO localize!
     public void requestSaveToDatabaseFile(Window window) {
         var fileChooser = new FileChooser();
         fileChooser.setTitle("Save Music Database");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", DB_FILE_EXTENSION));
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", "*" + DB_FILE_EXTENSION));
         fileChooser.setInitialFileName("music" + MusicDatabase.DB_FILE_EXTENSION);
         fileChooser.setInitialDirectory(new File("."));
 
