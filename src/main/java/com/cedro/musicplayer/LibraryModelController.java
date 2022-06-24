@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
@@ -46,6 +48,25 @@ public class LibraryModelController extends AnchorPane {
         allTrackListView.populateListItems();
         populateAlbums();
         populateUserCollections();
+
+        Jukebox.getInstance().getMusicDatabase().getTrackMap().addListener(new MapChangeListener<>() {
+            @Override
+            public void onChanged(MapChangeListener.Change c) {
+                allTrackListView.populateListItems();
+            }  
+        });
+        Jukebox.getInstance().getMusicDatabase().getAlbumMap().addListener(new MapChangeListener<>() {
+            @Override
+            public void onChanged(MapChangeListener.Change c) {
+                populateAlbums();
+            }
+        });
+        Jukebox.getInstance().getMusicDatabase().getUserCollectionList().addListener(new ListChangeListener<>() {
+            @Override
+            public void onChanged(ListChangeListener.Change c) {
+                populateUserCollections();
+            }
+        });
     }
 
     void populateAlbums() {

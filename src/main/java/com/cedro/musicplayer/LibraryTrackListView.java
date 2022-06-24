@@ -15,7 +15,7 @@ public abstract class LibraryTrackListView extends TrackListView {
         super.initialize();
 
         try {
-            ContextMenu cm = new LibraryTrackListContextMenu(() -> this.getSelectedTracks());
+            ContextMenu cm = new LibraryTrackListContextMenu(this);
             this.listView.setContextMenu(cm);
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,11 +1,10 @@
 package com.cedro.musicplayer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -25,7 +24,7 @@ public class Jukebox {
 
     private MediaPlayer mediaPlayer = null;
 
-    private List<MusicTrack> playlist = new ArrayList<>();
+    private ObservableList<MusicTrack> playlist = FXCollections.observableArrayList();
     private MusicDatabase musicDatabase = new MusicDatabase();
 
 
@@ -43,7 +42,7 @@ public class Jukebox {
     
 
 
-    public List<MusicTrack> getPlaylist() {
+    public ObservableList<MusicTrack> getPlaylist() {
         return this.playlist;
     }
 

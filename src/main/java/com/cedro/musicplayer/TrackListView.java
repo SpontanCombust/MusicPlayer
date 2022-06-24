@@ -61,7 +61,7 @@ public abstract class TrackListView extends AnchorPane {
             .collect(Collectors.toList()));
     }
 
-    protected List<MusicTrack> getSelectedTracks() {
+    public List<MusicTrack> getSelectedTracks() {
         return this.listView
         .getSelectionModel()
         .getSelectedIndices()

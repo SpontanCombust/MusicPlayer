@@ -5,17 +5,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.DirectoryChooser;
@@ -25,9 +24,9 @@ import javafx.stage.Window;
 public class MusicDatabase {
     public static final String DB_FILE_EXTENSION = ".musicdb";
 
-    private HashMap<Path, MusicTrack> trackMap = new HashMap<>();
-    private HashMap<Path, MusicAlbum> albumMap = new HashMap<>();
-    private ArrayList<MusicCollection> userCollectionList = new ArrayList<>();
+    private ObservableMap<Path, MusicTrack> trackMap = FXCollections.observableHashMap();
+    private ObservableMap<Path, MusicAlbum> albumMap = FXCollections.observableHashMap();
+    private ObservableList<MusicCollection> userCollectionList = FXCollections.observableArrayList();
 
 
 
@@ -68,16 +67,16 @@ public class MusicDatabase {
 
     // ================== READ ONLY ACCESSORS ==================
 
-    public Map<Path, MusicTrack> getTrackMap() {
-        return Collections.unmodifiableMap(trackMap);
+    public ObservableMap<Path, MusicTrack> getTrackMap() {
+        return trackMap;
     }
 
-    public Map<Path, MusicAlbum> getAlbumMap() {
-        return Collections.unmodifiableMap(albumMap);
+    public ObservableMap<Path, MusicAlbum> getAlbumMap() {
+        return albumMap;
     }
 
-    public List<MusicCollection> getUserCollectionList() {
-        return Collections.unmodifiableList(userCollectionList);
+    public ObservableList<MusicCollection> getUserCollectionList() {
+        return userCollectionList;
     }
     
 

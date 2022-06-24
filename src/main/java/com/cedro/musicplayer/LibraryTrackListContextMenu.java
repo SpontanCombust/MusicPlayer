@@ -1,10 +1,8 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,16 +16,16 @@ public class LibraryTrackListContextMenu extends ContextMenu {
     @FXML
     private Menu menuAddToUserCollection;
 
-    private Callable<List<MusicTrack>> selectedMusicTracksGetter;
+    private TrackListView parentTrackListView;
 
 
-    public LibraryTrackListContextMenu(Callable<List<MusicTrack>> selectedMusicTracksGetter) throws IOException {
+    public LibraryTrackListContextMenu(TrackListView trackListView) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("library-track-list-context-menu-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
 
-        this.selectedMusicTracksGetter = selectedMusicTracksGetter;
+        this.parentTrackListView = trackListView;
     }
 
     @FXML
@@ -36,11 +34,7 @@ public class LibraryTrackListContextMenu extends ContextMenu {
             MenuItem collectionItem = new MenuItem();
             collectionItem.setText(collection.getName());
             collectionItem.setOnAction(e -> {
-                try {
-                    collection.addTracks(this.selectedMusicTracksGetter.call());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                collection.addTracks(this.parentTrackListView.getSelectedTracks());
             });
             menuAddToUserCollection.getItems().add(collectionItem);
         });
@@ -48,11 +42,8 @@ public class LibraryTrackListContextMenu extends ContextMenu {
 
     @FXML
     void onAddToPlaylist(ActionEvent event) {
-        try {
-            Jukebox.getInstance().getPlaylist().addAll(this.selectedMusicTracksGetter.call());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Jukebox.getInstance().getPlaylist().addAll(this.parentTrackListView.getSelectedTracks());
+        parentTrackListView.populateListItems();
     }
 
     @FXML
@@ -65,14 +56,10 @@ public class LibraryTrackListContextMenu extends ContextMenu {
 
         Optional<String> result = tid.showAndWait();
         if(result.isPresent()) {
-            try {
-                MusicCollection newCollection = new MusicCollection();
-                newCollection.setName(result.get());
-                newCollection.addTracks(this.selectedMusicTracksGetter.call());
-                Jukebox.getInstance().getMusicDatabase().addUserCollection(newCollection);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            MusicCollection newCollection = new MusicCollection();
+            newCollection.setName(result.get());
+            newCollection.addTracks(this.parentTrackListView.getSelectedTracks());
+            Jukebox.getInstance().getMusicDatabase().addUserCollection(newCollection);
         }
     }
 

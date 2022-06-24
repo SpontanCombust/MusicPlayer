@@ -42,7 +42,7 @@ public class LibraryCollectionTile extends VBox {
                 Button backButton = new Button("←");
                 backButton.setPrefWidth(75);
                 backButton.setTextAlignment(TextAlignment.CENTER);
-                backButton.setAlignment(Pos.TOP_LEFT);
+                backButton.setAlignment(Pos.CENTER);
                 backButton.setOnAction(e -> {
                     this.parentStackPane.getChildren().remove(vb);
                 });
