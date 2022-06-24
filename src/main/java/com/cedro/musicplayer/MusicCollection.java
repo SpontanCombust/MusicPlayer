@@ -73,7 +73,7 @@ public class MusicCollection {
     }
 
     public static MusicCollection fromJSON(JSONObject json) throws JSONException {
-        MusicCollection collection = new MusicAlbum();
+        MusicCollection collection = new MusicCollection();
         collection.name = json.getString("name");
 
         if(json.isNull("coverImagePath")) {
