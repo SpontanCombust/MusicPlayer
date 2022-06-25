@@ -2,10 +2,13 @@
 
 <?import com.cedro.musicplayer.PlayerHud?>
 <?import com.cedro.musicplayer.PlaylistTrackListView?>
-<?import javafx.scene.layout.VBox?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" type="VBox" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -18,7 +21,16 @@
                 <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
             </rowConstraints>
             <children>
-                <PlaylistTrackListView fx:id="playlistTrackListPane" maxWidth="1.7976931348623157E308" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                <VBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <children>
+                        <Label text="%playlist_track_list_label">
+                            <VBox.margin>
+                                <Insets bottom="5.0" top="20.0" left="5.0" />
+                            </VBox.margin>
+                        </Label>
+                        <PlaylistTrackListView fx:id="playlistTrackListPane" VBox.vgrow="ALWAYS"/>
+                    </children>
+                </VBox>
                 <PlayerHud fx:id="playerHudPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
             </children>
         </GridPane>

@@ -35,6 +35,8 @@ public class RootController extends AnchorPane {
     @FXML
     public void initialize() throws IOException {
         openPlayer();
+        buttonOpenPlayer.setSelected(true);
+        buttonOpenLibrary.setSelected(false);
     }
 
     @FXML
@@ -74,13 +76,17 @@ public class RootController extends AnchorPane {
 
 
     @FXML
-    protected void onButtonOpenLibrary(ActionEvent event) {
-        openLibrary();
+    protected void onButtonOpenPlayer(ActionEvent event) throws IOException {
+        this.openPlayer();
+        buttonOpenPlayer.setSelected(true);
+        buttonOpenLibrary.setSelected(false);
     }
 
     @FXML
-    protected void onButtonOpenPlayer(ActionEvent event) throws IOException {
-        openPlayer();
+    protected void onButtonOpenLibrary(ActionEvent event) {
+        this.openLibrary();
+        buttonOpenLibrary.setSelected(true);
+        buttonOpenPlayer.setSelected(false);
     }
 
 
@@ -94,41 +100,43 @@ public class RootController extends AnchorPane {
         return content;
     }
 
-    private void openLibrary() {
+    private boolean openLibrary() {
         Node content = getContentNode();
         if(content == null || content instanceof PlayerHudAndTrackList) {
             try {
                 var library = new LibraryModelController();
                 contentPane.getChildren().clear();
                 contentPane.getChildren().add(library);
-                AnchorPane.setTopAnchor(library, 0.0);
-                AnchorPane.setBottomAnchor(library, 0.0);
-                AnchorPane.setLeftAnchor(library, 0.0);
-                AnchorPane.setRightAnchor(library, 0.0);
-                buttonOpenLibrary.setSelected(true);
-                buttonOpenPlayer.setSelected(false);
+                contentPane.setTopAnchor(library, 0.0);
+                contentPane.setBottomAnchor(library, 0.0);
+                contentPane.setLeftAnchor(library, 0.0);
+                contentPane.setRightAnchor(library, 0.0);
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        return false;
     }
 
-    private void openPlayer() {
+    private boolean openPlayer() {
         Node content = getContentNode();
         if(content == null || content instanceof LibraryModelController) {
             try {
                 var player = new PlayerHudAndTrackList();
                 contentPane.getChildren().clear();
                 contentPane.getChildren().add(player);
-                AnchorPane.setTopAnchor(player, 0.0);
-                AnchorPane.setBottomAnchor(player, 0.0);
-                AnchorPane.setLeftAnchor(player, 0.0);
-                AnchorPane.setRightAnchor(player, 0.0);
-                buttonOpenPlayer.setSelected(true);
-                buttonOpenLibrary.setSelected(false);
+                contentPane.setTopAnchor(player, 0.0);
+                contentPane.setBottomAnchor(player, 0.0);
+                contentPane.setLeftAnchor(player, 0.0);
+                contentPane.setRightAnchor(player, 0.0);
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        
+        return false;
     }
 }
