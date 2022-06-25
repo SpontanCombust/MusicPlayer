@@ -32,23 +32,7 @@ public class LibraryTrackListContextMenu extends ContextMenu {
 
     @FXML
     void initialize() {
-        List<MenuItem> items = 
-        Jukebox.getInstance()
-        .getMusicDatabase()
-        .getUserCollectionList().stream()
-        .map(collection -> {
-            MenuItem collectionItem = new MenuItem();
-            collectionItem.setText(collection.getName());
-            collectionItem.setOnAction(e -> {
-                collection.addTracks(this.parentTrackListView.getSelectedTracks());
-            });
-
-            return collectionItem;
-
-        }).collect(Collectors.toList());
-
-        // inserting to the beginning so the "new collection" item is at the bottom
-        menuAddToUserCollection.getItems().addAll(0, items);
+        populateAddToUserCollectionMenu();
     }
 
     @FXML
@@ -70,7 +54,29 @@ public class LibraryTrackListContextMenu extends ContextMenu {
             newCollection.setName(result.get());
             newCollection.addTracks(this.parentTrackListView.getSelectedTracks());
             Jukebox.getInstance().getMusicDatabase().addUserCollection(newCollection);
+            populateAddToUserCollectionMenu();
         }
     }
 
+
+    private void populateAddToUserCollectionMenu() {
+        List<MenuItem> items = 
+        Jukebox.getInstance()
+        .getMusicDatabase()
+        .getUserCollectionList().stream()
+        .map(collection -> {
+            MenuItem collectionItem = new MenuItem();
+            collectionItem.setText(collection.getName());
+            collectionItem.setOnAction(e -> {
+                collection.addTracks(this.parentTrackListView.getTracks());
+            });
+
+            return collectionItem;
+
+        }).collect(Collectors.toList());
+
+        // inserting to the beginning so the "new collection" item is at the bottom
+        menuAddToUserCollection.getItems().remove(0, menuAddToUserCollection.getItems().size() - 1);
+        menuAddToUserCollection.getItems().addAll(0, items);
+    }
 }

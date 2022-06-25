@@ -8,6 +8,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
@@ -22,13 +23,21 @@ public class LibraryCollectionTile extends VBox {
     public LibraryCollectionTile(MusicCollection collection, StackPane parentStackPane) {
         this.setAlignment(Pos.CENTER);
 
+        HBox hbox = new HBox();
+        hbox.setPrefWidth(200);
+        hbox.setPrefHeight(200);
+        hbox.setAlignment(Pos.CENTER);
+
         this.coverImageView = new ImageView(collection.getCoverImage());
         this.coverImageView.setFitWidth(200);
+        this.coverImageView.setFitHeight(200);
         this.coverImageView.setPreserveRatio(true);
         
+        hbox.getChildren().add(this.coverImageView);
+
         this.collectionNameLabel = new Label(collection.getName());
 
-        this.getChildren().addAll(this.coverImageView, this.collectionNameLabel);
+        this.getChildren().addAll(hbox, this.collectionNameLabel);
         this.setOnContextMenuRequested(event -> {
             try {
                 ContextMenu cm = new LibraryCollectionTileContextMenu(this);

@@ -35,23 +35,7 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
 
     @FXML
     void initialize() {
-        List<MenuItem> items = 
-        Jukebox.getInstance()
-        .getMusicDatabase()
-        .getUserCollectionList().stream()
-        .map(collection -> {
-            MenuItem collectionItem = new MenuItem();
-            collectionItem.setText(collection.getName());
-            collectionItem.setOnAction(e -> {
-                collection.addTracks(this.parentTile.getCollection().getTracks());
-            });
-
-            return collectionItem;
-
-        }).collect(Collectors.toList());
-
-        // inserting to the beginning so the "new collection" item is at the bottom
-        menuAddToUserCollection.getItems().addAll(0, items);
+        populateAddToUserCollectionMenu();
     }
         
     @FXML
@@ -73,6 +57,7 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
             newCollection.setName(result.get());
             newCollection.addTracks(this.parentTile.getCollection().getTracks());
             Jukebox.getInstance().getMusicDatabase().addUserCollection(newCollection);
+            populateAddToUserCollectionMenu();
         }
     }
 
@@ -106,5 +91,27 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
             this.parentTile.getCollection().setName(result.get());
             this.parentTile.reloadView();
         }
+    }
+
+
+    private void populateAddToUserCollectionMenu() {
+        List<MenuItem> items = 
+        Jukebox.getInstance()
+        .getMusicDatabase()
+        .getUserCollectionList().stream()
+        .map(collection -> {
+            MenuItem collectionItem = new MenuItem();
+            collectionItem.setText(collection.getName());
+            collectionItem.setOnAction(e -> {
+                collection.addTracks(this.parentTile.getCollection().getTracks());
+            });
+
+            return collectionItem;
+
+        }).collect(Collectors.toList());
+
+        // inserting to the beginning so the "new collection" item is at the bottom
+        menuAddToUserCollection.getItems().remove(0, menuAddToUserCollection.getItems().size() - 1);
+        menuAddToUserCollection.getItems().addAll(0, items);
     }
 }

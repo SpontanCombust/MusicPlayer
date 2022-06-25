@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.cedro.musicplayer.AllTracksTrackListView?>
+
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -29,7 +30,7 @@
                            <children>
                               <ScrollPane>
                                  <content>
-                                    <FlowPane fx:id="albumsFlowPane" prefWrapLength="1200.0" />
+                                    <FlowPane fx:id="albumsFlowPane" hgap="10.0" prefWrapLength="1200.0" vgap="10.0" />
                                  </content>
                               </ScrollPane>
                            </children>
@@ -46,7 +47,7 @@
                            <children>
                               <ScrollPane>
                                  <content>
-                                    <FlowPane fx:id="customCollectionsFlowPane" prefWrapLength="1200.0" />
+                                    <FlowPane fx:id="customCollectionsFlowPane" hgap="10.0" prefWrapLength="1200.0" vgap="10.0" />
                                  </content>
                               </ScrollPane>
                            </children>
