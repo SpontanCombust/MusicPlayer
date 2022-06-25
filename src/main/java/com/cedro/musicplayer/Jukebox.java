@@ -1,5 +1,6 @@
 package com.cedro.musicplayer;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -19,7 +20,9 @@ public class Jukebox {
     public final SimpleObjectProperty<Duration> currentTrackTime = new SimpleObjectProperty<>(new Duration(0.0));
     public final SimpleObjectProperty<Status> currentTrackStatus = new SimpleObjectProperty<>(Status.UNKNOWN);
     public final SimpleObjectProperty<Image> currentTrackCoverImage = new SimpleObjectProperty<>(MusicAlbum.DEFAULT_COVER_IMAGE);
-    public final SimpleFloatProperty currentTrackVolume = new SimpleFloatProperty(1.f);
+    public final SimpleFloatProperty trackVolume = new SimpleFloatProperty(1.f);
+    public final SimpleBooleanProperty playlistAutoplay = new SimpleBooleanProperty(false); 
+    public final SimpleBooleanProperty playlistLooping = new SimpleBooleanProperty(false); 
 
 
     private static Jukebox instance = null;
@@ -107,11 +110,21 @@ public class Jukebox {
     }
 
     public void selectNextTrack() {
-        this.selectTrack(this.currentTrackIndex.get() + 1);
+        int idx = this.currentTrackIndex.get() + 1;
+        if(idx < playlist.size()) {
+            this.selectTrack(idx);
+        } else if(this.playlistLooping.get()){
+            this.selectTrack(0);
+        }
     }
 
     public void selectPreviousTrack() {
-        this.selectTrack(this.currentTrackIndex.get() - 1);
+        int idx = this.currentTrackIndex.get() - 1;
+        if(idx >= 0) {
+            this.selectTrack(idx);
+        } else if(this.playlistLooping.get()){
+            this.selectTrack(playlist.size() - 1);
+        }
     }
 
     public Duration getCurrentTrackDuration() {
@@ -131,7 +144,7 @@ public class Jukebox {
     }
 
     public void setVolume(float volume) {
-        this.currentTrackVolume.set(volume);
+        this.trackVolume.set(volume);
         if(this.mediaPlayer != null) {
             this.mediaPlayer.setVolume(volume);
         }
@@ -147,7 +160,7 @@ public class Jukebox {
         this.currentTrackStatus.bind(this.mediaPlayer.statusProperty());
         this.currentTrackCoverImage.set(playlist.get(index).getParentAlbum().getCoverImage());
 
-        this.mediaPlayer.setVolume(this.currentTrackVolume.floatValue());
+        this.mediaPlayer.setVolume(this.trackVolume.floatValue());
 
         if(wasPlayingBefore) {
             this.mediaPlayer.play();
@@ -155,9 +168,13 @@ public class Jukebox {
     }
 
     private void onTrackFinished() {
-        // simply seeking to the beginning or stopping doesn't seem to work as it should
-        // it always seeks a little bit after the beginning
-        // the hack is to just reselect the song
-        this.selectTrack(this.currentTrackIndex.get(), false);
+        if(this.playlistAutoplay.get()) {
+            this.selectNextTrack();
+        } else {
+            // simply seeking to the beginning or stopping doesn't seem to work as it should
+            // it always seeks a little bit after the beginning
+            // the hack is to just reselect the song
+            this.selectTrack(this.currentTrackIndex.get(), false);
+        }
     }
 }

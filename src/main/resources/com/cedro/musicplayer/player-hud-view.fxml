@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -29,11 +30,17 @@
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
+         <HBox>
+            <children>
+               <ToggleButton fx:id="autoplayButton" minWidth="50.0" mnemonicParsing="false" text="%player_view_button_autoplay" />
+               <ToggleButton fx:id="loopButton" minWidth="50.0" mnemonicParsing="false" text="%player_view_button_loop" />
+            </children>
+         </HBox>
          <HBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
             <children>
-               <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onPreviousTrackClick" text="%player_view_button_previous_track" />
-               <Button fx:id="playPauseButton" alignment="TOP_CENTER" onAction="#onPlayPauseClick" text="%player_view_button_play_track" />
-               <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onNextTrackClick" text="%player_view_button_next_track" />
+               <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#onPreviousTrackClick" text="%player_view_button_previous_track" />
+               <Button fx:id="playPauseButton" alignment="CENTER" minWidth="100.0" onAction="#onPlayPauseClick" text="%player_view_button_play_track" />
+               <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#onNextTrackClick" text="%player_view_button_next_track" />
             </children>
          </HBox>
          <Slider fx:id="volumeSlider" value="100.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" />
