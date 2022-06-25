@@ -1,7 +1,6 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +37,7 @@ public class PlayerHud extends VBox {
 
 
     public PlayerHud() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("player-hud-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("player-hud-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load(); 
@@ -185,11 +184,10 @@ public class PlayerHud extends VBox {
     }
     
     private String getPlayPauseButtonText(boolean isPlaying) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
         if(isPlaying) {
-            return bundle.getString("player_view_button_pause_track");
+            return Localization.getString("player_view_button_pause_track");
         } else {
-            return bundle.getString("player_view_button_play_track");
+            return Localization.getString("player_view_button_play_track");
         }
     }
 

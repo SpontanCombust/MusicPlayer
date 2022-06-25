@@ -2,7 +2,6 @@ package com.cedro.musicplayer;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.collections.ListChangeListener;
@@ -37,7 +36,7 @@ public class LibraryModelController extends AnchorPane {
 
 
     public LibraryModelController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("library-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("library-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load();

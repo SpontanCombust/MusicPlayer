@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
@@ -25,7 +24,7 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
 
 
     public LibraryCollectionTileContextMenu(LibraryCollectionTile tile) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("library-collection-tile-context-menu-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("library-collection-tile-context-menu-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
@@ -45,11 +44,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
 
     @FXML
     void onAddToNewCollection(ActionEvent event) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-        
         TextInputDialog tid = new TextInputDialog();
-        tid.setTitle(bundle.getString("library_collection_tile_context_menu_item_add_to_collection_dialog_title"));
-        tid.setHeaderText(bundle.getString("library_collection_tile_context_menu_item_add_to_collection_dialog_header"));
+        tid.setTitle(Localization.getString("library_collection_tile_context_menu_item_add_to_collection_dialog_title"));
+        tid.setHeaderText(Localization.getString("library_collection_tile_context_menu_item_add_to_collection_dialog_header"));
 
         Optional<String> result = tid.showAndWait();
         if(result.isPresent()) {
@@ -63,11 +60,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
 
     @FXML
     void onChangeCoverImage(ActionEvent event) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-
         FileChooser fc = new FileChooser();
-        fc.setTitle(bundle.getString("library_collection_tile_change_cover_image_dialog_title"));
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(bundle.getString("library_collection_tile_change_cover_image_dialog_file_category"), MusicAlbum.IMAGE_EXTENSIONS.stream().map(ext -> "*." + ext).collect(Collectors.toList())));
+        fc.setTitle(Localization.getString("library_collection_tile_change_cover_image_dialog_title"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString("library_collection_tile_change_cover_image_dialog_file_category"), MusicAlbum.IMAGE_EXTENSIONS.stream().map(ext -> "*." + ext).collect(Collectors.toList())));
         fc.setInitialDirectory(new File("."));
 
         File file = fc.showOpenDialog(parentTile.getScene().getWindow());
@@ -79,11 +74,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
 
     @FXML
     void onChangeName(ActionEvent event) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-        
         TextInputDialog tid = new TextInputDialog();
-        tid.setTitle(bundle.getString("library_collection_tile_context_menu_item_change_name_dialog_title"));
-        tid.setHeaderText(bundle.getString("library_collection_tile_context_menu_item_change_name_dialog_header"));
+        tid.setTitle(Localization.getString("library_collection_tile_context_menu_item_change_name_dialog_title"));
+        tid.setHeaderText(Localization.getString("library_collection_tile_context_menu_item_change_name_dialog_header"));
         tid.setResult(this.parentTile.getCollection().getName());
         
         Optional<String> result = tid.showAndWait();

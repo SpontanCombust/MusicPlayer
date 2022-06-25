@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -103,11 +102,9 @@ public class MusicDatabase {
     }
 
     public void requestSaveToConfigurationFile(Window window) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(bundle.getString("database_save_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString("database_save_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(bundle.getString("database_save_config_dialog_title"));
+        fileChooser.setTitle(Localization.getString("database_save_config_dialog_title"));
         fileChooser.getExtensionFilters().add(filter);
         fileChooser.setSelectedExtensionFilter(filter);
         fileChooser.setInitialFileName("music" + MusicDatabase.CONFIG_FILE_EXTENSION);
@@ -119,8 +116,8 @@ public class MusicDatabase {
                 saveToConfigurationFile(selectedFile.toPath());
             } catch (IOException e) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle(bundle.getString("database_save_config_dialog_error_title"));
-                alert.setHeaderText(bundle.getString("database_save_config_dialog_error_header"));
+                alert.setTitle(Localization.getString("database_save_config_dialog_error_title"));
+                alert.setHeaderText(Localization.getString("database_save_config_dialog_error_header"));
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
@@ -155,11 +152,9 @@ public class MusicDatabase {
     }
 
     public void requestLoadFromConfigurationFile(Window window) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(bundle.getString("database_load_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString("database_load_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(bundle.getString("database_load_config_dialog_title"));
+        fileChooser.setTitle(Localization.getString("database_load_config_dialog_title"));
         fileChooser.getExtensionFilters().add(filter);
         fileChooser.setSelectedExtensionFilter(filter);
         fileChooser.setInitialDirectory(new File("."));
@@ -170,8 +165,8 @@ public class MusicDatabase {
                 loadFromConfigurationFile(selectedFile.toPath());
             } catch (Exception e) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle(bundle.getString("database_load_config_dialog_error_title"));
-                alert.setHeaderText(bundle.getString("database_load_config_dialog_error_header"));
+                alert.setTitle(Localization.getString("database_load_config_dialog_error_title"));
+                alert.setHeaderText(Localization.getString("database_load_config_dialog_error_header"));
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
@@ -184,10 +179,8 @@ public class MusicDatabase {
     }
 
     public void requestLoadFromFileSystem(Window window) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle(bundle.getString("database_load_from_filesystem_dialog_title"));
+        directoryChooser.setTitle(Localization.getString("database_load_from_filesystem_dialog_title"));
         directoryChooser.setInitialDirectory(new File("."));
 
         File selectedDirectory = directoryChooser.showDialog(window);

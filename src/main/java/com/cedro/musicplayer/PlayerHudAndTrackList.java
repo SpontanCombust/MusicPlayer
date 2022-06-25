@@ -1,7 +1,6 @@
 package com.cedro.musicplayer;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,7 @@ public class PlayerHudAndTrackList extends VBox {
     private PlaylistTrackListView playlistTrackListPane;
 
     public PlayerHudAndTrackList() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("playerhud-and-tracklist-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("playerhud-and-tracklist-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load(); 
