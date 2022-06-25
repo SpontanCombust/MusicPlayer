@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -22,7 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 public class MusicDatabase {
-    public static final String DB_FILE_EXTENSION = ".musicdb";
+    public static final String CONFIG_FILE_EXTENSION = ".mpconfig";
 
     private ObservableMap<Path, MusicTrack> trackMap = FXCollections.observableHashMap();
     private ObservableMap<Path, MusicAlbum> albumMap = FXCollections.observableHashMap();
@@ -83,7 +84,7 @@ public class MusicDatabase {
 
     // =========================== IO ===========================
 
-    public void saveToDatabaseFile(Path filePath) throws IOException {
+    public void saveToConfigurationFile(Path filePath) throws IOException {
         JSONObject json = new JSONObject()
         .put("albums", new JSONArray(
             albumMap.values().stream()
@@ -94,38 +95,42 @@ public class MusicDatabase {
             .map(MusicCollection::toJSON)
             .collect(Collectors.toList())));
         
-        if(!filePath.toString().endsWith(DB_FILE_EXTENSION)) {
-            filePath = filePath.resolveSibling(filePath.getFileName() + DB_FILE_EXTENSION);
+        if(!filePath.toString().endsWith(CONFIG_FILE_EXTENSION)) {
+            filePath = filePath.resolveSibling(filePath.getFileName() + CONFIG_FILE_EXTENSION);
         }
 
-        Files.write(filePath, json.toString().getBytes());
+        Files.write(filePath, json.toString(4).getBytes());
     }
 
-    //TODO localize!
-    public void requestSaveToDatabaseFile(Window window) {
-        var fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Music Database");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", "*" + DB_FILE_EXTENSION));
-        fileChooser.setInitialFileName("music" + MusicDatabase.DB_FILE_EXTENSION);
+    public void requestSaveToConfigurationFile(Window window) {
+        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
+
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(bundle.getString("database_save_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("database_save_config_dialog_title"));
+        fileChooser.getExtensionFilters().add(filter);
+        fileChooser.setSelectedExtensionFilter(filter);
+        fileChooser.setInitialFileName("music" + MusicDatabase.CONFIG_FILE_EXTENSION);
         fileChooser.setInitialDirectory(new File("."));
 
         File selectedFile = fileChooser.showSaveDialog(window);
         if(selectedFile != null) {
             try {
-                saveToDatabaseFile(selectedFile.toPath());
+                saveToConfigurationFile(selectedFile.toPath());
             } catch (IOException e) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error saving database");
-                alert.setContentText("Error saving database to file: " + e.getMessage());
+                alert.setTitle(bundle.getString("database_save_config_dialog_error_title"));
+                alert.setHeaderText(bundle.getString("database_save_config_dialog_error_header"));
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
             }
         }
     }
 
     // If error occurs returns non-empty string
-    public void loadFromDatabaseFile(Path filePath) throws Exception {
-        if(!filePath.toString().endsWith(DB_FILE_EXTENSION)) {
-            throw new Exception("File extension must be " + DB_FILE_EXTENSION);
+    public void loadFromConfigurationFile(Path filePath) throws Exception {
+        if(!filePath.toString().endsWith(CONFIG_FILE_EXTENSION)) {
+            throw new Exception("File extension must be " + CONFIG_FILE_EXTENSION);
         }
 
         FileReader fr = new FileReader(filePath.toFile());
@@ -149,21 +154,26 @@ public class MusicDatabase {
         }
     }
 
-    public void requestLoadFromDatabaseFile(Window window) {
-        var fileChooser = new FileChooser();
-        fileChooser.setTitle("Load Music Database");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Music Database", MusicDatabase.DB_FILE_EXTENSION));
+    public void requestLoadFromConfigurationFile(Window window) {
+        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
+
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(bundle.getString("database_load_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("database_load_config_dialog_title"));
+        fileChooser.getExtensionFilters().add(filter);
+        fileChooser.setSelectedExtensionFilter(filter);
         fileChooser.setInitialDirectory(new File("."));
 
         File selectedFile = fileChooser.showOpenDialog(window);
         if(selectedFile != null) {
             try {
-                loadFromDatabaseFile(selectedFile.toPath());
+                loadFromConfigurationFile(selectedFile.toPath());
             } catch (Exception e) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error loading database");
-                alert.setContentText("Error loading database from file: " + e.getMessage());
+                alert.setTitle(bundle.getString("database_load_config_dialog_error_title"));
+                alert.setHeaderText(bundle.getString("database_load_config_dialog_error_header"));
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
             }
         }
     }
@@ -174,8 +184,10 @@ public class MusicDatabase {
     }
 
     public void requestLoadFromFileSystem(Window window) {
+        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
+
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Load music from file system");
+        directoryChooser.setTitle(bundle.getString("database_load_from_filesystem_dialog_title"));
         directoryChooser.setInitialDirectory(new File("."));
 
         File selectedDirectory = directoryChooser.showDialog(window);

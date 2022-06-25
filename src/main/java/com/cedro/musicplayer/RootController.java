@@ -45,13 +45,13 @@ public class RootController extends AnchorPane {
     }
 
     @FXML
-    protected void onMenuLoadMusicFromDatabase(ActionEvent event) throws IOException {
-        Jukebox.getInstance().getMusicDatabase().requestLoadFromDatabaseFile(this.contentPane.getScene().getWindow());
+    protected void onMenuLoadMusicFromConfiguration(ActionEvent event) throws IOException {
+        Jukebox.getInstance().getMusicDatabase().requestLoadFromConfigurationFile(this.contentPane.getScene().getWindow());
     }
 
     @FXML
-    protected void onMenuSaveMusicToDatabase(ActionEvent event) throws IOException {
-        Jukebox.getInstance().getMusicDatabase().requestSaveToDatabaseFile(this.contentPane.getScene().getWindow());
+    protected void onMenuSaveMusicToConfiguration(ActionEvent event) throws IOException {
+        Jukebox.getInstance().getMusicDatabase().requestSaveToConfigurationFile(this.contentPane.getScene().getWindow());
     }
 
     @FXML

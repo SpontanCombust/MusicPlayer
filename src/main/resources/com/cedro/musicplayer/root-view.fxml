@@ -18,8 +18,8 @@
                 <Menu mnemonicParsing="false" text="%root_view_menu_file">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromFileSystem" text="%root_view_menu_file_load_from_system" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromDatabase" text="%root_view_menu_file_load_from_database" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToDatabase" text="%root_view_menu_file_save_to_system" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromConfiguration" text="%root_view_menu_file_load_from_configuration" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToConfiguration" text="%root_view_menu_file_save_to_configuration" />
                     <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="%root_view_menu_file_exit" />
                   </items>
                 </Menu>

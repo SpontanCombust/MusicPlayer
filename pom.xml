@@ -6,7 +6,7 @@
 
     <groupId>com.cedro</groupId>
     <artifactId>MusicPlayer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>MusicPlayer</name>
 
     <properties>
@@ -80,9 +80,9 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.cedro.musicplayer/com.cedro.musicplayer.MusicPlayerApplication</mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <launcher>MusicPlayer</launcher>
+                            <jlinkZipName>MusicPlayer</jlinkZipName>
+                            <jlinkImageName>MusicPlayer</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
