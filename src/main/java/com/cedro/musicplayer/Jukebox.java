@@ -1,5 +1,6 @@
 package com.cedro.musicplayer;
 
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,9 +16,10 @@ public class Jukebox {
     public final SimpleObjectProperty<Media> currentTrack = new SimpleObjectProperty<>();
     public final SimpleIntegerProperty currentTrackIndex = new SimpleIntegerProperty(0);
     public final SimpleStringProperty currentTrackName = new SimpleStringProperty();
-    public final SimpleObjectProperty<Duration> currentTrackTime = new SimpleObjectProperty<>();
-    public final SimpleObjectProperty<Status> currentTrackStatus = new SimpleObjectProperty<>();
-    public final SimpleObjectProperty<Image> currentTrackCoverImage = new SimpleObjectProperty<>();
+    public final SimpleObjectProperty<Duration> currentTrackTime = new SimpleObjectProperty<>(new Duration(0.0));
+    public final SimpleObjectProperty<Status> currentTrackStatus = new SimpleObjectProperty<>(Status.UNKNOWN);
+    public final SimpleObjectProperty<Image> currentTrackCoverImage = new SimpleObjectProperty<>(MusicAlbum.DEFAULT_COVER_IMAGE);
+    public final SimpleFloatProperty currentTrackVolume = new SimpleFloatProperty(1.f);
 
 
     private static Jukebox instance = null;
@@ -69,19 +71,21 @@ public class Jukebox {
         return false;
     }
 
-    public void selectTrack(int newIndex) {
+    public void selectTrack(int newIndex, boolean shouldPlay) {
         if(newIndex >= 0 && newIndex < playlist.size()) {
-            boolean wasPlayingBefore = this.isPlaying();
-            
             if(mediaPlayer != null) {
                 this.mediaPlayer.dispose();
             }
             
             Media media = playlist.get(newIndex).loadMedia();
             this.mediaPlayer = new MediaPlayer(media);
-            this.mediaPlayer.setOnReady(() -> onTrackReady(newIndex, media, wasPlayingBefore));
+            this.mediaPlayer.setOnReady(() -> onTrackReady(newIndex, media, shouldPlay));
             this.mediaPlayer.setOnEndOfMedia(() -> onTrackFinished());
         }
+    }
+
+    public void selectTrack(int newIndex) {
+        this.selectTrack(newIndex, this.isPlaying());
     }
 
     public void play() {
@@ -118,20 +122,32 @@ public class Jukebox {
         return Duration.UNKNOWN;
     }
 
+    public Duration getCurrentTrackTime() {
+        if(this.mediaPlayer != null) {
+            return this.mediaPlayer.getCurrentTime();
+        }
+
+        return Duration.UNKNOWN;
+    }
+
     public void setVolume(float volume) {
+        this.currentTrackVolume.set(volume);
         if(this.mediaPlayer != null) {
             this.mediaPlayer.setVolume(volume);
         }
     }
 
     private void onTrackReady(int index, Media media, boolean wasPlayingBefore) {
-        this.currentTrackIndex.set(index);
         this.currentTrack.set(media);
+        this.currentTrackIndex.set(index);
         this.currentTrackName.set(playlist.get(index).getName());
         this.currentTrackTime.unbind();
         this.currentTrackTime.set(new Duration(0.0));
         this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());
         this.currentTrackStatus.bind(this.mediaPlayer.statusProperty());
+        this.currentTrackCoverImage.set(playlist.get(index).getParentAlbum().getCoverImage());
+
+        this.mediaPlayer.setVolume(this.currentTrackVolume.floatValue());
 
         if(wasPlayingBefore) {
             this.mediaPlayer.play();
@@ -139,8 +155,9 @@ public class Jukebox {
     }
 
     private void onTrackFinished() {
-        //FIXME this doesn't seem to seek to the actual beginning, but some time after it for some reason
-        this.mediaPlayer.seek(this.mediaPlayer.getStartTime());
-        this.mediaPlayer.stop();
+        // simply seeking to the beginning or stopping doesn't seem to work as it should
+        // it always seeks a little bit after the beginning
+        // the hack is to just reselect the song
+        this.selectTrack(this.currentTrackIndex.get(), false);
     }
 }

@@ -10,11 +10,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public class PlayerHud extends VBox {
+    @FXML
+    private ImageView albumCoverImageView;
     @FXML
     private Label musicTitleText;
     @FXML
@@ -25,8 +26,6 @@ public class PlayerHud extends VBox {
     private Button playPauseButton;
     @FXML
     private Slider volumeSlider;
-    @FXML
-    private ImageView albumCoverImageView;
 
 
     private boolean isDraggingMusicTimeline;
@@ -42,38 +41,9 @@ public class PlayerHud extends VBox {
 
     @FXML
     public void initialize() {
-        this.musicTimeText.setText("00:00/00:00");
-        this.musicTimelineSlider.setMin(0.0);
-        this.musicTimelineSlider.setValue(0.0);
-        this.playPauseButton.setText(getPlayPauseButtonText(false));
-        this.volumeSlider.setMin(0.0);
-        this.volumeSlider.setMax(1.0);
-        this.volumeSlider.setValue(1.0);
-        this.isDraggingMusicTimeline = false;
-        this.shouldResumeOnMusicTimelineDragFinished = false;
-        this.albumCoverImageView.setImage(MusicAlbum.DEFAULT_COVER_IMAGE);
-
-
-        this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
-
-        Jukebox.getInstance().currentTrack.addListener(
-            (observable, oldVal, newVal) -> onCurrentTrackChanged(newVal)
-        );
-
-        Jukebox.getInstance().currentTrackTime.addListener(
-            (observable, oldVal, newVal) -> onCurrentTrackTimeProgressed(newVal)
-        );
-
-        Jukebox.getInstance().currentTrackStatus.addListener(
-            (observable, oldVal, newVal) -> onTrackStatusChanged(newVal)
-        );
-
-        this.volumeSlider.valueProperty().addListener(
-            (observable, oldVal, newVal) -> onVolumeSliderValueChanged(newVal.floatValue())
-        );
+        reconfigure();
     }
 
-    
     @FXML
     protected void onPreviousTrackClick() {
         Jukebox.getInstance().selectPreviousTrack();
@@ -120,6 +90,46 @@ public class PlayerHud extends VBox {
     }
 
 
+
+
+    public void reconfigure() {
+        this.isDraggingMusicTimeline = false;
+        this.shouldResumeOnMusicTimelineDragFinished = false;
+
+        reconfigureCoverImage();
+        reconfigureTitleText();
+        reconfigureTimeText();
+        reconfigureTimelineSlider();
+        reconfigurePlayPauseButton();
+        reconfigureVolumeSlider();
+    }
+
+    protected void reconfigureCoverImage() {
+        this.albumCoverImageView.imageProperty().bind(Jukebox.getInstance().currentTrackCoverImage);
+    }
+
+    protected void reconfigureTitleText() {
+        this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
+    }
+
+    protected void reconfigureTimeText() {
+        setTimeText(new Duration(0.0));
+
+        Jukebox.getInstance().currentTrackTime.addListener(
+            (observable, oldVal, newVal) -> {
+                setTimeText(newVal);
+            }
+        );
+    }
+
+    private void setTimeText(Duration time) {
+        this.musicTimeText.setText(
+            this.formatTimeFromSeconds((int)time.toSeconds()) // elapsed
+            + "/" + 
+            this.formatTimeFromSeconds(Math.max((int)Jukebox.getInstance().getCurrentTrackDuration().toSeconds(), 1)) // total duration
+        );  
+    }
+
     private String formatTimeFromSeconds(int seconds) {
         int minutes = seconds / 60;
         seconds %= 60;
@@ -137,14 +147,36 @@ public class PlayerHud extends VBox {
         return minutesStr + ":" + secondsStr;
     }
 
-    private void onTrackStatusChanged(MediaPlayer.Status newStatus) {
-        if(isDraggingMusicTimeline) {
-            return;
-        }
+    protected void reconfigureTimelineSlider() {
+        this.musicTimelineSlider.setMin(0.f);
+        this.musicTimelineSlider.setMax(Math.max(Jukebox.getInstance().getCurrentTrackDuration().toMillis(), 1));
+        this.musicTimelineSlider.setValue(Jukebox.getInstance().getCurrentTrackTime().toMillis());
 
-        this.playPauseButton.setText(getPlayPauseButtonText(newStatus == MediaPlayer.Status.PLAYING));
+        Jukebox.getInstance().currentTrack.addListener(
+            (observable, oldVal, newVal) -> {
+                this.musicTimelineSlider.setMax(Math.max(newVal.getDuration().toMillis(), 1));
+            }
+        );
+
+        Jukebox.getInstance().currentTrackTime.addListener(
+            (observable, oldVal, newVal) -> {
+                this.musicTimelineSlider.setValue(newVal.toMillis());
+            }
+        );
     }
 
+    protected void reconfigurePlayPauseButton() {
+        this.playPauseButton.setText(getPlayPauseButtonText(Jukebox.getInstance().currentTrackStatus.get() == MediaPlayer.Status.PLAYING));
+
+        Jukebox.getInstance().currentTrackStatus.addListener(
+            (observable, oldVal, newVal) -> {
+                if(!isDraggingMusicTimeline) {
+                    this.playPauseButton.setText(getPlayPauseButtonText(newVal == MediaPlayer.Status.PLAYING));
+                }
+            }
+        );
+    }
+    
     private String getPlayPauseButtonText(boolean isPlaying) {
         ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
         if(isPlaying) {
@@ -154,20 +186,13 @@ public class PlayerHud extends VBox {
         }
     }
 
-    private void onCurrentTrackChanged(Media newTrack) {
-        this.musicTimelineSlider.setMax(Math.max(newTrack.getDuration().toMillis(), 1));
-    }
+    protected void reconfigureVolumeSlider() {
+        this.volumeSlider.setMin(0.0);
+        this.volumeSlider.setMax(1.0);
+        this.volumeSlider.setValue(Jukebox.getInstance().currentTrackVolume.get());
 
-    private void onCurrentTrackTimeProgressed(Duration newTime) {
-        this.musicTimelineSlider.setValue(newTime.toMillis());
-        this.musicTimeText.setText(
-            this.formatTimeFromSeconds((int)newTime.toSeconds()) // elapsed
-            + "/" + 
-            this.formatTimeFromSeconds(Math.max((int)Jukebox.getInstance().getCurrentTrackDuration().toSeconds(), 1)) // total duration
+        this.volumeSlider.valueProperty().addListener(
+            (observable, oldVal, newVal) -> Jukebox.getInstance().setVolume(newVal.floatValue())
         );
-    }
-
-    private void onVolumeSliderValueChanged(float newVolume) {
-        Jukebox.getInstance().setVolume(newVolume);
     }
 }
