@@ -36,7 +36,7 @@ public class MusicAlbum extends MusicCollection {
                 Path filePath = f.toPath().toAbsolutePath();
                 if(MusicTrack.isAudioFile(filePath)) {
                     album.tracksPaths.add(filePath);
-                } else if(album.coverImagePath != null && isImageFile(f.toPath())) {
+                } else if(album.coverImagePath == null && isImageFile(f.toPath())) {
                     album.coverImagePath = filePath;
                 }
             });
@@ -49,23 +49,17 @@ public class MusicAlbum extends MusicCollection {
 
     public static List<MusicAlbum> fromDirectoryRecurse(Path rootDirectory) {
         List<MusicAlbum> albums = new ArrayList<>();
-
         File fileDir = rootDirectory.toFile();
-        if(fileDir.isDirectory()) {
-            for(File f: fileDir.listFiles()) {
-                if(f.isDirectory() && !f.isHidden()) {
-                    MusicAlbum album = fromDirectory(f.toPath());
-                    if(album != null) {
-                        albums.add(album);
-                    }
 
-                    for(File ff: f.listFiles()) {
-                        if(ff.isDirectory()) {
-                            var moreAlbums = fromDirectoryRecurse(ff.toPath());
-                            albums.addAll(moreAlbums);
-                        }
-                    }
-                }
+        if(fileDir.isDirectory() && !fileDir.isHidden()) {
+            MusicAlbum album = fromDirectory(rootDirectory);
+            if(album != null) {
+                albums.add(album);
+            }
+            
+            for(File f: fileDir.listFiles()) {
+                List<MusicAlbum> subAlbums = fromDirectoryRecurse(f.toPath());
+                albums.addAll(subAlbums);
             }
         }
 
