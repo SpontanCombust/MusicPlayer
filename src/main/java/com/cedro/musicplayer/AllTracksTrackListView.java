@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AllTracksTrackListView extends LibraryTrackListView {
+public class AllTracksTrackListView extends TrackListView {
     public AllTracksTrackListView() throws IOException {
         super();
     }

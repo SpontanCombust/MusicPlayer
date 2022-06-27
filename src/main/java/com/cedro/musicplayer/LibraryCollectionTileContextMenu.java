@@ -24,12 +24,12 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
 
 
     public LibraryCollectionTileContextMenu(LibraryCollectionTile tile) throws IOException {
+        this.parentTile = tile;
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("library-collection-tile-context-menu-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
-
-        this.parentTile = tile;
     }
 
     @FXML
@@ -83,6 +83,17 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
         if(result.isPresent()) {
             this.parentTile.getCollection().setName(result.get());
             this.parentTile.reloadView();
+        }
+    }
+
+    @FXML
+    void onRemove(ActionEvent event) {
+        MusicCollection collection = this.parentTile.getCollection();
+
+        if(collection instanceof MusicAlbum) {
+            Jukebox.getInstance().getMusicDatabase().removeAlbum((MusicAlbum) collection);
+        } else {
+            Jukebox.getInstance().getMusicDatabase().removeUserCollection(collection);
         }
     }
 

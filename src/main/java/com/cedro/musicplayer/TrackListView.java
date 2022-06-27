@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -37,11 +37,6 @@ public abstract class TrackListView extends AnchorPane {
         
     }
 
-    @FXML
-    protected void onContextMenuRequested(ContextMenuEvent e) {
-        
-    }
-
 
 
     public List<MusicTrack> getTracks() {
@@ -58,6 +53,15 @@ public abstract class TrackListView extends AnchorPane {
             .stream()
             .map(t -> t.getName())
             .collect(Collectors.toList()));
+    }
+
+    public void setupContextMenu() {
+        try {
+            ContextMenu cm = new TrackListContextMenu(this);
+            this.listView.setContextMenu(cm);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<MusicTrack> getSelectedTracks() {

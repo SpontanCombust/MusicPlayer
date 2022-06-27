@@ -5,6 +5,6 @@
 
 <fx:root fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" type="AnchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ListView fx:id="listView" onContextMenuRequested="#onContextMenuRequested" onMouseClicked="#onListItemSelected" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <ListView fx:id="listView" onMouseClicked="#onListItemSelected" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </fx:root>

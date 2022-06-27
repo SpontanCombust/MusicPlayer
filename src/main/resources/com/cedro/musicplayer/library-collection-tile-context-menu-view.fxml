@@ -14,5 +14,6 @@
     </Menu>
     <MenuItem onAction="#onChangeName" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_change_name" />
     <MenuItem onAction="#onChangeCoverImage" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_change_cover_image" />
+    <MenuItem onAction="#onRemove" mnemonicParsing="false" text="%library_collection_tile_context_menu_item_remove" />
   </items>
 </fx:root>

@@ -69,6 +69,7 @@ public class LibraryCollectionTile extends VBox {
 
                 CollectionTrackListView collectionTrackList = new CollectionTrackListView(this.collection);
                 collectionTrackList.populateListItems();
+                collectionTrackList.setupContextMenu();
                 
                 vb.getChildren().addAll(backButton, collectionTrackList);
                 this.parentStackPane.getChildren().add(vb);

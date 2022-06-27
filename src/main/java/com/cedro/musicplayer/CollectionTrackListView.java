@@ -3,7 +3,7 @@ package com.cedro.musicplayer;
 import java.io.IOException;
 import java.util.List;
 
-public class CollectionTrackListView extends LibraryTrackListView {
+public class CollectionTrackListView extends TrackListView {
     private MusicCollection collection;
 
     public CollectionTrackListView(MusicCollection collection) throws IOException {
@@ -14,5 +14,9 @@ public class CollectionTrackListView extends LibraryTrackListView {
     @Override
     public List<MusicTrack> getTracks() {
         return collection.getTracks();
+    }
+
+    public MusicCollection getCollection() {
+        return collection;
     }
 }

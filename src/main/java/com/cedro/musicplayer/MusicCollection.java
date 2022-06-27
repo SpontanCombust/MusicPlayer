@@ -60,6 +60,10 @@ public class MusicCollection {
     public void addTracks(List<MusicTrack> tracks) {
         tracks.stream().forEach(t -> this.tracksPaths.add(t.getFilePath()));
     }
+
+    public void removeTracks(List<MusicTrack> tracks) {
+        tracks.stream().forEach(t -> this.tracksPaths.remove(t.getFilePath()));
+    }
     
     public JSONObject toJSON() {
         return new JSONObject()

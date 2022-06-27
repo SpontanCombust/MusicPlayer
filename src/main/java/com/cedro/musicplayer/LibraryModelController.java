@@ -19,7 +19,7 @@ public class LibraryModelController extends AnchorPane {
     private AnchorPane rootPane;
 
     @FXML
-    private LibraryTrackListView allTrackListView;
+    private AllTracksTrackListView allTrackListView;
 
     @FXML
     private StackPane albumsStackPane;
@@ -44,6 +44,8 @@ public class LibraryModelController extends AnchorPane {
 
     @FXML
     public void initialize() {
+        allTrackListView.setupContextMenu();
+        
         allTrackListView.populateListItems();
         populateAlbums();
         populateUserCollections();
@@ -68,7 +70,7 @@ public class LibraryModelController extends AnchorPane {
         });
     }
 
-    void populateAlbums() {
+    private void populateAlbums() {
         Jukebox jb = Jukebox.getInstance();
 
         List<VBox> albumVboxes =
@@ -83,7 +85,7 @@ public class LibraryModelController extends AnchorPane {
         albumsFlowPane.getChildren().addAll(albumVboxes);
     }
 
-    void populateUserCollections() {
+    private void populateUserCollections() {
         Jukebox jb = Jukebox.getInstance();
 
         List<VBox> userCollectionVboxes = 

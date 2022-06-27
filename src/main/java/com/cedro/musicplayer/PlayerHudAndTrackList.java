@@ -2,6 +2,7 @@ package com.cedro.musicplayer;
 
 import java.io.IOException;
 
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
@@ -21,5 +22,13 @@ public class PlayerHudAndTrackList extends VBox {
     @FXML
     public void initialize() {
         this.playlistTrackListPane.populateListItems();
+        this.playlistTrackListPane.setupContextMenu();
+
+        Jukebox.getInstance().getPlaylist().addListener(new ListChangeListener<>() {
+            @Override
+            public void onChanged(ListChangeListener.Change c) {
+                playlistTrackListPane.populateListItems();
+            }  
+        });
     }
 }

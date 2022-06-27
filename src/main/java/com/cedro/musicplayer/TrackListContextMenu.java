@@ -3,7 +3,6 @@ package com.cedro.musicplayer;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
@@ -14,25 +13,28 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 
-public class LibraryTrackListContextMenu extends ContextMenu {
+public class TrackListContextMenu extends ContextMenu {
     @FXML
     private Menu menuAddToUserCollection;
+    @FXML
+    private MenuItem menuItemRemoveTracks;
 
     private TrackListView parentTrackListView;
 
 
-    public LibraryTrackListContextMenu(TrackListView trackListView) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("library-track-list-context-menu-view.fxml"), ResourceBundle.getBundle("com.cedro.musicplayer.strings"));
+    public TrackListContextMenu(TrackListView trackListView) throws IOException {
+        this.parentTrackListView = trackListView;
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("track-list-context-menu-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
-
-        this.parentTrackListView = trackListView;
     }
 
     @FXML
     void initialize() {
         populateAddToUserCollectionMenu();
+        removeRemoveMenuItemIfNecessary();
     }
 
     @FXML
@@ -42,11 +44,9 @@ public class LibraryTrackListContextMenu extends ContextMenu {
 
     @FXML
     void onAddToNewCollection(ActionEvent event) {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.cedro.musicplayer.strings");
-        
         TextInputDialog tid = new TextInputDialog();
-        tid.setTitle(bundle.getString("library_track_list_context_menu_menu_add_to_collection_dialog_title"));
-        tid.setHeaderText(bundle.getString("library_track_list_context_menu_menu_add_to_collection_dialog_header"));
+        tid.setTitle(Localization.getString("track_list_context_menu_menu_add_to_collection_dialog_title"));
+        tid.setHeaderText(Localization.getString("track_list_context_menu_menu_add_to_collection_dialog_header"));
 
         Optional<String> result = tid.showAndWait();
         if(result.isPresent()) {
@@ -55,6 +55,19 @@ public class LibraryTrackListContextMenu extends ContextMenu {
             newCollection.addTracks(this.parentTrackListView.getSelectedTracks());
             Jukebox.getInstance().getMusicDatabase().addUserCollection(newCollection);
             populateAddToUserCollectionMenu();
+        }
+    }
+
+    @FXML
+    void onRemoveTracks(ActionEvent event) {
+        if(this.parentTrackListView instanceof CollectionTrackListView) {
+            var collectionTLV = (CollectionTrackListView) this.parentTrackListView;
+            collectionTLV.getCollection().removeTracks(collectionTLV.getSelectedTracks());
+            collectionTLV.populateListItems();
+        } else if(this.parentTrackListView instanceof PlaylistTrackListView) {
+            var playlistTLV = (PlaylistTrackListView) this.parentTrackListView;
+            Jukebox.getInstance().getPlaylist().removeAll(playlistTLV.getSelectedTracks());
+            playlistTLV.populateListItems();
         }
     }
 
@@ -78,5 +91,20 @@ public class LibraryTrackListContextMenu extends ContextMenu {
         // inserting to the beginning so the "new collection" item is at the bottom
         menuAddToUserCollection.getItems().remove(0, menuAddToUserCollection.getItems().size() - 1);
         menuAddToUserCollection.getItems().addAll(0, items);
+    }
+
+    private void removeRemoveMenuItemIfNecessary() {
+        if(this.parentTrackListView instanceof PlaylistTrackListView) {
+            return;
+        }
+        
+        if(this.parentTrackListView instanceof CollectionTrackListView) {
+            var collectionTLV = (CollectionTrackListView) this.parentTrackListView;
+            if(!(collectionTLV.getCollection() instanceof MusicAlbum)) {
+                return;
+            }
+        }
+
+        this.getItems().remove(menuItemRemoveTracks);
     }
 }

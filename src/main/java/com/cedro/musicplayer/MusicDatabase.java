@@ -52,6 +52,11 @@ public class MusicDatabase {
         albums.forEach(this::addAlbum);
     }
 
+    public void removeAlbum(MusicAlbum album) {
+        this.albumMap.remove(album.getDirPath().toAbsolutePath());
+        album.tracksPaths.forEach(p -> this.trackMap.remove(p));
+    }
+
     public void clearUserCollections() {
         userCollectionList.clear();
     }
@@ -62,6 +67,10 @@ public class MusicDatabase {
 
     public void addUserCollections(List<MusicCollection> collections) {
         this.userCollectionList.addAll(collections);
+    }
+
+    public void removeUserCollection(MusicCollection collection) {
+        this.userCollectionList.remove(collection);
     }
 
 
