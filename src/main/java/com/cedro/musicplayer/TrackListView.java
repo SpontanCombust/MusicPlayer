@@ -12,14 +12,22 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Abstract class for the ListView that displays music tracks.
+ */
 public abstract class TrackListView extends AnchorPane {
-    @FXML
-    protected AnchorPane rootPane;
+    /**
+     * Actual ListView displaying track names
+     */
     @FXML
     protected ListView<String> listView;
 
 
 
+    /**
+     * Constructor
+     * @throws IOException
+     */
     public TrackListView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("track-list-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
@@ -27,11 +35,18 @@ public abstract class TrackListView extends AnchorPane {
         loader.load();  
     }
  
+    /**
+     * Initializes the list view
+     */
     @FXML
     public void initialize() {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    /**
+     * Handler for when an item in the list view gets clicked on.
+     * @param e - mouse event
+     */
     @FXML
     protected void onListItemSelected(MouseEvent e) {
         
@@ -39,10 +54,17 @@ public abstract class TrackListView extends AnchorPane {
 
 
 
+    /**
+     * Returns stored list of tracks
+     * @return List<MusicTrack> - list of stored tracks
+     */
     public List<MusicTrack> getTracks() {
         return null;
     }
 
+    /**
+     * Fills items of the list view with names of stored tracks
+     */
     public void populateListItems() {
         this.listView.getItems().clear();
 
@@ -55,6 +77,9 @@ public abstract class TrackListView extends AnchorPane {
             .collect(Collectors.toList()));
     }
 
+    /**
+     * Sets a context menu for the list view
+     */
     public void setupContextMenu() {
         try {
             ContextMenu cm = new TrackListContextMenu(this);
@@ -64,6 +89,10 @@ public abstract class TrackListView extends AnchorPane {
         }
     }
 
+    /**
+     * Returns the tracks that are selected in the list view
+     * @return List<MusicTrack> - list of selected tracks
+     */
     public List<MusicTrack> getSelectedTracks() {
         return this.listView
         .getSelectionModel()

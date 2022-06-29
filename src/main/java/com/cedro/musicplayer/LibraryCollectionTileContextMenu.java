@@ -15,14 +15,26 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 
+/**
+ * Class representing the context menu for the library collection tile.
+ */
 public class LibraryCollectionTileContextMenu extends ContextMenu {
     
+    /**
+     * Submenu for adding selected tracks to a user collection
+     */
     @FXML
     private Menu menuAddToUserCollection;
-
+    /**
+     * Collection tile to which the context menu is assigned
+     */
     private LibraryCollectionTile parentTile;
 
 
+    /**
+     * Constructor for the context menu.
+     * @param parentTile The collection tile to which the context menu is assigned
+     */
     public LibraryCollectionTileContextMenu(LibraryCollectionTile tile) throws IOException {
         this.parentTile = tile;
 
@@ -36,12 +48,18 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
     void initialize() {
         populateAddToUserCollectionMenu();
     }
-        
+      
+    /**
+     * Event handler for menu item responsible for adding tracks to a playlist.
+     */
     @FXML
     void onAddToPlaylist(ActionEvent event) {
         Jukebox.getInstance().getPlaylist().addAll(this.parentTile.getCollection().getTracks());
     }
 
+    /**
+     * Event handler for menu item responsible for creating a new user collection and adding tracks to it.
+     */
     @FXML
     void onAddToNewCollection(ActionEvent event) {
         TextInputDialog tid = new TextInputDialog();
@@ -58,6 +76,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
         }
     }
 
+    /**
+     * Event handler for menu item responsible for change collection cover image.
+     */
     @FXML
     void onChangeCoverImage(ActionEvent event) {
         FileChooser fc = new FileChooser();
@@ -72,6 +93,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
         }
     }
 
+    /**
+     * Event handler for menu item responsible for change collection name.
+     */
     @FXML
     void onChangeName(ActionEvent event) {
         TextInputDialog tid = new TextInputDialog();
@@ -86,6 +110,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
         }
     }
 
+    /**
+     * Event handler for menu item responsible for deleting a collection
+     */
     @FXML
     void onRemove(ActionEvent event) {
         MusicCollection collection = this.parentTile.getCollection();
@@ -98,6 +125,9 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
     }
 
 
+    /**
+     * Populates the add to user collection menu with all existing user collections.
+     */
     private void populateAddToUserCollectionMenu() {
         List<MenuItem> items = 
         Jukebox.getInstance()

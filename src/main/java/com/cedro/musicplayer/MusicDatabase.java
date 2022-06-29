@@ -21,21 +21,43 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
+/**
+ * A class that stores all tracks, albums and user collections
+ */
 public class MusicDatabase {
+    /**
+     * Extension of application's config file
+     */
     public static final String CONFIG_FILE_EXTENSION = ".mpconfig";
 
+    /**
+     * Map of all stored music tracks
+     */
     private ObservableMap<Path, MusicTrack> trackMap = FXCollections.observableHashMap();
+    /**
+     * Map of all stored albums
+     */
     private ObservableMap<Path, MusicAlbum> albumMap = FXCollections.observableHashMap();
+    /**
+     * List of all stored user collections
+     */
     private ObservableList<MusicCollection> userCollectionList = FXCollections.observableArrayList();
 
 
 
     // ==================== MODIFIER WRAPPERS ===================
 
+    /**
+     * Deletes all stored albums
+     */
     public void clearAlbums() {
         albumMap.clear();
     }
 
+    /**
+     * Stores the album object and all the tracks that it contains 
+     * @param album - music album
+     */
     public void addAlbum(MusicAlbum album) {
         this.albumMap.put(album.getDirPath().toAbsolutePath(), album);
         album.tracksPaths.forEach(p -> {
@@ -48,27 +70,50 @@ public class MusicDatabase {
         });
     }
 
+    /**
+     * Stores multiple album objects
+     * @param albums - music albums
+     */
     public void addAlbums(List<MusicAlbum> albums) {
         albums.forEach(this::addAlbum);
     }
 
+    /**
+     * Removes stored album
+     * @param album - music album
+     */
     public void removeAlbum(MusicAlbum album) {
         this.albumMap.remove(album.getDirPath().toAbsolutePath());
         album.tracksPaths.forEach(p -> this.trackMap.remove(p));
     }
 
+    /**
+     * Removes all stored user collections
+     */
     public void clearUserCollections() {
         userCollectionList.clear();
     }
 
+    /**
+     * Stores the user collection
+     * @param collection - user collection
+     */
     public void addUserCollection(MusicCollection collection) {
         this.userCollectionList.add(collection);
     }
 
+    /**
+     * Stores multiple user collections
+     * @param collections - user collections
+     */
     public void addUserCollections(List<MusicCollection> collections) {
         this.userCollectionList.addAll(collections);
     }
 
+    /**
+     * Removes stored user collection
+     * @param collection - user collection
+     */
     public void removeUserCollection(MusicCollection collection) {
         this.userCollectionList.remove(collection);
     }
@@ -76,14 +121,26 @@ public class MusicDatabase {
 
     // ================== READ ONLY ACCESSORS ==================
 
+    /**
+     * Returns the map of all available music tracks
+     * @return ObservableMap<Path, MusicTrack> - track map
+     */
     public ObservableMap<Path, MusicTrack> getTrackMap() {
         return trackMap;
     }
 
+    /**
+     * Returns the map of all available music albums
+     * @return ObservableMap<Path, MusicAlbum> - album map
+     */
     public ObservableMap<Path, MusicAlbum> getAlbumMap() {
         return albumMap;
     }
 
+    /**
+     * Returns the list of all available user collections
+     * @return ObservableList<MusicCollection> - user collection list
+     */
     public ObservableList<MusicCollection> getUserCollectionList() {
         return userCollectionList;
     }
@@ -92,6 +149,12 @@ public class MusicDatabase {
 
     // =========================== IO ===========================
 
+    /**
+     * Takes all the stored albums and user collections and saves their information into a JSON file.
+     * 
+     * @param filePath - path to the output file
+     * @throws IOException
+     */
     public void saveToConfigurationFile(Path filePath) throws IOException {
         JSONObject json = new JSONObject()
         .put("albums", new JSONArray(
@@ -110,6 +173,10 @@ public class MusicDatabase {
         Files.write(filePath, json.toString(4).getBytes());
     }
 
+    /**
+     * Brings up a save to file prompt that saves the database configuration
+     * @param window - owner window of the dialog prompt
+     */
     public void requestSaveToConfigurationFile(Window window) {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString("database_save_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
         FileChooser fileChooser = new FileChooser();
@@ -133,7 +200,12 @@ public class MusicDatabase {
         }
     }
 
-    // If error occurs returns non-empty string
+    /**
+     * Takes a configuration json file and parses it to yield music album and user collections data
+     * 
+     * @param filePath path to the config file
+     * @throws Exception
+     */
     public void loadFromConfigurationFile(Path filePath) throws Exception {
         if(!filePath.toString().endsWith(CONFIG_FILE_EXTENSION)) {
             throw new Exception("File extension must be " + CONFIG_FILE_EXTENSION);
@@ -160,6 +232,10 @@ public class MusicDatabase {
         }
     }
 
+    /**
+     * Brings up a load from file prompt that loads database data from a configuration file
+     * @param window - owner window of the dialog prompt
+     */
     public void requestLoadFromConfigurationFile(Window window) {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString("database_load_config_dialog_file_category"), "*" + CONFIG_FILE_EXTENSION);
         FileChooser fileChooser = new FileChooser();
@@ -182,11 +258,19 @@ public class MusicDatabase {
         }
     }
 
+    /**
+     * Scans the file system in a given directory to find music albums
+     * @param dirPath - path to the directory
+     */
     public void loadFromFileSystem(Path dirPath) {
         var albums = MusicAlbum.fromDirectoryRecurse(dirPath);
         addAlbums(albums);
     }
 
+    /**
+     * Brings up a choose directory prompt and scans that directory for music albums
+     * @param window - owner window of the dialog prompt
+     */
     public void requestLoadFromFileSystem(Window window) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(Localization.getString("database_load_from_filesystem_dialog_title"));

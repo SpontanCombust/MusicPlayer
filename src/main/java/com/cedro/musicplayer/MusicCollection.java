@@ -12,30 +12,65 @@ import org.json.JSONObject;
 
 import javafx.scene.image.Image;
 
+/**
+ * Class representing a collection of music tracks.
+ */
 public class MusicCollection {
+    /**
+     * Image object of the default cover used for the collection.
+     */
     public static final Image DEFAULT_COVER_IMAGE = new Image(MusicAlbum.class.getResourceAsStream("record_disk.png"));
     
+    /**
+     * Name of the collection.
+     */
     protected String name;
+    /**
+     * Path to the cover image of the collection.
+     */
     protected Path coverImagePath;
+    /**
+     * List of paths to the tracks in the collection.
+     */
     protected List<Path> tracksPaths = new ArrayList<>();
 
 
+    /**
+     * Sets the name of the collection.
+     * @param name - name of the collection
+     */
     public void setName(String name) {
         this.name = name;
     }
     
+    /**
+     * Returns the name of the collection.
+     * @return String - name of the collection
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Sets the path to the cover image of the collection.
+     * @param coverImagePath - path to the cover image of the collection
+     */
     public void setCoverImagePath(Path coverImagePath) {
         this.coverImagePath = coverImagePath;
     }
 
+    /**
+     * Returns the path to the cover image of the collection.
+     * @return Path - path to the cover image of the collection
+     */
     public Path getCoverImagePath() {
         return coverImagePath;
     }
 
+    /**
+     * Returns the Image object of the cover image of the collection.
+     * @return Image - Image object of the cover image of the collection
+     */
     public Image getCoverImage() {
         if(coverImagePath != null) {
             return new Image(coverImagePath.toUri().toString());
@@ -44,10 +79,18 @@ public class MusicCollection {
         return DEFAULT_COVER_IMAGE;
     }
 
+    /**
+     * Returns paths to the tracks in the collection.
+     * @return List<Path> - paths to the tracks in the collection
+     */
     public List<Path> getTracksPaths() {
         return this.tracksPaths;
     }
 
+    /**
+     * Fetches tracks from the database based on the stored track paths.
+     * @return List<MusicTrack> - music tracks assigned to collection
+     */
     public List<MusicTrack> getTracks() {
         return Jukebox.getInstance()
         .getMusicDatabase()
@@ -57,14 +100,26 @@ public class MusicCollection {
         .collect(Collectors.toList());
     }
 
+    /**
+     * Adds tracks to the collection
+     * @param tracks - tracks to add
+     */
     public void addTracks(List<MusicTrack> tracks) {
         tracks.stream().forEach(t -> this.tracksPaths.add(t.getFilePath()));
     }
 
+    /**
+     * Removes tracks from the collection
+     * @param tracks - tracks to remove
+     */
     public void removeTracks(List<MusicTrack> tracks) {
         tracks.stream().forEach(t -> this.tracksPaths.remove(t.getFilePath()));
     }
     
+    /**
+     * Returns a JSON representation of the collection
+     * @return JSONObject - JSON representation of the collection
+     */
     public JSONObject toJSON() {
         return new JSONObject()
         .put("name", name)
@@ -76,6 +131,12 @@ public class MusicCollection {
             .collect(Collectors.toList())));
     }
 
+    /**
+     * Creates a MusicCollection object based on its JSON representation
+     * @param json - JSON representation of the collection
+     * @return MusicCollection object
+     * @throws JSONException
+     */
     public static MusicCollection fromJSON(JSONObject json) throws JSONException {
         MusicCollection collection = new MusicCollection();
         collection.name = json.getString("name");

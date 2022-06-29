@@ -5,8 +5,15 @@ import java.util.List;
 
 import javafx.scene.input.MouseEvent;
 
+/**
+ * ListView class for the paylist
+ */
 public class PlaylistTrackListView extends TrackListView {
 
+    /**
+     * Constructor
+     * @throws IOException
+     */
     public PlaylistTrackListView() throws IOException {
         super();
     }
@@ -28,6 +35,10 @@ public class PlaylistTrackListView extends TrackListView {
         return Jukebox.getInstance().getPlaylist();
     }
 
+    /**
+     * Handler on when the current track index changes
+     * @param newIndex - new track index in the playlist
+     */
     private void onCurrentTrackIndexChanged(int newIndex) {
         this.listView.getSelectionModel().select(newIndex);
     }

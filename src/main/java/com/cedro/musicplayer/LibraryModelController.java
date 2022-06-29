@@ -13,28 +13,48 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * A class representing the library page of the application.
+ */
 public class LibraryModelController extends AnchorPane {
 
-    @FXML
-    private AnchorPane rootPane;
-
+    /**
+     * ListView with all available songs.
+     */
     @FXML
     private AllTracksTrackListView allTrackListView;
 
+    /**
+     * Stack pane for albumsFlowPane
+     */
     @FXML
     private StackPane albumsStackPane;
 
+    /**
+     * Flow pane for album tiles.
+     */
     @FXML
     private FlowPane albumsFlowPane;
 
+    /**
+     * Stack pane for customCollectionsFlowPane
+     */
     @FXML
     private StackPane customCollectionsStackPane;
 
+    /**
+     * Flow pane for custom collection tiles.
+     */
     @FXML
     private FlowPane customCollectionsFlowPane;
 
 
 
+    /**
+     * Constructor.
+     * 
+     * @throws IOException
+     */
     public LibraryModelController() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("library-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
@@ -42,6 +62,9 @@ public class LibraryModelController extends AnchorPane {
         loader.load();
     }
 
+    /**
+     * Initializes the controller class. This method is automatically called when loading from FXML.
+     */
     @FXML
     public void initialize() {
         allTrackListView.setupContextMenu();
@@ -70,6 +93,9 @@ public class LibraryModelController extends AnchorPane {
         });
     }
 
+    /**
+     * Fills albumsFlowPane with album tiles.
+     */
     private void populateAlbums() {
         Jukebox jb = Jukebox.getInstance();
 
@@ -85,6 +111,9 @@ public class LibraryModelController extends AnchorPane {
         albumsFlowPane.getChildren().addAll(albumVboxes);
     }
 
+    /**
+     * Fills customCollectionsFlowPane with custom collections tiles.
+     */
     private void populateUserCollections() {
         Jukebox jb = Jukebox.getInstance();
 

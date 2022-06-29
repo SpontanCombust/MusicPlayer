@@ -13,15 +13,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+/**
+ * A class representing a music album.
+ */
 public class MusicAlbum extends MusicCollection {
+    /**
+     * All the extenions that cover images can have
+     */
     public static final List<String> IMAGE_EXTENSIONS = Arrays.asList(
         "bmp", "gif", "jpg", "jpeg", "png"
     );
 
 
+    /**
+     * Absolute directory path to the album in the system
+     */
     protected Path dirPath;
 
 
+    /**
+     * Creates a MusicAlbum object by doing a shallow scan on a given directory. 
+     * If comes accross an image sets it as the album cover.
+     * 
+     * @param directoryPath - Absolute directory path to the album in the system
+     * @return MusicAlbum - object or null on error
+     */
     public static MusicAlbum fromDirectory(Path directoryPath) {
         List<File> files = Arrays.asList(directoryPath.toFile().listFiles());
 
@@ -47,6 +63,13 @@ public class MusicAlbum extends MusicCollection {
         return null;
     }
 
+    /**
+     * Creates a list of MusicAlbum objects by doing a recursive scan on a given directory. 
+     * If comes accross an image sets it as the album cover.
+     * 
+     * @param directoryPath - Absolute directory path to the album in the system
+     * @return List<MusicAlbum> - list of albums
+     */
     public static List<MusicAlbum> fromDirectoryRecurse(Path rootDirectory) {
         List<MusicAlbum> albums = new ArrayList<>();
         File fileDir = rootDirectory.toFile();
@@ -66,17 +89,30 @@ public class MusicAlbum extends MusicCollection {
         return albums;
     }
 
+    /**
+     * Checks whether a file at this path is an image file.
+     * 
+     * @param filePath - path to the file
+     * @return boolean - true if it is an image file, false otherwise
+     */
     private static boolean isImageFile(Path filePath) {
         String fileName = filePath.getFileName().toString();
 
         return IMAGE_EXTENSIONS.stream().anyMatch(ext -> fileName.endsWith("." + ext));
     }
 
+    /**
+     * Returns the absolute path to the album in the system.
+     * @return Path - absolute path to the album in the system
+     */
     public Path getDirPath() {
         return dirPath;
     }
 
 
+    /**
+     * Returns the JSON representation of the album.
+     */
     public JSONObject toJSON() {
         return new JSONObject()
         .put("dirPath", dirPath.toString())
@@ -89,6 +125,13 @@ public class MusicAlbum extends MusicCollection {
             .collect(Collectors.toList())));
     }
 
+    /**
+     * Creates a MusicAlbum object from a JSON representation.
+     * 
+     * @param json - parsed JSON object
+     * @return MusicAlbum - created album
+     * @throws JSONException
+     */
     public static MusicAlbum fromJSON(JSONObject json) throws JSONException {
         MusicAlbum album = new MusicAlbum();
         album.dirPath = Paths.get(json.getString("dirPath"));

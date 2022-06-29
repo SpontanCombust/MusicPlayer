@@ -13,13 +13,34 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Class representing a collection tile with a cover and a name displayed in "Albums" and "User collections" sections
+ */
 public class LibraryCollectionTile extends VBox {
 
+    /**
+     * Collection this tile refers to
+     */
     private MusicCollection collection;
+    /**
+     * Stack pane in which the tile resides
+     */
     private StackPane parentStackPane;
+    /**
+     * Cover image of the collection
+     */
     private ImageView coverImageView;
+    /**
+     * Name label of the colletion
+     */
     private Label collectionNameLabel;
 
+    /**
+     * Constructor
+     * 
+     * @param collection - collection this tile should refer to
+     * @param parentStackPane - stack pane in which the tile resides
+     */
     public LibraryCollectionTile(MusicCollection collection, StackPane parentStackPane) {
         this.setAlignment(Pos.CENTER);
 
@@ -52,6 +73,11 @@ public class LibraryCollectionTile extends VBox {
         this.setOnMouseClicked(e -> this.onMouseClicked(e));
     }
 
+    /**
+     * Event handler on when mouse is clicked on the tile
+     * 
+     * @param mouseEvent - mouse event
+     */
     void onMouseClicked(MouseEvent mouseEvent) {       
         if (mouseEvent.getClickCount() >= 2) {
             try {
@@ -79,10 +105,18 @@ public class LibraryCollectionTile extends VBox {
         }
     }
 
+    /**
+     * Returns collection this tile refers to
+     * 
+     * @return MusicCollection - referenced colletion 
+     */
     public MusicCollection getCollection() {
         return this.collection;
     }
 
+    /**
+     * Refresh the label and cover image
+     */
     public void reloadView() {
         this.collectionNameLabel.setText(this.collection.getName());
         this.coverImageView.setImage(this.collection.getCoverImage());

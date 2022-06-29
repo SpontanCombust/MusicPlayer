@@ -6,9 +6,18 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main application class
+ */
 public class MusicPlayerApplication extends Application {
+    /**
+     * Version of the application 
+     */
     public static final String VERSION = "1.0";
 
+    /**
+     * Method ran at the start of application
+     */
     @Override
     public void start(Stage stage) throws IOException {
         RootController root = new RootController();
@@ -20,6 +29,10 @@ public class MusicPlayerApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Main method
+     * @param args
+     */
     public static void main(String[] args) {
         launch();
     }

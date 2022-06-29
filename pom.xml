@@ -23,17 +23,17 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>19-ea+3</version>
+            <version>19-ea+8</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>14.0.2.1</version>
+            <version>19-ea+8</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>14.0.2.1</version>
+            <version>19-ea+8</version>
         </dependency>
         <dependency>
             <groupId>org.controlsfx</groupId>
@@ -55,6 +55,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit5</artifactId>
+            <version>4.0.16-alpha</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -79,7 +85,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.cedro.musicplayer/com.cedro.musicplayer.MusicPlayerApplication</mainClass>
+                            <mainClass>com.cedro.musicplayer.MusicPlayerApplication</mainClass>
                             <launcher>MusicPlayer</launcher>
                             <jlinkZipName>MusicPlayer</jlinkZipName>
                             <jlinkImageName>MusicPlayer</jlinkImageName>
@@ -89,6 +95,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <show>private</show>
+                </configuration>
             </plugin>
         </plugins>
     </build>

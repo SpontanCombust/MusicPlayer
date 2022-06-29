@@ -13,29 +13,67 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+/**
+ * Class representing the main player view with the track timeline, play/pause button etc.
+ */
 public class PlayerHud extends VBox {
+    /**
+     * ImageView for the album cover image
+     */
     @FXML
     private ImageView albumCoverImageView;
+    /**
+     * Label for the track title
+     */
     @FXML
     private Label musicTitleText;
+    /**
+     * Label for passed track time
+     */
     @FXML
     private Label musicTimeText;
+    /**
+     * Slider representing the time progress of the song
+     */
     @FXML
     private Slider musicTimelineSlider;
+    /**
+     * Button for playing/pausing the song
+     */
     @FXML
     private Button playPauseButton;
+    /**
+     * Slider for setting music volume
+     */
     @FXML
     private Slider volumeSlider;
+    /**
+     * Button for enabling/disabling autoplay
+     */
     @FXML
     private ToggleButton autoplayButton;
+    /**
+     * Button for enabling/disabling looping the playlist
+     */
     @FXML
     private ToggleButton loopButton;
 
 
+    /**
+     * Whether the user is currently dragging the timelime slider
+     */
     private boolean isDraggingMusicTimeline;
+    /**
+     * Whether playing should be resumed when user lets go of the timeline slider
+     */
     private boolean shouldResumeOnMusicTimelineDragFinished;
 
 
+    /**
+     * Constructor
+     *
+     * @throws IOException
+     */
     public PlayerHud() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("player-hud-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
@@ -43,21 +81,33 @@ public class PlayerHud extends VBox {
         loader.load(); 
     }
 
+    /**
+     * Initializes the player hud
+     */
     @FXML
     public void initialize() {
         reconfigure();
     }
 
+    /**
+     * Event handler for when previous track is requested
+     */
     @FXML
     protected void onPreviousTrackClick() {
         Jukebox.getInstance().selectPreviousTrack();
     }
 
+    /**
+     * Event handler for when next track is requested
+     */
     @FXML
     protected void onNextTrackClick() {
         Jukebox.getInstance().selectNextTrack();
     }
 
+    /**
+     * Event handler for when play/pause button is clicked
+     */
     @FXML
     protected void onPlayPauseClick() {
         if(Jukebox.getInstance().isPlaying()) {
@@ -67,6 +117,9 @@ public class PlayerHud extends VBox {
         }
     }
 
+    /** 
+     * Event handler for when the timeline slider is dragged
+     */
     @FXML
     protected void onMusicSliderCursorDragged() {
         this.isDraggingMusicTimeline = true;
@@ -79,11 +132,17 @@ public class PlayerHud extends VBox {
         Jukebox.getInstance().seek(new Duration(this.musicTimelineSlider.getValue()));
     }
 
+    /**
+     * Event handler for when the timeline slider is only clicked in some place
+     */
     @FXML
     protected void onMusicSliderMousePressed() {
         Jukebox.getInstance().seek(new Duration(this.musicTimelineSlider.getValue()));
     }
 
+    /**
+     * Event handler for when the timeline slider is released
+     */
     @FXML
     protected void onMusicSliderMouseReleased() {
         if(this.shouldResumeOnMusicTimelineDragFinished) {
@@ -96,6 +155,9 @@ public class PlayerHud extends VBox {
 
 
 
+    /**
+     * Reconfigures states of all child controls
+     */
     public void reconfigure() {
         this.isDraggingMusicTimeline = false;
         this.shouldResumeOnMusicTimelineDragFinished = false;
@@ -110,14 +172,23 @@ public class PlayerHud extends VBox {
         reconfigureLoopButton();
     }
 
+    /**
+     * Reconfigures the cover image. Sets appropriate listeners.
+     */
     protected void reconfigureCoverImage() {
         this.albumCoverImageView.imageProperty().bind(Jukebox.getInstance().currentTrackCoverImage);
     }
 
+    /**
+     * Reconfigures the title text. Sets appropriate listeners.
+     */
     protected void reconfigureTitleText() {
         this.musicTitleText.textProperty().bind(Jukebox.getInstance().currentTrackName);
     }
 
+    /**
+     * Reconfigures the time text. Sets appropriate listeners.
+     */
     protected void reconfigureTimeText() {
         setTimeText(new Duration(0.0));
 
@@ -128,6 +199,11 @@ public class PlayerHud extends VBox {
         );
     }
 
+    /**
+     * Sets the time text
+     *
+     * @param time the time to set
+     */
     private void setTimeText(Duration time) {
         this.musicTimeText.setText(
             this.formatTimeFromSeconds((int)time.toSeconds()) // elapsed
@@ -136,6 +212,12 @@ public class PlayerHud extends VBox {
         );  
     }
 
+    /**
+     * Formats the time from seconds to a string
+     *
+     * @param seconds the time in seconds
+     * @return the formatted time string
+     */
     private String formatTimeFromSeconds(int seconds) {
         int minutes = seconds / 60;
         seconds %= 60;
@@ -153,6 +235,9 @@ public class PlayerHud extends VBox {
         return minutesStr + ":" + secondsStr;
     }
 
+    /**
+     * Reconfigures the timeline slider. Sets appropriate listeners.
+     */
     protected void reconfigureTimelineSlider() {
         this.musicTimelineSlider.setMin(0.f);
         this.musicTimelineSlider.setMax(Math.max(Jukebox.getInstance().getCurrentTrackDuration().toMillis(), 1));
@@ -171,6 +256,9 @@ public class PlayerHud extends VBox {
         );
     }
 
+    /**
+     * Reconfigures the play/pause button. Sets appropriate listeners.
+     */
     protected void reconfigurePlayPauseButton() {
         this.playPauseButton.setText(getPlayPauseButtonText(Jukebox.getInstance().currentTrackStatus.get() == MediaPlayer.Status.PLAYING));
 
@@ -183,6 +271,12 @@ public class PlayerHud extends VBox {
         );
     }
     
+    /**
+     * Gets the localised play/pause button text
+     *
+     * @param isPlaying whether the player is playing or not
+     * @return the play/pause button text
+     */
     private String getPlayPauseButtonText(boolean isPlaying) {
         if(isPlaying) {
             return Localization.getString("player_view_button_pause_track");
@@ -191,6 +285,9 @@ public class PlayerHud extends VBox {
         }
     }
 
+    /**
+     * Reconfigures the volume slider. Sets appropriate listeners.
+     */
     protected void reconfigureVolumeSlider() {
         this.volumeSlider.setMin(0.0);
         this.volumeSlider.setMax(1.0);
@@ -201,11 +298,17 @@ public class PlayerHud extends VBox {
         );
     }
 
+    /**
+     * Reconfigures the autplay button. Sets appropriate listeners.
+     */
     protected void reconfigureAutplayButton() {
         this.autoplayButton.setSelected(Jukebox.getInstance().playlistAutoplay.get());
         Jukebox.getInstance().playlistAutoplay.bind(this.autoplayButton.selectedProperty());
     }
 
+    /**
+     * Reconfigures the loop button. Sets appropriate listeners.
+     */
     protected void reconfigureLoopButton() {
         this.loopButton.setSelected(Jukebox.getInstance().playlistLooping.get());
         Jukebox.getInstance().playlistLooping.bind(this.loopButton.selectedProperty());
