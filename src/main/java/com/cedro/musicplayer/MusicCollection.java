@@ -152,4 +152,31 @@ public class MusicCollection {
         
         return collection;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        MusicCollection other = (MusicCollection) obj;
+        if (coverImagePath == null) {
+            if (other.coverImagePath != null)
+                return false;
+        } else if (!coverImagePath.equals(other.coverImagePath))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (tracksPaths == null) {
+            if (other.tracksPaths != null)
+                return false;
+        } else if (!tracksPaths.equals(other.tracksPaths))
+            return false;
+        return true;
+    }
 }

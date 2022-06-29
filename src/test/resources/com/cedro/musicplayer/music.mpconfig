@@ -1,0 +1,32 @@
+{
+    "albums": [
+        {
+            "name": "Beat Doctor",
+            "dirPath": "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Beat Doctor",
+            "tracks": [
+                "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Bad Man (edit).mp3",
+                "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Too Retro.mp3"
+            ]
+        },
+        {
+            "coverImagePath": "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Wankers United/cover.jpeg",
+            "name": "Wankers United",
+            "dirPath": "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Wankers United",
+            "tracks": ["/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Wankers United/Wankers United - Calva Song.mp3"]
+        },
+        {
+            "coverImagePath": "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/glasscarpenter/cover.jpeg",
+            "name": "glasscarpenter",
+            "dirPath": "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/glasscarpenter",
+            "tracks": ["/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/glasscarpenter/glasscarpenter - Funeral.mp3"]
+        }
+    ],
+    "userCollections": [{
+        "name": "united beat",
+        "tracks": [
+            "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Too Retro.mp3",
+            "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Bad Man (edit).mp3",
+            "/home/spontan/GitHub-repo/MusicPlayer/src/test/resources/com/cedro/musicplayer/Wankers United/Wankers United - Calva Song.mp3"
+        ]
+    }]
+}

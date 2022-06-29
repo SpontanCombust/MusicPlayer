@@ -148,4 +148,21 @@ public class MusicAlbum extends MusicCollection {
         
         return album;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        MusicAlbum other = (MusicAlbum) obj;
+        if (dirPath == null) {
+            if (other.dirPath != null)
+                return false;
+        } else if (!dirPath.equals(other.dirPath))
+            return false;
+        return true;
+    }
 }

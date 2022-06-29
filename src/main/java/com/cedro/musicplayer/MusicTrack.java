@@ -106,4 +106,21 @@ public class MusicTrack {
     Media loadMedia() {
         return new Media(this.filePath.toUri().toString());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        MusicTrack other = (MusicTrack) obj;
+        if (filePath == null) {
+            if (other.filePath != null)
+                return false;
+        } else if (!filePath.equals(other.filePath))
+            return false;
+        return true;
+    }
 }
