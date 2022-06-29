@@ -279,9 +279,9 @@ public class PlayerHud extends VBox {
      */
     private String getPlayPauseButtonText(boolean isPlaying) {
         if(isPlaying) {
-            return Localization.getString("player_view_button_pause_track");
+            return "| |";
         } else {
-            return Localization.getString("player_view_button_play_track");
+            return "\u25b6";
         }
     }
 
