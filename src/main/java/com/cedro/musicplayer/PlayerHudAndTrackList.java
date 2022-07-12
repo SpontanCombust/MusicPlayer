@@ -35,13 +35,13 @@ public class PlayerHudAndTrackList extends VBox {
      */
     @FXML
     public void initialize() {
-        this.playlistTrackListPane.populateListItems();
+        this.playlistTrackListPane.populateItems();
         this.playlistTrackListPane.setupContextMenu();
 
         Jukebox.getInstance().getPlaylist().addListener(new ListChangeListener<>() {
             @Override
             public void onChanged(ListChangeListener.Change c) {
-                playlistTrackListPane.populateListItems();
+                playlistTrackListPane.populateItems();
             }  
         });
     }

@@ -44,7 +44,7 @@ public class PlaylistTrackListView extends TrackListView {
     }
 
     @Override
-    protected void onListItemSelected(MouseEvent e) {
+    public void onItemSelected(MouseEvent e) {
         if(e.getClickCount() >= 2) {
             int trackIdx = this.listView.getSelectionModel().getSelectedIndex();
             Jukebox.getInstance().selectTrack(trackIdx);

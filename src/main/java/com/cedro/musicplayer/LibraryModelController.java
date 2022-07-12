@@ -22,7 +22,7 @@ public class LibraryModelController extends AnchorPane {
      * ListView with all available songs.
      */
     @FXML
-    private AllTracksTrackListView allTrackListView;
+    private AllTracksTreeView allTrackTreeView;
 
     /**
      * Stack pane for albumsFlowPane
@@ -67,16 +67,16 @@ public class LibraryModelController extends AnchorPane {
      */
     @FXML
     public void initialize() {
-        allTrackListView.setupContextMenu();
+        allTrackTreeView.setupContextMenu();
         
-        allTrackListView.populateListItems();
+        allTrackTreeView.populateItems();
         populateAlbums();
         populateUserCollections();
 
         Jukebox.getInstance().getMusicDatabase().getTrackMap().addListener(new MapChangeListener<>() {
             @Override
             public void onChanged(MapChangeListener.Change c) {
-                allTrackListView.populateListItems();
+                allTrackTreeView.populateItems();
             }  
         });
         Jukebox.getInstance().getMusicDatabase().getAlbumMap().addListener(new MapChangeListener<>() {
