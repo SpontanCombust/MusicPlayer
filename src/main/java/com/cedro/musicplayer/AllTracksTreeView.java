@@ -2,7 +2,8 @@ package com.cedro.musicplayer;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Iterator;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,21 @@ import javafx.scene.layout.AnchorPane;
  * Class representing the TreeView control for the "All tracks" page in the library
  */
 public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
+
+    class MusicTreeItem extends TreeItem<String> {
+        private final MusicTrack track;
+
+        public MusicTreeItem(String value, MusicTrack track) {
+            super(value);
+            this.track = track;
+        }
+
+        public MusicTrack getTrack() {
+            return this.track;
+        }
+    }
+
+
     /**
      * Actual ListView displaying track names
      */
@@ -37,6 +53,7 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
     @FXML
     protected void initialize() {
         this.treeView.setRoot(new TreeItem<String>("All tracks"));
+        this.treeView.setShowRoot(false);
     }
 
     @Override
@@ -56,40 +73,55 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
 
     @Override
     public void populateItems() {
+        this.treeView.getRoot().getChildren().clear();
         List<MusicTrack> tracks = this.getTracks();
         
         for(MusicTrack track : tracks) {
             Path trackPath = track.getFilePath();
-            insertPathIntoTree(trackPath, treeView.getRoot());
+            insertTrackIntoTree(track, trackPath, treeView.getRoot());
         }
 
         flattenLinearTreeBranches(treeView.getRoot());
+
+        expandTree(this.treeView.getRoot());        
     }
 
-    //FIXME incorrect placement in the tree
-    private void insertPathIntoTree(Path path, TreeItem<String> treeItem) {
-        if(path.getNameCount() == 0) {
+    private void expandTree(TreeItem<String> item) {
+        item.setExpanded(true);
+        if(!item.isLeaf()) {
+            item.getChildren().stream().forEach(ch -> expandTree(ch));
+        }
+    }
+
+    private void insertTrackIntoTree(MusicTrack track, Path remainingPath, TreeItem<String> treeItem) {
+        if(remainingPath.getNameCount() == 0) {
             return;
-        } else if(path.getNameCount() == 1) {
-            treeItem.getChildren().add(new TreeItem<>(path.toString()));
+        } else if(remainingPath.getNameCount() == 1) {
+            String trackName = remainingPath.toString();
+            trackName = trackName.substring(0, trackName.lastIndexOf("."));
+            treeItem.getChildren().add(new MusicTreeItem(trackName, track));
         } else {
-            TreeItem<String> foundChild = null;
-            for(TreeItem<String> childItem : treeItem.getChildren()) {
-                if(childItem.getValue() == path.getName(0).toString()) {
-                    foundChild = childItem;
-                }
+            String currentPathName;
+            if(remainingPath.isAbsolute()) {
+                currentPathName = remainingPath.getRoot().toString();
+                remainingPath = remainingPath.subpath(0, remainingPath.getNameCount());
+            } else {
+                currentPathName = remainingPath.getName(0).toString();
+                remainingPath = remainingPath.subpath(1, remainingPath.getNameCount());
             }
 
-            if(foundChild != null) {
-                insertPathIntoTree(path.subpath(1, -1), foundChild);
-            } else {
-                Iterator<Path> iter = path.iterator();
-                while(iter.hasNext()) {
-                    TreeItem<String> newTreeItem = new TreeItem<>(iter.next().toString());
-                    treeItem.getChildren().add(newTreeItem);
-                    treeItem = newTreeItem;
-                }
+
+            TreeItem<String> foundChild = treeItem.getChildren().stream()
+            .filter(ch -> ch.getValue().equals(currentPathName))
+            .findFirst()
+            .orElse(null);
+
+            if(foundChild == null) {
+                foundChild = new TreeItem<>(currentPathName);
+                treeItem.getChildren().add(foundChild);
             }
+
+            insertTrackIntoTree(track, remainingPath, foundChild);
         }
     }
 
@@ -98,7 +130,12 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
             TreeItem<String> onlyChild = treeItem.getChildren().get(0);
             List<TreeItem<String>> subchildren = onlyChild.getChildren();
 
-            treeItem.setValue(treeItem.getValue() + "/" + onlyChild.getValue());
+            if(subchildren.isEmpty()) {
+                return;
+            }
+
+            treeItem.setValue(Paths.get(treeItem.getValue(), onlyChild.getValue()).toString());
+            
             treeItem.getChildren().remove(onlyChild);
             treeItem.getChildren().addAll(subchildren);
 
@@ -114,10 +151,24 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
     public List<MusicTrack> getSelectedTracks() {
         return this.treeView
         .getSelectionModel()
-        .getSelectedIndices()
+        .getSelectedItems()
         .stream()
-        .map(i -> this.getTracks().get(i))
+        .map(i -> this.getTreeItemChildTracks(i))
+        .flatMap(List::stream)
+        .distinct()
         .collect(Collectors.toList());
+    }
+
+    private List<MusicTrack> getTreeItemChildTracks(TreeItem<String> item) {
+        // if it's last in the hierarchy it's always MusicTreeItem
+        if(item.isLeaf()) {
+            return Arrays.asList(((MusicTreeItem)item).getTrack());
+        } else {
+            return item.getChildren().stream()
+            .map(ch -> getTreeItemChildTracks(ch))
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+        }
     }
 
     @Override
