@@ -266,7 +266,7 @@ public class Jukebox {
     private void onTrackReady(int index, Media media, boolean wasPlayingBefore) {
         this.currentTrack.set(media);
         this.currentTrackIndex.set(index);
-        this.currentTrackName.set(playlist.get(index).getName());
+        this.currentTrackName.set(playlist.get(index).getFileName());
         this.currentTrackTime.unbind();
         this.currentTrackTime.set(new Duration(0.0));
         this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());

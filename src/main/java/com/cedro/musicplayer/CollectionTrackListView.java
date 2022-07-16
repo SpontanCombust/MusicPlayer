@@ -24,7 +24,7 @@ public class CollectionTrackListView extends TrackListView {
     }
 
     @Override
-    public List<MusicTrack> getTracks() {
+    public List<MusicTrack> fetchTracks() {
         return collection.getTracks();
     }
 

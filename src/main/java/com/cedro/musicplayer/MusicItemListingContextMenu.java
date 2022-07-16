@@ -103,6 +103,12 @@ public class MusicItemListingContextMenu extends ContextMenu {
         }
     }
 
+    @FXML
+    void onShowTrackInfo(ActionEvent event) throws IOException {
+        TrackInfoDialog dialog = new TrackInfoDialog(this.parentMusicItemListing.getSelectedTracks().get(0));
+        dialog.show();
+    }
+
 
     /**
      * Populates the menu with the user collections to which tracks can be added
@@ -116,7 +122,7 @@ public class MusicItemListingContextMenu extends ContextMenu {
             MenuItem collectionItem = new MenuItem();
             collectionItem.setText(collection.getName());
             collectionItem.setOnAction(e -> {
-                collection.addTracks(this.parentMusicItemListing.getTracks());
+                collection.addTracks(this.parentMusicItemListing.fetchTracks());
             });
 
             return collectionItem;

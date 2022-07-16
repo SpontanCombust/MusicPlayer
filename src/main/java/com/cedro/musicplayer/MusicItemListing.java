@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.scene.input.MouseEvent;
 
 public interface MusicItemListing {
-    public List<MusicTrack> getTracks();
+    public List<MusicTrack> fetchTracks();
     
     public void setupContextMenu();
     public void populateItems();

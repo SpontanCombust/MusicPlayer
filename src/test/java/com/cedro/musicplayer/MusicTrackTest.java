@@ -50,7 +50,7 @@ public class MusicTrackTest {
         MusicTrack t1 = MusicTrack.fromFile(Path.of("./src/test/resources/com/cedro/musicplayer/glasscarpenter/glasscarpenter - Funeral.mp3"));
 
         assertNotNull(t1);
-        assertEquals("glasscarpenter - Funeral", t1.getName());
+        assertEquals("glasscarpenter - Funeral", t1.getFileName());
     }
 
     @Test

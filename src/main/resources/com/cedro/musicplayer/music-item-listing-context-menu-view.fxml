@@ -13,5 +13,6 @@
       </items>
     </Menu>
     <MenuItem fx:id="menuItemRemoveTracks" mnemonicParsing="false" onAction="#onRemoveTracks" text="%track_list_context_menu_item_remove" />
+    <MenuItem mnemonicParsing="false" onAction="#onShowTrackInfo" text="%track_list_context_menu_item_show_info" />
   </items>
 </fx:root>

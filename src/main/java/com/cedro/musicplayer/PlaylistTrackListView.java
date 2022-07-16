@@ -31,7 +31,7 @@ public class PlaylistTrackListView extends TrackListView {
     }
 
     @Override
-    public List<MusicTrack> getTracks() {
+    public List<MusicTrack> fetchTracks() {
         return Jukebox.getInstance().getPlaylist();
     }
 

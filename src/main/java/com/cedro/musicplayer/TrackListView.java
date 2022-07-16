@@ -59,7 +59,7 @@ public abstract class TrackListView extends AnchorPane implements MusicItemListi
      * @return List<MusicTrack> - list of stored tracks
      */
     @Override
-    public List<MusicTrack> getTracks() {
+    public List<MusicTrack> fetchTracks() {
         return null;
     }
 
@@ -73,9 +73,9 @@ public abstract class TrackListView extends AnchorPane implements MusicItemListi
         this.listView
         .getItems()
         .addAll(
-            this.getTracks()
+            this.fetchTracks()
             .stream()
-            .map(t -> t.getName())
+            .map(t -> t.getFileName())
             .collect(Collectors.toList()));
     }
 
@@ -102,7 +102,7 @@ public abstract class TrackListView extends AnchorPane implements MusicItemListi
         .getSelectionModel()
         .getSelectedIndices()
         .stream()
-        .map(i -> this.getTracks().get(i))
+        .map(i -> this.fetchTracks().get(i))
         .collect(Collectors.toList());
     }
 }

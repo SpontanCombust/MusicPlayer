@@ -57,7 +57,7 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
     }
 
     @Override
-    public List<MusicTrack> getTracks() {
+    public List<MusicTrack> fetchTracks() {
         return Jukebox.getInstance().getMusicDatabase().getTrackMap().values().stream().collect(Collectors.toList());
     }
 
@@ -74,7 +74,7 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
     @Override
     public void populateItems() {
         this.treeView.getRoot().getChildren().clear();
-        List<MusicTrack> tracks = this.getTracks();
+        List<MusicTrack> tracks = this.fetchTracks();
         
         for(MusicTrack track : tracks) {
             Path trackPath = track.getFilePath();
