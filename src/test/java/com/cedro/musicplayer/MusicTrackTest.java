@@ -54,17 +54,6 @@ public class MusicTrackTest {
     }
 
     @Test
-    void testGetParentAlbumPath() {
-        MusicTrack t1 = MusicTrack.fromFile(Path.of("./src/test/resources/com/cedro/musicplayer/glasscarpenter/glasscarpenter - Funeral.mp3"));
-
-        assertNotNull(t1);
-        assertEquals(
-            Path.of("./src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath(),
-            t1.getParentAlbumPath()
-        );
-    }
-
-    @Test
     void testIsAudioFile() {
         assertTrue(MusicTrack.isAudioFile(Path.of("./src/test/resources/com/cedro/musicplayer/glasscarpenter/glasscarpenter - Funeral.mp3")));
         assertFalse(MusicTrack.isAudioFile(Path.of("./src/test/resources/com/cedro/musicplayer/glasscarpenter/cover.jpeg")));

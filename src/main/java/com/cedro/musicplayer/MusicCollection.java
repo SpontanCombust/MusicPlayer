@@ -17,11 +17,6 @@ import javafx.scene.image.Image;
  */
 public class MusicCollection {
     /**
-     * Image object of the default cover used for the collection.
-     */
-    public static final Image DEFAULT_COVER_IMAGE = new Image(MusicAlbum.class.getResourceAsStream("record_disk.png"));
-    
-    /**
      * Name of the collection.
      */
     protected String name;
@@ -76,7 +71,7 @@ public class MusicCollection {
             return new Image(coverImagePath.toUri().toString());
         }
 
-        return DEFAULT_COVER_IMAGE;
+        return MusicTrack.DEFAULT_COVER_IMAGE;
     }
 
     /**

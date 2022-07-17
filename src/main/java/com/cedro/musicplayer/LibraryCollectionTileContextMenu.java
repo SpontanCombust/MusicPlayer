@@ -83,7 +83,7 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
     void onChangeCoverImage(ActionEvent event) {
         FileChooser fc = new FileChooser();
         fc.setTitle(Localization.getString("library_collection_tile_change_cover_image_dialog_title"));
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString("library_collection_tile_change_cover_image_dialog_file_category"), MusicAlbum.IMAGE_EXTENSIONS.stream().map(ext -> "*." + ext).collect(Collectors.toList())));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString("library_collection_tile_change_cover_image_dialog_file_category"), MusicTrack.IMAGE_EXTENSIONS.stream().map(ext -> "*." + ext).collect(Collectors.toList())));
         fc.setInitialDirectory(new File("."));
 
         File file = fc.showOpenDialog(parentTile.getScene().getWindow());
@@ -116,12 +116,7 @@ public class LibraryCollectionTileContextMenu extends ContextMenu {
     @FXML
     void onRemove(ActionEvent event) {
         MusicCollection collection = this.parentTile.getCollection();
-
-        if(collection instanceof MusicAlbum) {
-            Jukebox.getInstance().getMusicDatabase().removeAlbum((MusicAlbum) collection);
-        } else {
-            Jukebox.getInstance().getMusicDatabase().removeUserCollection(collection);
-        }
+        Jukebox.getInstance().getMusicDatabase().removeUserCollection(collection);
     }
 
 

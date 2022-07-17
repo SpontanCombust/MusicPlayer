@@ -23,7 +23,7 @@ public class MusicPlayerApplication extends Application {
         RootController root = new RootController();
         Scene scene = new Scene(root);
         stage.setTitle("Music Player");
-        stage.getIcons().add(MusicAlbum.DEFAULT_COVER_IMAGE);
+        stage.getIcons().add(MusicTrack.DEFAULT_COVER_IMAGE);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();

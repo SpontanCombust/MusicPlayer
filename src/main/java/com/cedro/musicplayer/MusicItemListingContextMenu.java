@@ -54,7 +54,6 @@ public class MusicItemListingContextMenu extends ContextMenu {
     @FXML
     void initialize() {
         populateAddToUserCollectionMenu();
-        removeRemoveMenuItemIfNecessary();
     }
 
     /**
@@ -132,23 +131,5 @@ public class MusicItemListingContextMenu extends ContextMenu {
         // inserting to the beginning so the "new collection" item is at the bottom
         menuAddToUserCollection.getItems().remove(0, menuAddToUserCollection.getItems().size() - 1);
         menuAddToUserCollection.getItems().addAll(0, items);
-    }
-
-    /**
-     * Removes the "remove" menu item if the track list is not a playlist or album
-     */
-    private void removeRemoveMenuItemIfNecessary() {
-        if(this.parentMusicItemListing instanceof PlaylistTrackListView) {
-            return;
-        }
-        
-        if(this.parentMusicItemListing instanceof CollectionTrackListView) {
-            var collectionTLV = (CollectionTrackListView) this.parentMusicItemListing;
-            if(!(collectionTLV.getCollection() instanceof MusicAlbum)) {
-                return;
-            }
-        }
-
-        this.getItems().remove(menuItemRemoveTracks);
     }
 }

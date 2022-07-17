@@ -11,62 +11,7 @@ public class MusicDatabaseTest {
 
     MusicDatabase db = new MusicDatabase();
 
-    @Test
-    void testAddAlbum() {
-        final String albumPath = "./src/test/resources/com/cedro/musicplayer/Beat Doctor";
-        final String albumName = "Beat Doctor";
-        final String coverImagePath = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor.jpg"; 
-        final String track1Path = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Bad Man (edit).mp3";
-        final String track2Path = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Too Retro.mp3";
-
-        MusicAlbum album = new MusicAlbum();
-        album.dirPath = Paths.get(albumPath);
-        album.name = albumName;
-        album.coverImagePath = Paths.get(coverImagePath);
-        album.tracksPaths.add(Paths.get(track1Path));
-        album.tracksPaths.add(Paths.get(track2Path));
-
-        db.addAlbum(album);
-
-        MusicAlbum fetchedAlbum = db.getAlbumMap().get(Paths.get(albumPath).toAbsolutePath());
-        Assertions.assertTrue(fetchedAlbum.equals(album));
-    }
-
-    @Test
-    void testAddAlbums() {
-        final String album1Path = "./src/test/resources/com/cedro/musicplayer/Beat Doctor";
-        final String album1Name = "Beat Doctor";
-        final String album1coverImagePath = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor.jpg"; 
-        final String album1trackPath = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Too Retro.mp3";
-
-        MusicAlbum album1 = new MusicAlbum();
-        album1.dirPath = Paths.get(album1Path);
-        album1.name = album1Name;
-        album1.coverImagePath = Paths.get(album1coverImagePath);
-        album1.tracksPaths.add(Paths.get(album1trackPath));
-
-
-        final String album2Path = "./src/test/resources/com/cedro/musicplayer/glasscarpenter";
-        final String album2Name = "glasscarpenter";
-        final String album2coverImagePath = "./src/test/resources/com/cedro/musicplayer/glasscarpenter/Beat Doctor 2.jpg"; 
-        final String album2trackPath = "./src/test/resources/com/cedro/musicplayer/glasscarpenter/glasscarpenter - Funeral.mp3";
-
-        MusicAlbum album2 = new MusicAlbum();
-        album2.dirPath = Paths.get(album2Path);
-        album2.name = album2Name;
-        album2.coverImagePath = Paths.get(album2coverImagePath);
-        album2.tracksPaths.add(Paths.get(album2trackPath));
-
-
-        db.addAlbums(Lists.list(album1, album2));
-
-
-        MusicAlbum fetchedAlbum1 = db.getAlbumMap().get(Paths.get(album1Path).toAbsolutePath());
-        Assertions.assertTrue(fetchedAlbum1.equals(album1));
-
-        MusicAlbum fetchedAlbum2 = db.getAlbumMap().get(Paths.get(album2Path).toAbsolutePath());
-        Assertions.assertTrue(fetchedAlbum2.equals(album2));
-    }
+    //TODO tests for MusicTrack
 
     @Test
     void testAddUserCollection() {
@@ -117,42 +62,12 @@ public class MusicDatabaseTest {
     }
 
     @Test
-    void testClearAlbums() {
-        testAddAlbums();
-
-        db.clearAlbums();
-
-        Assertions.assertTrue(db.getAlbumMap().isEmpty());
-    }
-
-    @Test
     void testClearUserCollections() {
         testAddUserCollections();
 
         db.clearUserCollections();
 
         Assertions.assertTrue(db.getUserCollectionList().isEmpty());
-    }
-
-    @Test
-    void testRemoveAlbum() {
-        final String albumPath = "./src/test/resources/com/cedro/musicplayer/Beat Doctor";
-        final String albumName = "Beat Doctor";
-        final String coverImagePath = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor.jpg"; 
-        final String track1Path = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Bad Man (edit).mp3";
-        final String track2Path = "./src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Too Retro.mp3";
-
-        MusicAlbum album = new MusicAlbum();
-        album.dirPath = Paths.get(albumPath);
-        album.name = albumName;
-        album.coverImagePath = Paths.get(coverImagePath);
-        album.tracksPaths.add(Paths.get(track1Path));
-        album.tracksPaths.add(Paths.get(track2Path));
-
-        db.addAlbum(album);
-
-        db.removeAlbum(album);
-        Assertions.assertTrue(db.getAlbumMap().values().stream().noneMatch(a -> a.equals(album)));
     }
 
     @Test
@@ -178,12 +93,13 @@ public class MusicDatabaseTest {
     void testLoadFromConfigurationFile() {
         Assertions.assertDoesNotThrow(() -> db.loadFromConfigurationFile(Paths.get("src/test/resources/com/cedro/musicplayer/music.mpconfig")));
 
-        String s1 = db.getAlbumMap().toString();
-        String s2 = Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath().toString();
+        //FIXME
+        // String s1 = db.getAlbumMap().toString();
+        // String s2 = Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath().toString();
 
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath()));
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath()));
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Wankers United").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Wankers United").toAbsolutePath()));
 
         Assertions.assertTrue(db.getUserCollectionList().stream().anyMatch(c -> c.name.equals("united beat")));
 
@@ -197,9 +113,10 @@ public class MusicDatabaseTest {
     void testLoadFromFileSystem() {
         Assertions.assertDoesNotThrow(() -> db.loadFromFileSystem(Paths.get("src/test/resources/com/cedro/musicplayer")));
 
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath()));
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath()));
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Wankers United").toAbsolutePath()));
+        //FIXME
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Wankers United").toAbsolutePath()));
 
         Assertions.assertTrue(db.getTrackMap().containsKey(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Bad Man (edit).mp3").toAbsolutePath()));
         Assertions.assertTrue(db.getTrackMap().containsKey(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor/Beat Doctor - Too Retro.mp3").toAbsolutePath()));
@@ -212,14 +129,15 @@ public class MusicDatabaseTest {
         Assertions.assertDoesNotThrow(() -> db.loadFromConfigurationFile(Paths.get("src/test/resources/com/cedro/musicplayer/music.mpconfig")));
         Assertions.assertDoesNotThrow(() -> db.saveToConfigurationFile(Paths.get("src/test/resources/com/cedro/musicplayer/test.mpconfig")));
 
-        db.clearAlbums();
+        //FIXME
+        // db.clearAlbums();
         db.clearUserCollections();
 
         Assertions.assertDoesNotThrow(() -> db.loadFromConfigurationFile(Paths.get("src/test/resources/com/cedro/musicplayer/test.mpconfig")));
 
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath()));
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath()));
-        Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Wankers United").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Beat Doctor").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/glasscarpenter").toAbsolutePath()));
+        // Assertions.assertTrue(db.getAlbumMap().keySet().contains(Paths.get("src/test/resources/com/cedro/musicplayer/Wankers United").toAbsolutePath()));
 
         Assertions.assertTrue(db.getUserCollectionList().stream().anyMatch(c -> c.name.equals("united beat")));
 

@@ -75,7 +75,7 @@ public abstract class TrackListView extends AnchorPane implements MusicItemListi
         .addAll(
             this.fetchTracks()
             .stream()
-            .map(t -> t.getFileName())
+            .map(t -> t.getArtist() + " - " + t.getTitle())
             .collect(Collectors.toList()));
     }
 

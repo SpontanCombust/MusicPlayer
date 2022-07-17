@@ -6,6 +6,7 @@ import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -20,6 +21,11 @@ public abstract class TrackTableView extends AnchorPane implements MusicItemList
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
+    }
+
+    @FXML
+    void initialize() {
+        this.tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     @Override

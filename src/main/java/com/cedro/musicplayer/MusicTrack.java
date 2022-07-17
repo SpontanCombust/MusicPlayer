@@ -1,8 +1,16 @@
 package com.cedro.musicplayer;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.InvalidDataException;
@@ -10,6 +18,7 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.util.Pair;
 
@@ -18,16 +27,33 @@ import javafx.util.Pair;
  */
 public class MusicTrack {
     /**
+     * All the extenions that cover images can have
+     */
+    public static final List<String> IMAGE_EXTENSIONS = Arrays.asList(
+        "bmp", "gif", "jpg", "jpeg", "png"
+    );
+
+    /**
+     * Image object of the default cover used for the collection.
+     */
+    public static final Image DEFAULT_COVER_IMAGE = new Image(MusicTrack.class.getResourceAsStream("record_disk.png"));
+
+    private static final String UNKNOWN_TAG = Localization.getString("track_info_unknown");
+
+    
+    /**
      * Path to the music file
      */
     private Path filePath;
 
-    private static final String UNKNOWN_TAG = Localization.getString("track_info_unknown");
     private SimpleStringProperty title = new SimpleStringProperty();
     private SimpleStringProperty artist = new SimpleStringProperty();
     private SimpleStringProperty album = new SimpleStringProperty();
     private SimpleStringProperty year = new SimpleStringProperty();
     private SimpleStringProperty genre = new SimpleStringProperty();
+
+    private Path coverImagePath = null;
+    
 
 
     /**
@@ -36,7 +62,7 @@ public class MusicTrack {
      * @param filePath - path to the music file
      */
     private MusicTrack(Path filePath) {
-        this.filePath = filePath;
+        this.filePath = filePath.toAbsolutePath();
 
         this.title.set(UNKNOWN_TAG);
         this.artist.set(UNKNOWN_TAG);
@@ -54,7 +80,7 @@ public class MusicTrack {
      * @return MusicTrack object or null on error
      */
     public static MusicTrack fromFile(Path filePath) {
-        if(Files.exists(filePath) && isAudioFile(filePath)) {
+        if(isAudioFile(filePath)) {
             MusicTrack track = new MusicTrack(filePath);
             
             try {
@@ -90,14 +116,34 @@ public class MusicTrack {
     public static boolean isAudioFile(Path filePath) {
         String fileName = filePath.getFileName().toString();
 
-        return fileName.endsWith(".mp3");
+        return Files.exists(filePath) && fileName.endsWith(".mp3");
+    }
+
+    public static List<MusicTrack> fromDirectory(Path dirPath) {
+        List<MusicTrack> tracks = new ArrayList<>();
+
+        File dir = dirPath.toFile();
+        if(dir.exists() && dir.isDirectory()) {
+            List<File> files = Arrays.asList(dir.listFiles());
+            if(!files.isEmpty()) {
+                for(File f : files) {
+                    if(f.isDirectory()) {
+                        tracks.addAll(fromDirectory(f.toPath()));
+                    } else if(isAudioFile(f.toPath())) {
+                        tracks.add(fromFile(f.toPath()));
+                    }
+                }
+            }
+        }
+
+        return tracks;
     }
 
     private static Pair<String, String> artistAndTitleFromFilename(String fileName) {
-        String[] split = fileName.split(" - ");
+        String[] split = fileName.split("-");
 
         if(split.length == 2) {
-            return new Pair<>(split[0], split[1]);
+            return new Pair<>(split[0].trim(), split[1].trim());
         }
         else {
             return new Pair<>(UNKNOWN_TAG, fileName);
@@ -125,25 +171,6 @@ public class MusicTrack {
         return fileName.substring(0, fileName.lastIndexOf("."));
     }
 
-    /**
-     * Returns the path of a parent album of this track
-     * @return Path - path of the parent album
-     */
-    public Path getParentAlbumPath() {
-        return filePath.getParent();
-    }
-
-    /**
-     * Returns the MusicAlbum object, which is a parent of this track by fetching it from the database
-     * @return MusicAlbum object
-     */
-    public MusicAlbum getParentAlbum() {
-        return Jukebox.getInstance()
-        .getMusicDatabase()
-        .getAlbumMap()
-        .get(this.getParentAlbumPath());
-    }
-
     public String getTitle() {
         return title.get();
     }
@@ -164,6 +191,22 @@ public class MusicTrack {
         return genre.get();
     }
 
+    public void setCoverImagePath(Path coverImagePath) throws IOException {
+        String fileName = coverImagePath.getFileName().toString();
+        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        if(IMAGE_EXTENSIONS.contains(fileExtension)) {
+            this.coverImagePath = coverImagePath;
+        } else {
+            throw new IOException("Invalid file for cover image");
+        }
+    }
+
+    public Path getCoverImagePath() {
+        return coverImagePath;
+    }
+
+
+
     /**
      * Loads the music media using the path at which this track is located
      * @return Media object
@@ -172,8 +215,36 @@ public class MusicTrack {
         return new Media(this.filePath.toUri().toString());
     }
 
+    Image loadCoverImage() {
+        if(coverImagePath != null) {
+            return new Image(this.coverImagePath.toUri().toString());
+        }
+
+        return DEFAULT_COVER_IMAGE;
+    }
+
     
 
+    public JSONObject toJSON() {
+        return new JSONObject()
+        .put("filePath", this.filePath.toString())
+        .put("coverImagePath", coverImagePath != null ? coverImagePath.toString() : null);
+    }
+
+    public static MusicTrack fromJSON(JSONObject json) throws JSONException, IOException {
+        Path filePath = Paths.get(json.getString("filePath"));
+        
+        MusicTrack track = fromFile(filePath);
+        if(json.has("coverImagePath")) {
+            track.setCoverImagePath(Paths.get(json.getString("coverImagePath")));
+        }
+
+        return track;
+    }
+
+
+
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
