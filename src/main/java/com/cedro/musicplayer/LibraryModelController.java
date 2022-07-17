@@ -24,17 +24,8 @@ public class LibraryModelController extends AnchorPane {
     @FXML
     private AllTracksTreeView allTrackTreeView;
 
-    /**
-     * Stack pane for albumsFlowPane
-     */
     @FXML
-    private StackPane albumsStackPane;
-
-    /**
-     * Flow pane for album tiles.
-     */
-    @FXML
-    private FlowPane albumsFlowPane;
+    private BrowserTrackTableView browserTrackTableView;
 
     /**
      * Stack pane for customCollectionsFlowPane
@@ -68,22 +59,20 @@ public class LibraryModelController extends AnchorPane {
     @FXML
     public void initialize() {
         allTrackTreeView.setupContextMenu();
-        
         allTrackTreeView.populateItems();
-        populateAlbums();
+
+        browserTrackTableView.setupContextMenu();
+        browserTrackTableView.populateItems();
+
         populateUserCollections();
+
 
         Jukebox.getInstance().getMusicDatabase().getTrackMap().addListener(new MapChangeListener<>() {
             @Override
             public void onChanged(MapChangeListener.Change c) {
                 allTrackTreeView.populateItems();
+                browserTrackTableView.populateItems();
             }  
-        });
-        Jukebox.getInstance().getMusicDatabase().getAlbumMap().addListener(new MapChangeListener<>() {
-            @Override
-            public void onChanged(MapChangeListener.Change c) {
-                populateAlbums();
-            }
         });
         Jukebox.getInstance().getMusicDatabase().getUserCollectionList().addListener(new ListChangeListener<>() {
             @Override
@@ -91,24 +80,6 @@ public class LibraryModelController extends AnchorPane {
                 populateUserCollections();
             }
         });
-    }
-
-    /**
-     * Fills albumsFlowPane with album tiles.
-     */
-    private void populateAlbums() {
-        Jukebox jb = Jukebox.getInstance();
-
-        List<VBox> albumVboxes =
-        jb.getMusicDatabase()
-        .getAlbumMap()
-        .values()
-        .stream()
-        .map(a -> new LibraryCollectionTile(a, this.albumsStackPane))
-        .collect(Collectors.toList());
-        
-        albumsFlowPane.getChildren().clear();
-        albumsFlowPane.getChildren().addAll(albumVboxes);
     }
 
     /**
