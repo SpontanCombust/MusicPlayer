@@ -4,21 +4,21 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Class representing the ListView control displayed when opening albums and user collections.
+ * Class representing the TableView control displayed when opening any collection
  */
-public class CollectionTrackListView extends TrackListView {
+public class CollectionTrackTableView extends TrackTableView {
     /**
-     * Music collection, which tracks are to be displayed in the track list view
+     * Music collection, which tracks are to be displayed in the table view
      */
     private MusicCollection collection;
 
     /**
      * Constructor
      * 
-     * @param collection - collection which tracks will be displayed in the track list view
+     * @param collection - collection which tracks will be displayed in the table view
      * @throws IOException
      */
-    public CollectionTrackListView(MusicCollection collection) throws IOException {
+    public CollectionTrackTableView(MusicCollection collection) throws IOException {
         super();
         this.collection = collection;
     }
@@ -30,7 +30,7 @@ public class CollectionTrackListView extends TrackListView {
 
     
     /** 
-     * Get the collection which tracks are displayed in the track list view
+     * Get the collection which tracks are displayed in the table view
      * 
      * @return MusicCollection - music collection
      */

@@ -105,6 +105,7 @@ public class PlayerHud extends VBox {
         Jukebox.getInstance().selectNextTrack();
     }
 
+    //TODO add shortcuts
     /**
      * Event handler for when play/pause button is clicked
      */

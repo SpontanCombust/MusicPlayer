@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
@@ -93,11 +94,14 @@ public class LibraryCollectionTile extends VBox {
                     this.parentStackPane.getChildren().remove(vb);
                 });
 
-                CollectionTrackListView collectionTrackList = new CollectionTrackListView(this.collection);
-                collectionTrackList.populateItems();
-                collectionTrackList.setupContextMenu();
-                
-                vb.getChildren().addAll(backButton, collectionTrackList);
+                CollectionTrackTableView collectionTableView = new CollectionTrackTableView(this.collection);
+                collectionTableView.setPrefWidth(this.parentStackPane.getPrefWidth());
+                collectionTableView.setupContextMenu();
+                collectionTableView.populateItems();
+
+                vb.getChildren().addAll(backButton, collectionTableView);
+                VBox.setVgrow(collectionTableView, Priority.ALWAYS);
+
                 this.parentStackPane.getChildren().add(vb);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -91,10 +91,10 @@ public class MusicItemListingContextMenu extends ContextMenu {
      */
     @FXML
     void onRemoveTracks(ActionEvent event) {
-        if(this.parentMusicItemListing instanceof CollectionTrackListView) {
-            var collectionTLV = (CollectionTrackListView) this.parentMusicItemListing;
-            collectionTLV.getCollection().removeTracks(collectionTLV.getSelectedTracks());
-            collectionTLV.populateItems();
+        if(this.parentMusicItemListing instanceof CollectionTrackTableView) {
+            var collectionTTV = (CollectionTrackTableView) this.parentMusicItemListing;
+            collectionTTV.getCollection().removeTracks(collectionTTV.getSelectedTracks());
+            collectionTTV.populateItems();
         } else if(this.parentMusicItemListing instanceof PlaylistTrackListView) {
             var playlistTLV = (PlaylistTrackListView) this.parentMusicItemListing;
             Jukebox.getInstance().getPlaylist().removeAll(playlistTLV.getSelectedTracks());
