@@ -25,6 +25,8 @@ public class LibraryModelController extends AnchorPane {
     private AllTracksTreeView allTrackTreeView;
 
     @FXML
+    private FilterTitledPane filterTitledPane;
+    @FXML
     private BrowserTrackTableView browserTrackTableView;
 
     /**
@@ -32,7 +34,6 @@ public class LibraryModelController extends AnchorPane {
      */
     @FXML
     private StackPane customCollectionsStackPane;
-
     /**
      * Flow pane for custom collection tiles.
      */
@@ -60,6 +61,10 @@ public class LibraryModelController extends AnchorPane {
     public void initialize() {
         allTrackTreeView.setupContextMenu();
         allTrackTreeView.populateItems();
+
+        filterTitledPane.getApplyFilterButton().setOnAction(event -> browserTrackTableView.populateItems());
+        browserTrackTableView.setFilter(filterTitledPane.getFilter());
+        filterTitledPane.setExpanded(false);
 
         browserTrackTableView.setupContextMenu();
         browserTrackTableView.populateItems();

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.cedro.musicplayer.ClearableTextField?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root minHeight="-Infinity" minWidth="-Infinity" text="%library_filter_pane" type="TitledPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <VBox alignment="CENTER_LEFT">
+            <children>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" maxWidth="400.0" percentWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" maxWidth="400.0" percentWidth="80.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="%track_label_title" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label text="%track_label_artist" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label text="%track_label_album" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label text="%track_label_year" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <Label text="%track_label_genre" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <ClearableTextField fx:id="titleTextField" minWidth="30.0" prefWidth="200.0" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                        <ClearableTextField fx:id="artistTextField" minWidth="30.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <ClearableTextField fx:id="albumTextField" minWidth="30.0" prefWidth="200.0" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                        <ClearableTextField fx:id="yearTextField" minWidth="30.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                        <ClearableTextField fx:id="genreTextField" minWidth="30.0" prefWidth="200.0" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                    </children>
+                </GridPane>
+                <Button fx:id="applyFilterButton" text="%apply_filter_button">
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </Button>
+            </children>
+        </VBox>
+    </content>
+</fx:root>

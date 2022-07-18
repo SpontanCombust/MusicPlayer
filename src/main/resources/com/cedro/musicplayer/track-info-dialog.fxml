@@ -28,7 +28,7 @@
                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                  </rowConstraints>
                   <children>
-                     <Label text="%track_info_dialog_label_title">
+                     <Label text="%track_label_title">
                         <font>
                            <Font name="System Bold" size="13.0" />
                         </font>
@@ -36,7 +36,7 @@
                            <Insets right="5.0" />
                         </padding>
                      </Label>
-                     <Label text="%track_info_dialog_label_artist" GridPane.rowIndex="1">
+                     <Label text="%track_label_artist" GridPane.rowIndex="1">
                         <font>
                            <Font name="System Bold" size="13.0" />
                         </font>
@@ -44,7 +44,7 @@
                            <Insets right="5.0" />
                         </padding>
                      </Label>
-                     <Label layoutX="10.0" layoutY="44.0" text="%track_info_dialog_label_album" GridPane.rowIndex="2">
+                     <Label layoutX="10.0" layoutY="44.0" text="%track_label_album" GridPane.rowIndex="2">
                         <font>
                            <Font name="System Bold" size="13.0" />
                         </font>
@@ -52,7 +52,7 @@
                            <Insets right="5.0" />
                         </padding>
                      </Label>
-                     <Label layoutX="10.0" layoutY="72.0" text="%track_info_dialog_label_year" GridPane.rowIndex="3">
+                     <Label layoutX="10.0" layoutY="72.0" text="%track_label_year" GridPane.rowIndex="3">
                         <font>
                            <Font name="System Bold" size="13.0" />
                         </font>
@@ -60,7 +60,7 @@
                            <Insets right="5.0" />
                         </padding>
                      </Label>
-                     <Label layoutX="10.0" layoutY="100.0" text="%track_info_dialog_label_genre" GridPane.rowIndex="4">
+                     <Label layoutX="10.0" layoutY="100.0" text="%track_label_genre" GridPane.rowIndex="4">
                         <font>
                            <Font name="System Bold" size="13.0" />
                         </font>

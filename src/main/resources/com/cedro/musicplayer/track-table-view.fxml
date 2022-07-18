@@ -10,27 +10,27 @@
    <children>
       <TableView fx:id="tableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-            <TableColumn text="%track_table_column_title">
+            <TableColumn text="%track_label_title">
                <cellValueFactory>
                   <PropertyValueFactory property="title" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn text="%track_table_column_artist">
+            <TableColumn text="%track_label_artist">
                <cellValueFactory>
                   <PropertyValueFactory property="artist" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn text="%track_table_column_album">
+            <TableColumn text="%track_label_album">
                <cellValueFactory>
                   <PropertyValueFactory property="album" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn text="%track_table_column_year">
+            <TableColumn text="%track_label_year">
                <cellValueFactory>
                   <PropertyValueFactory property="year" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn text="%track_table_column_genre">
+            <TableColumn text="%track_label_genre">
                <cellValueFactory>
                   <PropertyValueFactory property="genre" />
                </cellValueFactory>

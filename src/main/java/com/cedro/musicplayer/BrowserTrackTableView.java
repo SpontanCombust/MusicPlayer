@@ -6,17 +6,29 @@ import java.util.stream.Collectors;
 
 public class BrowserTrackTableView extends TrackTableView {
 
+    private MusicTrackFilter filter = null;
+
     public BrowserTrackTableView() throws IOException {
         super();
     }
 
+    public void setFilter(MusicTrackFilter filter) {
+        this.filter = filter;
+    }
+
     @Override
     public List<MusicTrack> fetchTracks() {
-        return Jukebox.getInstance()
+        var tracks = Jukebox.getInstance()
         .getMusicDatabase()
         .getTrackMap()
         .values().stream()
         .collect(Collectors.toList());
+
+        if (filter != null) {
+            tracks = filter.filter(tracks);
+        }
+
+        return tracks;
     }
     
 }
