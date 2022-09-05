@@ -102,7 +102,36 @@ public class MusicTrack {
                 track.title.set(artistAndTitle.getValue());
             }
 
+            try {
+                var coverImgPathCandidate = findCoverImageCandidateInDirectory(filePath.getParent());
+                if(coverImgPathCandidate != null) {
+                    track.setCoverImagePath(coverImgPathCandidate);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             return track;
+        }
+
+        return null;
+    }
+
+    private static Path findCoverImageCandidateInDirectory(Path directory) {
+        File dirFile = directory.toFile();
+        if(dirFile.isDirectory()) {
+            var coverImgFile = Arrays.asList(dirFile.listFiles()).stream()
+            .filter(f -> {
+                var p = f.getAbsolutePath();
+                var ext = p.substring(p.lastIndexOf(".") + 1);
+                return IMAGE_EXTENSIONS.contains(ext);
+            })
+            .findAny()
+            .orElse(null);
+
+            if(coverImgFile != null) {
+                return coverImgFile.toPath();
+            }
         }
 
         return null;
