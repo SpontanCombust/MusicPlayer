@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -39,11 +40,24 @@
          <HBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
             <children>
                <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#onPreviousTrackClick" text="||&lt;&lt;" />
-               <Button fx:id="playPauseButton" alignment="CENTER" minWidth="100.0" onAction="#onPlayPauseClick" text="&#x25B6;" />
+               <Button fx:id="playPauseButton" alignment="CENTER" minWidth="100.0" onAction="#onPlayPauseClick" text="▶" />
                <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#onNextTrackClick" text="&gt;&gt;||" />
             </children>
          </HBox>
-         <Slider fx:id="volumeSlider" value="100.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" />
+         <HBox GridPane.columnIndex="2" GridPane.halignment="CENTER">
+            <children>
+               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@speaker.png" />
+                  </image>
+               </ImageView>
+               <Slider fx:id="volumeSlider" value="100.0">
+                  <HBox.margin>
+                     <Insets top="7.0" />
+                  </HBox.margin>
+               </Slider>
+            </children>
+         </HBox>
       </children>
    </GridPane>
 </fx:root>
