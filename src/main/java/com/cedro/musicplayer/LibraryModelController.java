@@ -64,7 +64,7 @@ public class LibraryModelController extends AnchorPane {
 
         filterTitledPane.getApplyFilterButton().setOnAction(event -> browserTrackTableView.populateItems());
         browserTrackTableView.setFilter(filterTitledPane.getFilter());
-        filterTitledPane.setExpanded(false);
+        filterTitledPane.setExpanded(true);
 
         browserTrackTableView.setupContextMenu();
         browserTrackTableView.populateItems();

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.input.MouseEvent;
-import javafx.beans.binding.BooleanBinding;
 
 /**
  * ListView class for the paylist
@@ -51,6 +50,12 @@ public class PlaylistTrackListView extends TrackListView {
                     setStyle(null);
                 } else {
                     setText(item);
+
+                    if(getIndex() == Jukebox.getInstance().currentTrackIndex.intValue() && Jukebox.getInstance().currentTrack != null) {
+                        setStyle("-fx-font-weight: bold;");
+                    } else {
+                        setStyle("-fx-font-weight: normal;");
+                    }
                 }
             }
         });

@@ -121,7 +121,7 @@ public class MusicItemListingContextMenu extends ContextMenu {
             MenuItem collectionItem = new MenuItem();
             collectionItem.setText(collection.getName());
             collectionItem.setOnAction(e -> {
-                collection.addTracks(this.parentMusicItemListing.fetchTracks());
+                collection.addTracks(this.parentMusicItemListing.getSelectedTracks());
             });
 
             return collectionItem;

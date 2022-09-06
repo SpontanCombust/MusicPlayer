@@ -52,9 +52,10 @@ public class MusicDatabase {
     }
 
     public void addTracks(List<MusicTrack> tracks) {
-        for (MusicTrack track : tracks) {
-            trackMap.put(track.getFilePath(), track);
-        }
+        var map = tracks.stream()
+        .collect(Collectors.toMap(t -> t.getFilePath(), t -> t));
+        
+        trackMap.putAll(map);
     }
 
     public void removeTrack(MusicTrack track) {
