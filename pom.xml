@@ -100,6 +100,17 @@
                             <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
                     </execution>
+                    <execution>
+                        <!-- Configuration for debugging -->
+                        <id>debug</id>
+                        <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+                            </options>
+                            <mainClass>com.cedro.musicplayer.MusicPlayerApplication</mainClass>
+                            <launcher>MusicPlayer</launcher>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
