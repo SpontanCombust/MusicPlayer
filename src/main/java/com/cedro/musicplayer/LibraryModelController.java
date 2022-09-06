@@ -8,6 +8,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -40,7 +42,7 @@ public class LibraryModelController extends AnchorPane {
     @FXML
     private FlowPane customCollectionsFlowPane;
 
-
+    private ContextMenu userCollectionsContextMenu = null;
 
     /**
      * Constructor.
@@ -52,6 +54,8 @@ public class LibraryModelController extends AnchorPane {
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
+
+        userCollectionsContextMenu = new UserCollectionsContextMenu();
     }
 
     /**
@@ -85,6 +89,13 @@ public class LibraryModelController extends AnchorPane {
                 populateUserCollections();
             }
         });
+    }
+    
+    @FXML
+    private void onRequestCustomCollectionsContextMenu(ContextMenuEvent event) {
+        if(!userCollectionsContextMenu.isShowing()) {
+            userCollectionsContextMenu.show(customCollectionsFlowPane, event.getScreenX(), event.getScreenY());
+        }
     }
 
     /**

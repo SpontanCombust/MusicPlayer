@@ -36,6 +36,9 @@ public class LibraryCollectionTile extends VBox {
      */
     private Label collectionNameLabel;
 
+
+    private ContextMenu contextMenu = null;
+
     /**
      * Constructor
      * 
@@ -59,14 +62,19 @@ public class LibraryCollectionTile extends VBox {
 
         this.collectionNameLabel = new Label(collection.getName());
 
+        try {
+            contextMenu = new LibraryCollectionTileContextMenu(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.getChildren().addAll(hbox, this.collectionNameLabel);
         this.setOnContextMenuRequested(event -> {
-            try {
-                ContextMenu cm = new LibraryCollectionTileContextMenu(this);
-                cm.show(this, event.getScreenX(), event.getScreenY());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(!contextMenu.isShowing()) {
+                contextMenu.show(this, event.getScreenX(), event.getScreenY());
             }
+
+            event.consume();
         });
 
         this.collection = collection;

@@ -41,7 +41,7 @@
               <content>
                 <AnchorPane>
                      <children>
-                        <StackPane fx:id="customCollectionsStackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <StackPane fx:id="customCollectionsStackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" onContextMenuRequested="#onRequestCustomCollectionsContextMenu">
                            <children>
                               <ScrollPane>
                                  <content>
