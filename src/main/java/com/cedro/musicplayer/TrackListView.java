@@ -41,6 +41,7 @@ public abstract class TrackListView extends AnchorPane implements MusicItemListi
     @FXML
     public void initialize() {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.setFocusTraversable(this.isFocusTraversable());
     }
 
     /**

@@ -18,6 +18,9 @@ public class PlayerHudAndTrackList extends VBox {
     @FXML
     private PlaylistTrackListView playlistTrackListPane;
 
+    @FXML
+    private PlayerHud playerHudPane;
+
     /**
      * Constructor
      * 
@@ -44,5 +47,7 @@ public class PlayerHudAndTrackList extends VBox {
                 playlistTrackListPane.populateItems();
             }  
         });
+
+        playerHudPane.requestFocus();
     }
 }

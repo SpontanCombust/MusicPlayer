@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -17,6 +18,9 @@ import javafx.util.Duration;
  * Class representing the main player view with the track timeline, play/pause button etc.
  */
 public class PlayerHud extends VBox {
+    private final double KEY_PRESS_TIME_SKIP_MILLIS = 5000;
+    private final float KEY_PRESS_VOLUME_CHANGE = 0.05f;
+
     /**
      * ImageView for the album cover image
      */
@@ -89,6 +93,33 @@ public class PlayerHud extends VBox {
         reconfigure();
     }
 
+    @FXML
+    protected void onKeyPress(KeyEvent event) {
+        switch(event.getCode()) {
+            case SPACE:
+                if(Jukebox.getInstance().isPlaying()) {
+                    Jukebox.getInstance().pause();
+                } else {
+                    Jukebox.getInstance().play();
+                }
+                break;
+            case LEFT:
+                Jukebox.getInstance().seek(new Duration(this.musicTimelineSlider.getValue() - KEY_PRESS_TIME_SKIP_MILLIS));
+                break;
+            case RIGHT:
+                Jukebox.getInstance().seek(new Duration(this.musicTimelineSlider.getValue() + KEY_PRESS_TIME_SKIP_MILLIS));
+                break;
+            case UP:
+                this.volumeSlider.setValue(this.volumeSlider.getValue() + KEY_PRESS_VOLUME_CHANGE);
+                break;
+            case DOWN:
+                this.volumeSlider.setValue(this.volumeSlider.getValue() - KEY_PRESS_VOLUME_CHANGE);
+                break;
+            default: 
+                break;
+        }
+    }
+
     /**
      * Event handler for when previous track is requested
      */
@@ -105,7 +136,6 @@ public class PlayerHud extends VBox {
         Jukebox.getInstance().selectNextTrack();
     }
 
-    //TODO add shortcuts
     /**
      * Event handler for when play/pause button is clicked
      */

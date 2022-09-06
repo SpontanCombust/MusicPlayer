@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root type="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPress" type="AnchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox>
          <children>
@@ -17,10 +18,22 @@
               <menus>
                 <Menu mnemonicParsing="false" text="%root_view_menu_file">
                   <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromFileSystem" text="%root_view_menu_file_load_from_system" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromConfiguration" text="%root_view_menu_file_load_from_configuration" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToConfiguration" text="%root_view_menu_file_save_to_configuration" />
-                    <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="%root_view_menu_file_exit" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromFileSystem" text="%root_view_menu_file_load_from_system">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuLoadMusicFromConfiguration" text="%root_view_menu_file_load_from_configuration">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveMusicToConfiguration" text="%root_view_menu_file_save_to_configuration">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="%root_view_menu_file_exit">
+                           <accelerator>
+                              <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%root_view_menu_help">
@@ -32,12 +45,12 @@
             </MenuBar>
             <HBox minHeight="-Infinity" minWidth="-Infinity">
                <children>
-                  <ToggleButton fx:id="buttonOpenPlayer" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" text="%root_view_button_player">
+                  <ToggleButton fx:id="buttonOpenPlayer" focusTraversable="false" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" text="%root_view_button_player">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </ToggleButton>
-                  <ToggleButton fx:id="buttonOpenLibrary" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" text="%root_view_button_library" />
+                  <ToggleButton fx:id="buttonOpenLibrary" focusTraversable="false" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" text="%root_view_button_library" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" />

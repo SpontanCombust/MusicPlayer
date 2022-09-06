@@ -28,7 +28,7 @@
                                 <Insets bottom="5.0" top="20.0" left="5.0" />
                             </VBox.margin>
                         </Label>
-                        <PlaylistTrackListView fx:id="playlistTrackListPane" VBox.vgrow="ALWAYS"/>
+                        <PlaylistTrackListView fx:id="playlistTrackListPane" focusTraversable="false" VBox.vgrow="ALWAYS"/>
                     </children>
                 </VBox>
                 <PlayerHud fx:id="playerHudPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />

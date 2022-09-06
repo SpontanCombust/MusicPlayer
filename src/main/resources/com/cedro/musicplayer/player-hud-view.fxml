@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root alignment="CENTER" spacing="20.0" type="VBox" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="CENTER" spacing="20.0" type="VBox" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" focusTraversable="true" onKeyPressed="#onKeyPress">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <ImageView fx:id="albumCoverImageView" fitHeight="200.0" fitWidth="200.0" />
    <Label fx:id="musicTitleText" text="music_title" />
    <Label fx:id="musicTimeText" text="music_time" />
-   <Slider fx:id="musicTimelineSlider" onMouseDragged="#onMusicSliderCursorDragged" onMousePressed="#onMusicSliderMousePressed" onMouseReleased="#onMusicSliderMouseReleased" />
+   <Slider fx:id="musicTimelineSlider" focusTraversable="false" onMouseDragged="#onMusicSliderCursorDragged" onMousePressed="#onMusicSliderMousePressed" onMouseReleased="#onMusicSliderMouseReleased" />
    <GridPane alignment="TOP_CENTER">
      <columnConstraints>
        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -33,15 +33,15 @@
       <children>
          <HBox>
             <children>
-               <ToggleButton fx:id="autoplayButton" minWidth="50.0" mnemonicParsing="false" text="%player_view_button_autoplay" />
-               <ToggleButton fx:id="loopButton" minWidth="50.0" mnemonicParsing="false" text="%player_view_button_loop" />
+               <ToggleButton fx:id="autoplayButton" minWidth="50.0" mnemonicParsing="false" focusTraversable="false" text="%player_view_button_autoplay" />
+               <ToggleButton fx:id="loopButton" minWidth="50.0" mnemonicParsing="false" focusTraversable="false" text="%player_view_button_loop" />
             </children>
          </HBox>
          <HBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
             <children>
-               <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#onPreviousTrackClick" text="||&lt;&lt;" />
-               <Button fx:id="playPauseButton" alignment="CENTER" minWidth="100.0" onAction="#onPlayPauseClick" text="▶" />
-               <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#onNextTrackClick" text="&gt;&gt;||" />
+               <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" focusTraversable="false" onAction="#onPreviousTrackClick" text="||&lt;&lt;" />
+               <Button fx:id="playPauseButton" alignment="CENTER" minWidth="100.0" focusTraversable="false" onAction="#onPlayPauseClick" text="▶" />
+               <Button alignment="CENTER" minWidth="75.0" mnemonicParsing="false" focusTraversable="false" onAction="#onNextTrackClick" text="&gt;&gt;||" />
             </children>
          </HBox>
          <HBox GridPane.columnIndex="2" GridPane.halignment="CENTER">
@@ -51,7 +51,7 @@
                      <Image url="@speaker.png" />
                   </image>
                </ImageView>
-               <Slider fx:id="volumeSlider" value="100.0">
+               <Slider fx:id="volumeSlider" focusTraversable="false" value="100.0">
                   <HBox.margin>
                      <Insets top="7.0" />
                   </HBox.margin>
