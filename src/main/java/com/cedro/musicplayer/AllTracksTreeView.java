@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 /**
  * Class representing the TreeView control for the "All tracks" page in the library
@@ -39,6 +41,13 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
      */
     @FXML
     protected TreeView<String> treeView;
+
+    @FXML
+    protected StackPane stackPane;
+    
+    @FXML
+    protected Label noTracksHelpLabel;
+
 
     /**
      * Constructor
@@ -76,14 +85,18 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
         this.treeView.getRoot().getChildren().clear();
         List<MusicTrack> tracks = this.fetchTracks();
         
-        for(MusicTrack track : tracks) {
-            Path trackPath = track.getFilePath();
-            insertTrackIntoTree(track, trackPath, treeView.getRoot());
+        if(tracks.size() > 0) {
+            for(MusicTrack track : tracks) {
+                Path trackPath = track.getFilePath();
+                insertTrackIntoTree(track, trackPath, treeView.getRoot());
+            }
+    
+            flattenLinearTreeBranches(treeView.getRoot());
+    
+            expandTree(this.treeView.getRoot());        
+
+            this.stackPane.getChildren().remove(noTracksHelpLabel);
         }
-
-        flattenLinearTreeBranches(treeView.getRoot());
-
-        expandTree(this.treeView.getRoot());        
     }
 
     private void expandTree(TreeItem<String> item) {
