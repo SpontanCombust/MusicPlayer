@@ -88,6 +88,12 @@ public abstract class TrackListView extends AnchorPane implements MusicItemListi
         try {
             ContextMenu cm = new MusicItemListingContextMenu(this);
             this.listView.setContextMenu(cm);
+
+            this.listView.setOnContextMenuRequested(e -> {
+                if(this.getSelectedTracks().size() == 0) {
+                    cm.hide();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

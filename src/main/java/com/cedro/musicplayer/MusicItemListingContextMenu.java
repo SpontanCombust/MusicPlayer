@@ -54,6 +54,11 @@ public class MusicItemListingContextMenu extends ContextMenu {
     @FXML
     void initialize() {
         populateAddToUserCollectionMenu();
+
+        if(!(this.parentMusicItemListing instanceof CollectionTrackTableView) 
+        && !(this.parentMusicItemListing instanceof PlaylistTrackListView)) {
+            this.getItems().remove(menuItemRemoveTracks);
+        }
     }
 
     /**
@@ -104,8 +109,11 @@ public class MusicItemListingContextMenu extends ContextMenu {
 
     @FXML
     void onShowTrackInfo(ActionEvent event) throws IOException {
-        TrackInfoDialog dialog = new TrackInfoDialog(this.parentMusicItemListing.getSelectedTracks().get(0));
-        dialog.show();
+        var selected = this.parentMusicItemListing.getSelectedTracks();
+        if(selected.size() >= 1) {
+            TrackInfoDialog dialog = new TrackInfoDialog(selected.get(0));
+            dialog.show();
+        }
     }
 
 

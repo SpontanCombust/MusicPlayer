@@ -33,6 +33,12 @@ public abstract class TrackTableView extends AnchorPane implements MusicItemList
         try {
             ContextMenu cm = new MusicItemListingContextMenu(this);
             this.tableView.setContextMenu(cm);
+
+            this.tableView.setOnContextMenuRequested(e -> {
+                if(this.getSelectedTracks().size() == 0) {
+                    cm.hide();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -75,6 +75,12 @@ public class AllTracksTreeView extends AnchorPane implements MusicItemListing {
         try {
             ContextMenu cm = new MusicItemListingContextMenu(this);
             this.treeView.setContextMenu(cm);
+
+            this.treeView.setOnContextMenuRequested(e -> {
+                if(this.getSelectedTracks().size() == 0) {
+                    cm.hide();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
