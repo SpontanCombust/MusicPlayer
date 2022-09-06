@@ -12,7 +12,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.mpatric.mp3agic.ID3v1;
+import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
@@ -85,16 +85,24 @@ public class MusicTrack {
             
             try {
                 Mp3File mp3File = new Mp3File(filePath.toString());
-                if(!mp3File.hasId3v1Tag()) {
+                if(!mp3File.hasId3v2Tag()) {
                     throw new InvalidDataException();
                 }
 
-                ID3v1 tags = mp3File.getId3v1Tag();
-                track.title.set(tags.getTitle());
-                track.artist.set(tags.getArtist());
-                track.album.set(tags.getAlbum());
-                track.year.set(tags.getYear());
-                track.genre.set(tags.getGenreDescription());
+                ID3v2 tags = mp3File.getId3v2Tag();
+
+                if(tags.getTitle() == null && tags.getArtist() == null) {
+                    var artistAndTitle = artistAndTitleFromFilename(track.getFileName());
+                    track.artist.set(artistAndTitle.getKey());
+                    track.title.set(artistAndTitle.getValue());   
+                } else {
+                    track.title.set(tags.getTitle() != null ? tags.getTitle() : UNKNOWN_TAG);
+                    track.artist.set(tags.getArtist() != null ? tags.getArtist() : UNKNOWN_TAG);
+                }
+
+                track.album.set(tags.getAlbum() != null ? tags.getAlbum() : UNKNOWN_TAG);
+                track.year.set(tags.getDate() != null ? tags.getDate().substring(0, tags.getDate().indexOf("-")) : UNKNOWN_TAG);
+                track.genre.set(tags.getGenreDescription() != null ? tags.getGenreDescription() : UNKNOWN_TAG);
 
             } catch (UnsupportedTagException | InvalidDataException | IOException e) {
                 var artistAndTitle = artistAndTitleFromFilename(track.getFileName());
