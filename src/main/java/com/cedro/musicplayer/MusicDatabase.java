@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,7 +135,12 @@ public class MusicDatabase {
         .put("userCollections", new JSONArray(
             userCollectionList.stream()
             .map(MusicCollection::toJSON)
-            .collect(Collectors.toList())));
+            .collect(Collectors.toList())))
+        .put("playlist", new JSONArray(
+            Jukebox.getInstance().getPlaylist().stream()
+            .map(t -> t.getFilePath().toString())
+            .collect(Collectors.toList())
+        ));
         
         if(!filePath.toString().endsWith(CONFIG_FILE_EXTENSION)) {
             filePath = filePath.resolveSibling(filePath.getFileName() + CONFIG_FILE_EXTENSION);
@@ -185,18 +192,41 @@ public class MusicDatabase {
         JSONObject root = new JSONObject(tokener);
 
         JSONArray tracksJSON = root.getJSONArray("tracks");
+        var tracks = new ArrayList<MusicTrack>();
         for(int i = 0; i < tracksJSON.length(); i++) {
             MusicTrack track = MusicTrack.fromJSON(tracksJSON.getJSONObject(i));
-            addTrack(track);
+            if(track != null) {
+                tracks.add(track);
+            }
         }
+        this.clearTracks();
+        this.addTracks(tracks);
 
         JSONArray collectionsJSON = root.getJSONArray("userCollections");
+        var collections = new ArrayList<MusicCollection>();
         for(int i = 0; i < collectionsJSON.length(); i++) {
             MusicCollection collection = MusicCollection.fromJSON(collectionsJSON.getJSONObject(i));
             if(collection != null) {
-                addUserCollection(collection);
+                collections.add(collection);
             }
         }
+        this.clearUserCollections();
+        this.addUserCollections(collections);
+
+        JSONArray playlistJSON = root.getJSONArray("playlist");
+        var playlist = new ArrayList<MusicTrack>();
+        for (int i = 0; i < playlistJSON.length(); i++) {
+            try {
+                var trackPath = Paths.get(playlistJSON.getString(i));
+                if(this.trackMap.containsKey(trackPath)) {
+                    playlist.add(this.trackMap.get(trackPath));
+                }   
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Jukebox.getInstance().getPlaylist().clear();
+        Jukebox.getInstance().getPlaylist().addAll(playlist);
     }
 
     /**

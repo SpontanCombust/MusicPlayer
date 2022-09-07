@@ -264,17 +264,17 @@ public class MusicTrack {
 
     public JSONObject toJSON() {
         return new JSONObject()
-        .put("filePath", this.filePath.toString())
-        .put("coverImagePath", coverImagePath != null ? coverImagePath.toString() : null);
+        .put("filePath", this.filePath.toString());
+        // .put("coverImagePath", coverImagePath != null ? coverImagePath.toString() : null);
     }
 
     public static MusicTrack fromJSON(JSONObject json) throws JSONException, IOException {
         Path filePath = Paths.get(json.getString("filePath"));
         
         MusicTrack track = fromFile(filePath);
-        if(json.has("coverImagePath")) {
-            track.setCoverImagePath(Paths.get(json.getString("coverImagePath")));
-        }
+        // if(json.has("coverImagePath")) {
+        //     track.setCoverImagePath(Paths.get(json.getString("coverImagePath")));
+        // }
 
         return track;
     }
