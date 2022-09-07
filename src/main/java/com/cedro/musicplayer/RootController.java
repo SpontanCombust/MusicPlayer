@@ -108,7 +108,7 @@ public class RootController extends AnchorPane {
      * @throws IOException
      */
     @FXML
-    protected void onMenuAbout(ActionEvent event) throws IOException {
+    protected void onMenuAbout(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
         alert.setHeaderText("Music Player v" + MusicPlayerApplication.VERSION);
@@ -118,6 +118,18 @@ public class RootController extends AnchorPane {
         );
 
         alert.show();
+    }
+
+    @FXML
+    protected void onMenuInstructions(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(Localization.getString("root_view_menu_help_instructions_title"));
+        alert.setHeaderText("");
+        alert.setContentText(Localization.getString("root_view_menu_help_instructions_content"));
+        alert.setResizable(true);
+        
+        alert.show();
+        alert.setWidth(1000);
     }
 
 

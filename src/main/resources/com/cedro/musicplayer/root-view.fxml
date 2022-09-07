@@ -30,7 +30,7 @@
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                    <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="%root_view_menu_file_exit">
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="%root_view_menu_file_exit">
                            <accelerator>
                               <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
@@ -39,6 +39,7 @@
                 <Menu mnemonicParsing="false" text="%root_view_menu_help">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#onMenuAbout" text="%root_view_menu_help_about" />
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuInstructions" text="%root_view_menu_help_instructions_title" />
                   </items>
                 </Menu>
               </menus>
