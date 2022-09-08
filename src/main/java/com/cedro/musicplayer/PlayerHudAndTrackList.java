@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
@@ -17,6 +18,9 @@ public class PlayerHudAndTrackList extends VBox {
      */
     @FXML
     private PlaylistTrackListView playlistTrackListPane;
+
+    @FXML
+    private Label playlistHelpLabel;
 
     @FXML
     private PlayerHud playerHudPane;
@@ -41,9 +45,12 @@ public class PlayerHudAndTrackList extends VBox {
         this.playlistTrackListPane.populateItems();
         this.playlistTrackListPane.setupContextMenu();
 
+        playlistHelpLabel.setVisible(Jukebox.getInstance().getPlaylist().size() == 0);
+        
         Jukebox.getInstance().getPlaylist().addListener(new ListChangeListener<>() {
             @Override
             public void onChanged(ListChangeListener.Change c) {
+                playlistHelpLabel.setVisible(Jukebox.getInstance().getPlaylist().size() == 0);
                 playlistTrackListPane.populateItems();
             }  
         });
