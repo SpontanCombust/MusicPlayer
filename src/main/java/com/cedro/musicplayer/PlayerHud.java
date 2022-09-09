@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -287,33 +288,34 @@ public class PlayerHud extends VBox {
         );
     }
 
+
+    private final ImageView PLAY_BUTTON_IMAGEVIEW = new ImageView(
+        new Image(getClass().getResource("button_play.png").openStream(), 100, 30, true, true));
+        
+    private final ImageView PAUSE_BUTTON_IMAGEVIEW = new ImageView(
+        new Image(getClass().getResource("button_pause.png").openStream(), 100, 30, true, true));
+
     /**
      * Reconfigures the play/pause button. Sets appropriate listeners.
      */
     protected void reconfigurePlayPauseButton() {
-        this.playPauseButton.setText(getPlayPauseButtonText(Jukebox.getInstance().currentTrackStatus.get() == MediaPlayer.Status.PLAYING));
+        if(Jukebox.getInstance().currentTrackStatus.get() == MediaPlayer.Status.PLAYING) {
+            this.playPauseButton.setGraphic(PAUSE_BUTTON_IMAGEVIEW);
+        } else {
+            this.playPauseButton.setGraphic(PLAY_BUTTON_IMAGEVIEW);
+        }
 
         Jukebox.getInstance().currentTrackStatus.addListener(
             (observable, oldVal, newVal) -> {
                 if(!isDraggingMusicTimeline) {
-                    this.playPauseButton.setText(getPlayPauseButtonText(newVal == MediaPlayer.Status.PLAYING));
+                    if(Jukebox.getInstance().currentTrackStatus.get() == MediaPlayer.Status.PLAYING) {
+                        this.playPauseButton.setGraphic(PAUSE_BUTTON_IMAGEVIEW);
+                    } else {
+                        this.playPauseButton.setGraphic(PLAY_BUTTON_IMAGEVIEW);
+                    }
                 }
             }
         );
-    }
-    
-    /**
-     * Gets the localised play/pause button text
-     *
-     * @param isPlaying whether the player is playing or not
-     * @return the play/pause button text
-     */
-    private String getPlayPauseButtonText(boolean isPlaying) {
-        if(isPlaying) {
-            return "| |";
-        } else {
-            return "\u25b6";
-        }
     }
 
     /**

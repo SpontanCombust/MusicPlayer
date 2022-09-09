@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPress" type="AnchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPress" type="AnchorPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox>
          <children>
@@ -46,12 +46,12 @@
             </MenuBar>
             <HBox minHeight="-Infinity" minWidth="-Infinity">
                <children>
-                  <ToggleButton fx:id="buttonOpenPlayer" focusTraversable="false" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" text="%root_view_button_player">
+                  <ToggleButton fx:id="buttonOpenPlayer" focusTraversable="false" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenPlayer" style="-fx-font-weight: bold; -fx-font-size: 20;" text="%root_view_button_player" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </ToggleButton>
-                  <ToggleButton fx:id="buttonOpenLibrary" focusTraversable="false" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" text="%root_view_button_library" />
+                  <ToggleButton fx:id="buttonOpenLibrary" focusTraversable="false" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#onButtonOpenLibrary" style="-fx-font-weight: bold; -fx-font-size: 20;" text="%root_view_button_library" textAlignment="CENTER" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" />
