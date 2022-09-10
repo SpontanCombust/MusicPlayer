@@ -8,6 +8,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -22,33 +24,25 @@ public class LibraryModelController extends AnchorPane {
      * ListView with all available songs.
      */
     @FXML
-    private AllTracksTrackListView allTrackListView;
+    private AllTracksTreeView allTrackTreeView;
 
-    /**
-     * Stack pane for albumsFlowPane
-     */
     @FXML
-    private StackPane albumsStackPane;
-
-    /**
-     * Flow pane for album tiles.
-     */
+    private FilterTitledPane filterTitledPane;
     @FXML
-    private FlowPane albumsFlowPane;
+    private BrowserTrackTableView browserTrackTableView;
 
     /**
      * Stack pane for customCollectionsFlowPane
      */
     @FXML
     private StackPane customCollectionsStackPane;
-
     /**
      * Flow pane for custom collection tiles.
      */
     @FXML
     private FlowPane customCollectionsFlowPane;
 
-
+    private ContextMenu userCollectionsContextMenu = null;
 
     /**
      * Constructor.
@@ -60,6 +54,8 @@ public class LibraryModelController extends AnchorPane {
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
+
+        userCollectionsContextMenu = new UserCollectionsContextMenu();
     }
 
     /**
@@ -67,23 +63,25 @@ public class LibraryModelController extends AnchorPane {
      */
     @FXML
     public void initialize() {
-        allTrackListView.setupContextMenu();
-        
-        allTrackListView.populateListItems();
-        populateAlbums();
+        allTrackTreeView.setupContextMenu();
+        allTrackTreeView.populateItems();
+
+        filterTitledPane.getApplyFilterButton().setOnAction(event -> browserTrackTableView.populateItems());
+        browserTrackTableView.setFilter(filterTitledPane.getFilter());
+        filterTitledPane.setExpanded(true);
+
+        browserTrackTableView.setupContextMenu();
+        browserTrackTableView.populateItems();
+
         populateUserCollections();
+
 
         Jukebox.getInstance().getMusicDatabase().getTrackMap().addListener(new MapChangeListener<>() {
             @Override
             public void onChanged(MapChangeListener.Change c) {
-                allTrackListView.populateListItems();
+                allTrackTreeView.populateItems();
+                browserTrackTableView.populateItems();
             }  
-        });
-        Jukebox.getInstance().getMusicDatabase().getAlbumMap().addListener(new MapChangeListener<>() {
-            @Override
-            public void onChanged(MapChangeListener.Change c) {
-                populateAlbums();
-            }
         });
         Jukebox.getInstance().getMusicDatabase().getUserCollectionList().addListener(new ListChangeListener<>() {
             @Override
@@ -92,23 +90,12 @@ public class LibraryModelController extends AnchorPane {
             }
         });
     }
-
-    /**
-     * Fills albumsFlowPane with album tiles.
-     */
-    private void populateAlbums() {
-        Jukebox jb = Jukebox.getInstance();
-
-        List<VBox> albumVboxes =
-        jb.getMusicDatabase()
-        .getAlbumMap()
-        .values()
-        .stream()
-        .map(a -> new LibraryCollectionTile(a, this.albumsStackPane))
-        .collect(Collectors.toList());
-        
-        albumsFlowPane.getChildren().clear();
-        albumsFlowPane.getChildren().addAll(albumVboxes);
+    
+    @FXML
+    private void onRequestCustomCollectionsContextMenu(ContextMenuEvent event) {
+        if(!userCollectionsContextMenu.isShowing()) {
+            userCollectionsContextMenu.show(customCollectionsFlowPane, event.getScreenX(), event.getScreenY());
+        }
     }
 
     /**

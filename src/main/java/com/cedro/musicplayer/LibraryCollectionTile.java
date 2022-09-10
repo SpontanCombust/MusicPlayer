@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
@@ -35,6 +36,9 @@ public class LibraryCollectionTile extends VBox {
      */
     private Label collectionNameLabel;
 
+
+    private ContextMenu contextMenu = null;
+
     /**
      * Constructor
      * 
@@ -58,14 +62,19 @@ public class LibraryCollectionTile extends VBox {
 
         this.collectionNameLabel = new Label(collection.getName());
 
+        try {
+            contextMenu = new LibraryCollectionTileContextMenu(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.getChildren().addAll(hbox, this.collectionNameLabel);
         this.setOnContextMenuRequested(event -> {
-            try {
-                ContextMenu cm = new LibraryCollectionTileContextMenu(this);
-                cm.show(this, event.getScreenX(), event.getScreenY());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(!contextMenu.isShowing()) {
+                contextMenu.show(this, event.getScreenX(), event.getScreenY());
             }
+
+            event.consume();
         });
 
         this.collection = collection;
@@ -93,11 +102,14 @@ public class LibraryCollectionTile extends VBox {
                     this.parentStackPane.getChildren().remove(vb);
                 });
 
-                CollectionTrackListView collectionTrackList = new CollectionTrackListView(this.collection);
-                collectionTrackList.populateListItems();
-                collectionTrackList.setupContextMenu();
-                
-                vb.getChildren().addAll(backButton, collectionTrackList);
+                CollectionTrackTableView collectionTableView = new CollectionTrackTableView(this.collection);
+                collectionTableView.setPrefWidth(this.parentStackPane.getPrefWidth());
+                collectionTableView.setupContextMenu();
+                collectionTableView.populateItems();
+
+                vb.getChildren().addAll(backButton, collectionTableView);
+                VBox.setVgrow(collectionTableView, Priority.ALWAYS);
+
                 this.parentStackPane.getChildren().add(vb);
             } catch (IOException e) {
                 e.printStackTrace();

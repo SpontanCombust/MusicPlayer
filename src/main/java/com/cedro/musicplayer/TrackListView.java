@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 /**
  * Abstract class for the ListView that displays music tracks.
  */
-public abstract class TrackListView extends AnchorPane {
+public abstract class TrackListView extends AnchorPane implements MusicItemListing {
     /**
      * Actual ListView displaying track names
      */
@@ -41,14 +41,15 @@ public abstract class TrackListView extends AnchorPane {
     @FXML
     public void initialize() {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.setFocusTraversable(this.isFocusTraversable());
     }
 
     /**
      * Handler for when an item in the list view gets clicked on.
      * @param e - mouse event
      */
-    @FXML
-    protected void onListItemSelected(MouseEvent e) {
+    @Override
+    public void onItemSelected(MouseEvent e) {
         
     }
 
@@ -58,32 +59,41 @@ public abstract class TrackListView extends AnchorPane {
      * Returns stored list of tracks
      * @return List<MusicTrack> - list of stored tracks
      */
-    public List<MusicTrack> getTracks() {
+    @Override
+    public List<MusicTrack> fetchTracks() {
         return null;
     }
 
     /**
      * Fills items of the list view with names of stored tracks
      */
-    public void populateListItems() {
+    @Override
+    public void populateItems() {
         this.listView.getItems().clear();
 
         this.listView
         .getItems()
         .addAll(
-            this.getTracks()
+            this.fetchTracks()
             .stream()
-            .map(t -> t.getName())
+            .map(t -> t.getArtist() + " - " + t.getTitle())
             .collect(Collectors.toList()));
     }
 
     /**
      * Sets a context menu for the list view
      */
+    @Override
     public void setupContextMenu() {
         try {
-            ContextMenu cm = new TrackListContextMenu(this);
+            ContextMenu cm = new MusicItemListingContextMenu(this);
             this.listView.setContextMenu(cm);
+
+            this.listView.setOnContextMenuRequested(e -> {
+                if(this.getSelectedTracks().size() == 0) {
+                    cm.hide();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,12 +103,13 @@ public abstract class TrackListView extends AnchorPane {
      * Returns the tracks that are selected in the list view
      * @return List<MusicTrack> - list of selected tracks
      */
+    @Override
     public List<MusicTrack> getSelectedTracks() {
         return this.listView
         .getSelectionModel()
         .getSelectedIndices()
         .stream()
-        .map(i -> this.getTracks().get(i))
+        .map(i -> this.fetchTracks().get(i))
         .collect(Collectors.toList());
     }
 }

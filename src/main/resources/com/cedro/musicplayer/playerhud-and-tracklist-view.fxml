@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" type="VBox" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
@@ -28,7 +29,10 @@
                                 <Insets bottom="5.0" top="20.0" left="5.0" />
                             </VBox.margin>
                         </Label>
-                        <PlaylistTrackListView fx:id="playlistTrackListPane" VBox.vgrow="ALWAYS"/>
+                        <StackPane focusTraversable="false" VBox.vgrow="ALWAYS">
+                            <PlaylistTrackListView fx:id="playlistTrackListPane" focusTraversable="false"/>
+                            <Label fx:id="playlistHelpLabel" text="%playlist_track_list_help" textAlignment="CENTER"/>
+                        </StackPane>
                     </children>
                 </VBox>
                 <PlayerHud fx:id="playerHudPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />

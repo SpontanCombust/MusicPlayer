@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +37,6 @@ public class MusicDatabase {
      */
     private ObservableMap<Path, MusicTrack> trackMap = FXCollections.observableHashMap();
     /**
-     * Map of all stored albums
-     */
-    private ObservableMap<Path, MusicAlbum> albumMap = FXCollections.observableHashMap();
-    /**
      * List of all stored user collections
      */
     private ObservableList<MusicCollection> userCollectionList = FXCollections.observableArrayList();
@@ -47,45 +45,26 @@ public class MusicDatabase {
 
     // ==================== MODIFIER WRAPPERS ===================
 
-    /**
-     * Deletes all stored albums
-     */
-    public void clearAlbums() {
-        albumMap.clear();
+    public void clearTracks() {
+        trackMap.clear();
     }
 
-    /**
-     * Stores the album object and all the tracks that it contains 
-     * @param album - music album
-     */
-    public void addAlbum(MusicAlbum album) {
-        this.albumMap.put(album.getDirPath().toAbsolutePath(), album);
-        album.tracksPaths.forEach(p -> {
-            MusicTrack track = MusicTrack.fromFile(p);
-            if(track != null) {
-                this.trackMap.put(p, track);
-            } else {
-                album.tracksPaths.remove(p);
-            }
-        });
+    public void addTrack(MusicTrack track) {
+        trackMap.put(track.getFilePath(), track);
     }
 
-    /**
-     * Stores multiple album objects
-     * @param albums - music albums
-     */
-    public void addAlbums(List<MusicAlbum> albums) {
-        albums.forEach(this::addAlbum);
+    public void addTracks(List<MusicTrack> tracks) {
+        var map = tracks.stream()
+        .collect(Collectors.toMap(t -> t.getFilePath(), t -> t));
+        
+        trackMap.putAll(map);
     }
 
-    /**
-     * Removes stored album
-     * @param album - music album
-     */
-    public void removeAlbum(MusicAlbum album) {
-        this.albumMap.remove(album.getDirPath().toAbsolutePath());
-        album.tracksPaths.forEach(p -> this.trackMap.remove(p));
+    public void removeTrack(MusicTrack track) {
+        trackMap.remove(track.getFilePath());
     }
+
+
 
     /**
      * Removes all stored user collections
@@ -130,14 +109,6 @@ public class MusicDatabase {
     }
 
     /**
-     * Returns the map of all available music albums
-     * @return ObservableMap<Path, MusicAlbum> - album map
-     */
-    public ObservableMap<Path, MusicAlbum> getAlbumMap() {
-        return albumMap;
-    }
-
-    /**
      * Returns the list of all available user collections
      * @return ObservableList<MusicCollection> - user collection list
      */
@@ -157,14 +128,19 @@ public class MusicDatabase {
      */
     public void saveToConfigurationFile(Path filePath) throws IOException {
         JSONObject json = new JSONObject()
-        .put("albums", new JSONArray(
-            albumMap.values().stream()
-            .map(MusicAlbum::toJSON)
+        .put("tracks", new JSONArray(
+            trackMap.values().stream()
+            .map(MusicTrack::toJSON)
             .collect(Collectors.toList())))
         .put("userCollections", new JSONArray(
             userCollectionList.stream()
             .map(MusicCollection::toJSON)
-            .collect(Collectors.toList())));
+            .collect(Collectors.toList())))
+        .put("playlist", new JSONArray(
+            Jukebox.getInstance().getPlaylist().stream()
+            .map(t -> t.getFilePath().toString())
+            .collect(Collectors.toList())
+        ));
         
         if(!filePath.toString().endsWith(CONFIG_FILE_EXTENSION)) {
             filePath = filePath.resolveSibling(filePath.getFileName() + CONFIG_FILE_EXTENSION);
@@ -215,21 +191,42 @@ public class MusicDatabase {
         JSONTokener tokener = new JSONTokener(fr);
         JSONObject root = new JSONObject(tokener);
 
-        JSONArray albumsJSON = root.getJSONArray("albums");
-        for(int i = 0; i < albumsJSON.length(); i++) {
-            MusicAlbum album = MusicAlbum.fromJSON(albumsJSON.getJSONObject(i));
-            if(album != null) {
-                addAlbum(album);
+        JSONArray tracksJSON = root.getJSONArray("tracks");
+        var tracks = new ArrayList<MusicTrack>();
+        for(int i = 0; i < tracksJSON.length(); i++) {
+            MusicTrack track = MusicTrack.fromJSON(tracksJSON.getJSONObject(i));
+            if(track != null) {
+                tracks.add(track);
             }
         }
+        this.clearTracks();
+        this.addTracks(tracks);
 
         JSONArray collectionsJSON = root.getJSONArray("userCollections");
+        var collections = new ArrayList<MusicCollection>();
         for(int i = 0; i < collectionsJSON.length(); i++) {
             MusicCollection collection = MusicCollection.fromJSON(collectionsJSON.getJSONObject(i));
             if(collection != null) {
-                addUserCollection(collection);
+                collections.add(collection);
             }
         }
+        this.clearUserCollections();
+        this.addUserCollections(collections);
+
+        JSONArray playlistJSON = root.getJSONArray("playlist");
+        var playlist = new ArrayList<MusicTrack>();
+        for (int i = 0; i < playlistJSON.length(); i++) {
+            try {
+                var trackPath = Paths.get(playlistJSON.getString(i));
+                if(this.trackMap.containsKey(trackPath)) {
+                    playlist.add(this.trackMap.get(trackPath));
+                }   
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Jukebox.getInstance().getPlaylist().clear();
+        Jukebox.getInstance().getPlaylist().addAll(playlist);
     }
 
     /**
@@ -263,8 +260,8 @@ public class MusicDatabase {
      * @param dirPath - path to the directory
      */
     public void loadFromFileSystem(Path dirPath) {
-        var albums = MusicAlbum.fromDirectoryRecurse(dirPath);
-        addAlbums(albums);
+        List<MusicTrack> tracks = MusicTrack.fromDirectory(dirPath);
+        addTracks(tracks);
     }
 
     /**

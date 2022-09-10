@@ -41,7 +41,7 @@ public class Jukebox {
     /**
      * Cover image property of the album that the current track belongs to
      */
-    public final SimpleObjectProperty<Image> currentTrackCoverImage = new SimpleObjectProperty<>(MusicAlbum.DEFAULT_COVER_IMAGE);
+    public final SimpleObjectProperty<Image> currentTrackCoverImage = new SimpleObjectProperty<>(MusicTrack.DEFAULT_COVER_IMAGE);
     /**
      * Volume property of the music to be played
      */
@@ -266,12 +266,12 @@ public class Jukebox {
     private void onTrackReady(int index, Media media, boolean wasPlayingBefore) {
         this.currentTrack.set(media);
         this.currentTrackIndex.set(index);
-        this.currentTrackName.set(playlist.get(index).getName());
+        this.currentTrackName.set(playlist.get(index).getArtist() + " - " + playlist.get(index).getTitle());
         this.currentTrackTime.unbind();
         this.currentTrackTime.set(new Duration(0.0));
         this.currentTrackTime.bind(this.mediaPlayer.currentTimeProperty());
         this.currentTrackStatus.bind(this.mediaPlayer.statusProperty());
-        this.currentTrackCoverImage.set(playlist.get(index).getParentAlbum().getCoverImage());
+        this.currentTrackCoverImage.set(playlist.get(index).loadCoverImage());
 
         this.mediaPlayer.setVolume(this.trackVolume.floatValue());
 

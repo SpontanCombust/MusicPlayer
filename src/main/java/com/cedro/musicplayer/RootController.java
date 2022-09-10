@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -106,7 +108,7 @@ public class RootController extends AnchorPane {
      * @throws IOException
      */
     @FXML
-    protected void onMenuAbout(ActionEvent event) throws IOException {
+    protected void onMenuAbout(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
         alert.setHeaderText("Music Player v" + MusicPlayerApplication.VERSION);
@@ -118,7 +120,32 @@ public class RootController extends AnchorPane {
         alert.show();
     }
 
+    @FXML
+    protected void onMenuInstructions(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(Localization.getString("root_view_menu_help_instructions_title"));
+        alert.setHeaderText("");
+        alert.setContentText(Localization.getString("root_view_menu_help_instructions_content"));
+        alert.setResizable(true);
+        
+        alert.show();
+        alert.setWidth(1000);
+    }
 
+
+
+    @FXML
+    protected void onKeyPress(KeyEvent event) {
+        if(event.getCode() == KeyCode.P) {
+            this.openPlayer();
+            buttonOpenPlayer.setSelected(true);
+            buttonOpenLibrary.setSelected(false);
+        } else if(event.getCode() == KeyCode.L) {
+            this.openLibrary();
+            buttonOpenLibrary.setSelected(true);
+            buttonOpenPlayer.setSelected(false);   
+        }
+    }
 
     /**
      * Handler for the button that opens the player with playlist view
@@ -126,7 +153,7 @@ public class RootController extends AnchorPane {
      * @throws IOException
      */
     @FXML
-    protected void onButtonOpenPlayer(ActionEvent event) throws IOException {
+    protected void onButtonOpenPlayer(ActionEvent event) {
         this.openPlayer();
         buttonOpenPlayer.setSelected(true);
         buttonOpenLibrary.setSelected(false);

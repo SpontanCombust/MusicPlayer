@@ -16,7 +16,7 @@ import javafx.scene.control.TextInputDialog;
 /**
  * ContextMenu class for the track list view.
  */
-public class TrackListContextMenu extends ContextMenu {
+public class MusicItemListingContextMenu extends ContextMenu {
     /**
      * Menu with items that add tracks to collections
      */
@@ -29,20 +29,20 @@ public class TrackListContextMenu extends ContextMenu {
     private MenuItem menuItemRemoveTracks;
 
     /**
-     * ListView that the context menu is set for
+     * MusicItemListing that the context menu is set for
      */
-    private TrackListView parentTrackListView;
+    private MusicItemListing parentMusicItemListing;
 
 
     /**
      * Constructor
-     * @param trackListView - parent TrackListView
+     * @param musicItemListing - parent TrackListView
      * @throws IOException
      */
-    public TrackListContextMenu(TrackListView trackListView) throws IOException {
-        this.parentTrackListView = trackListView;
+    public MusicItemListingContextMenu(MusicItemListing musicItemListing) throws IOException {
+        this.parentMusicItemListing = musicItemListing;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("track-list-context-menu-view.fxml"), Localization.BUNDLE);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("music-item-listing-context-menu-view.fxml"), Localization.BUNDLE);
         loader.setController(this);
         loader.setRoot(this);
         loader.load();
@@ -54,7 +54,11 @@ public class TrackListContextMenu extends ContextMenu {
     @FXML
     void initialize() {
         populateAddToUserCollectionMenu();
-        removeRemoveMenuItemIfNecessary();
+
+        if(!(this.parentMusicItemListing instanceof CollectionTrackTableView) 
+        && !(this.parentMusicItemListing instanceof PlaylistTrackListView)) {
+            this.getItems().remove(menuItemRemoveTracks);
+        }
     }
 
     /**
@@ -63,7 +67,7 @@ public class TrackListContextMenu extends ContextMenu {
      */
     @FXML
     void onAddToPlaylist(ActionEvent event) {
-        Jukebox.getInstance().getPlaylist().addAll(this.parentTrackListView.getSelectedTracks());
+        Jukebox.getInstance().getPlaylist().addAll(this.parentMusicItemListing.getSelectedTracks());
     }
 
     /**
@@ -80,7 +84,7 @@ public class TrackListContextMenu extends ContextMenu {
         if(result.isPresent()) {
             MusicCollection newCollection = new MusicCollection();
             newCollection.setName(result.get());
-            newCollection.addTracks(this.parentTrackListView.getSelectedTracks());
+            newCollection.addTracks(this.parentMusicItemListing.getSelectedTracks());
             Jukebox.getInstance().getMusicDatabase().addUserCollection(newCollection);
             populateAddToUserCollectionMenu();
         }
@@ -92,14 +96,23 @@ public class TrackListContextMenu extends ContextMenu {
      */
     @FXML
     void onRemoveTracks(ActionEvent event) {
-        if(this.parentTrackListView instanceof CollectionTrackListView) {
-            var collectionTLV = (CollectionTrackListView) this.parentTrackListView;
-            collectionTLV.getCollection().removeTracks(collectionTLV.getSelectedTracks());
-            collectionTLV.populateListItems();
-        } else if(this.parentTrackListView instanceof PlaylistTrackListView) {
-            var playlistTLV = (PlaylistTrackListView) this.parentTrackListView;
+        if(this.parentMusicItemListing instanceof CollectionTrackTableView) {
+            var collectionTTV = (CollectionTrackTableView) this.parentMusicItemListing;
+            collectionTTV.getCollection().removeTracks(collectionTTV.getSelectedTracks());
+            collectionTTV.populateItems();
+        } else if(this.parentMusicItemListing instanceof PlaylistTrackListView) {
+            var playlistTLV = (PlaylistTrackListView) this.parentMusicItemListing;
             Jukebox.getInstance().getPlaylist().removeAll(playlistTLV.getSelectedTracks());
-            playlistTLV.populateListItems();
+            playlistTLV.populateItems();
+        }
+    }
+
+    @FXML
+    void onShowTrackInfo(ActionEvent event) throws IOException {
+        var selected = this.parentMusicItemListing.getSelectedTracks();
+        if(selected.size() >= 1) {
+            TrackInfoDialog dialog = new TrackInfoDialog(selected.get(0));
+            dialog.show();
         }
     }
 
@@ -116,7 +129,7 @@ public class TrackListContextMenu extends ContextMenu {
             MenuItem collectionItem = new MenuItem();
             collectionItem.setText(collection.getName());
             collectionItem.setOnAction(e -> {
-                collection.addTracks(this.parentTrackListView.getTracks());
+                collection.addTracks(this.parentMusicItemListing.getSelectedTracks());
             });
 
             return collectionItem;
@@ -126,23 +139,5 @@ public class TrackListContextMenu extends ContextMenu {
         // inserting to the beginning so the "new collection" item is at the bottom
         menuAddToUserCollection.getItems().remove(0, menuAddToUserCollection.getItems().size() - 1);
         menuAddToUserCollection.getItems().addAll(0, items);
-    }
-
-    /**
-     * Removes the "remove" menu item if the track list is not a playlist or album
-     */
-    private void removeRemoveMenuItemIfNecessary() {
-        if(this.parentTrackListView instanceof PlaylistTrackListView) {
-            return;
-        }
-        
-        if(this.parentTrackListView instanceof CollectionTrackListView) {
-            var collectionTLV = (CollectionTrackListView) this.parentTrackListView;
-            if(!(collectionTLV.getCollection() instanceof MusicAlbum)) {
-                return;
-            }
-        }
-
-        this.getItems().remove(menuItemRemoveTracks);
     }
 }

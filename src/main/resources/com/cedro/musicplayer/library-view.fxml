@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.cedro.musicplayer.AllTracksTrackListView?>
+<?import com.cedro.musicplayer.AllTracksTreeView?>
+<?import com.cedro.musicplayer.FilterTitledPane?>
+<?import com.cedro.musicplayer.BrowserTrackTableView?>
 
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
@@ -8,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <fx:root fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" type="AnchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -17,33 +20,28 @@
               <content>
                 <AnchorPane>
                      <children>
-                        <AllTracksTrackListView fx:id="allTrackListView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <AllTracksTreeView fx:id="allTrackTreeView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
-          <Tab text="%library_view_tab_albums">
+          <Tab text="%library_view_tab_browser">
             <content>
-              <AnchorPane>
+               <VBox>
+                  <FilterTitledPane fx:id="filterTitledPane"/>
+                  <AnchorPane VBox.vgrow="ALWAYS">
                      <children>
-                        <StackPane fx:id="albumsStackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <ScrollPane>
-                                 <content>
-                                    <FlowPane fx:id="albumsFlowPane" hgap="10.0" prefWrapLength="1200.0" vgap="10.0" />
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </StackPane>
+                        <BrowserTrackTableView fx:id="browserTrackTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
+               </VBox>
             </content>
           </Tab>
             <Tab text="%library_view_tab_user_collections">
               <content>
                 <AnchorPane>
                      <children>
-                        <StackPane fx:id="customCollectionsStackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <StackPane fx:id="customCollectionsStackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" onContextMenuRequested="#onRequestCustomCollectionsContextMenu">
                            <children>
                               <ScrollPane>
                                  <content>
